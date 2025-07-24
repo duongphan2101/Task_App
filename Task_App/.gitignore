@@ -1,0 +1,44 @@
+## Ignore build results
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+*.pdb
+
+## Ignore temporary files
+*.tmp
+*.bak
+*.old
+*.swp
+
+## Visual Studio specific
+.vscode/
+.vs/
+*.dbmdl
+*.sdf
+*.VC.db
+
+## NuGet packages
+*.nupkg
+packages/
+*.snupkg
+
+## Auto-generated files
+Generated_Code/
+
+## Database-related
+*.mdf
+*.ldf
+*.db
+
+## Publish folders
+publish/
+out/
+
+## Environment & sensitive files
+.env
+
+## Custom folders
+Trust/
