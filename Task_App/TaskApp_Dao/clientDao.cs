@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DotNetEnv;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -77,7 +78,6 @@ namespace Task_App.TaskApp_Dao
 
             return Encoding.UTF8.GetString(buffer).Trim();
         }
-
 
         public DataTable ConvertToDataTable<T>(List<T> items)
         {
@@ -809,6 +809,403 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
+        public int SoTaskTrongTuan(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung
+            };
+            string response = SendAndReceive("getsotasktrongtuan", requestData);
+            if (int.TryParse(response, out int soTaskTrongTuan) && soTaskTrongTuan >= 0)
+            {
+                return soTaskTrongTuan;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task trong tuần: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskTrongThang(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+            };
+            string response = SendAndReceive("getsotasktrongthang", requestData);
+            if (int.TryParse(response, out int soTaskTrongThang) && soTaskTrongThang >= 0)
+            {
+                return soTaskTrongThang;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task trong tháng: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskTrongNam(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+            };
+            string response = SendAndReceive("getsotasktrongnam", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task trong năm: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskChuaXuLi(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+            };
+            string response = SendAndReceive("getsotaskchuaxuly", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task chua xu li: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskdangXuLi(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung
+            };
+            string response = SendAndReceive("getsotaskdangxuly", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task dang xu li: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaHoanThanh(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung
+            };
+            string response = SendAndReceive("getsotaskdahoanthanh", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task da hoan thanh: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskTreHan(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung
+            };
+            string response = SendAndReceive("getsotaskdatre", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task tre han: " + response);
+                return -1;
+            }
+        }
+
+        public DataTable getNguoiGiao(int id)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = id
+            };
+
+            string response = SendAndReceive("getnguoigiao", requestData);
+
+            try
+            {
+                var nguoiGiaos = JsonConvert.DeserializeObject <List<NguoiGiaoDTO>>(response);
+                return ConvertToDataTable(nguoiGiaos);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi deserialize công việc: " + ex.Message);
+                return new DataTable();
+            }
+        }
+
+        public int SoTaskChuaXuLiByFilter(int maNguoiDung, DateTime? start, DateTime? end)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                NgayBatDau = start,
+                NgayKetThuc = end
+            };
+            string response = SendAndReceive("getsotaskchuxulibyfilter", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task chua xu li by filter: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDangXuLiByFilter(int maNguoiDung, DateTime? start, DateTime? end)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                NgayBatDau = start,
+                NgayKetThuc = end
+            };
+            string response = SendAndReceive("getsotaskdangxulibyfilter", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task dang xu li by filter: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaHoanThanhByFilter(int maNguoiDung, DateTime? start, DateTime? end)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                NgayBatDau = start,
+                NgayKetThuc = end
+            };
+            string response = SendAndReceive("getsotaskdahoanthanhbyfilter", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task da hoan thanh by filter: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskTreHanByFilter(int maNguoiDung, DateTime? start, DateTime? end)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                NgayBatDau = start,
+                NgayKetThuc = end
+            };
+            string response = SendAndReceive("getsotasktrehanbyfilter", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task tre han by filter: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaGiaoTrongTuan(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung
+            };
+            string response = SendAndReceive("getsotaskdagiaotrongtuan", requestData);
+            if (int.TryParse(response, out int soTaskTrongTuan) && soTaskTrongTuan >= 0)
+            {
+                return soTaskTrongTuan;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task da giao trong tuần: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaGiaoTrongThang(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+            };
+            string response = SendAndReceive("getsotaskdagiaotrongthang", requestData);
+            if (int.TryParse(response, out int soTaskTrongThang) && soTaskTrongThang >= 0)
+            {
+                return soTaskTrongThang;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task da giao trong tháng: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaGiaoTrongNam(int maNguoiDung)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+            };
+            string response = SendAndReceive("getsotaskdagiaotrongnam", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task da giao trong năm: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaGiaoChuaXuLiByFilter(int maNguoiDung, DateTime? start, DateTime? end)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                NgayBatDau = start,
+                NgayKetThuc = end
+            };
+            string response = SendAndReceive("getsotaskdagiaochuaxulibyfilter", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task chua xu li by filter: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaGiaoDangXuLiByFilter(int maNguoiDung, DateTime? start, DateTime? end)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                NgayBatDau = start,
+                NgayKetThuc = end
+            };
+            string response = SendAndReceive("getsotaskdagiaodangxulibyfilter", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task dang xu li by filter: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaGiaoHoanThanhByFilter(int maNguoiDung, DateTime? start, DateTime? end)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                NgayBatDau = start,
+                NgayKetThuc = end
+            };
+            string response = SendAndReceive("getsotaskdagiaohoanthanhbyfilter", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task da hoan thanh by filter: " + response);
+                return -1;
+            }
+        }
+
+        public int SoTaskDaGiaoTreHanByFilter(int maNguoiDung, DateTime? start, DateTime? end)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                NgayBatDau = start,
+                NgayKetThuc = end
+            };
+            string response = SendAndReceive("getsotaskdagiaotrehanbyfilter", requestData);
+            if (int.TryParse(response, out int soTaskTrongNam) && soTaskTrongNam >= 0)
+            {
+                return soTaskTrongNam;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy số task tre han by filter: " + response);
+                return -1;
+            }
+        }
+
+        public bool getIsGiaoViec(int maNguoiDung, int maCTCV)
+        {
+            var requestData = new
+            {
+                MaNguoiDung = maNguoiDung,
+                MaCTCV = maCTCV
+            };
+            string response = SendAndReceive("getisgiaoviec", requestData);
+            if (response.Equals("true", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi getIsGiaoViec: " + response);
+                return false;
+            }
+        }
+
+        public string getMaCongViec(int maCTCV)
+        {
+            var requestData = new
+            {
+                MaCTCV = maCTCV
+            };
+            string response = SendAndReceive("getmacongviec", requestData);
+            if (!string.IsNullOrEmpty(response))
+            {
+                return response;
+            }
+            else
+            {
+                Console.WriteLine("Lỗi khi lấy mã công việc: " + response);
+                return null;
+            }
+        }
 
 
 

@@ -43,17 +43,17 @@ namespace Task_App.views
             this.radio_DaHoanThanh = new Guna.UI2.WinForms.Guna2RadioButton();
             this.radio_Xep_Theo_Ngay = new Guna.UI2.WinForms.Guna2RadioButton();
             this.data_test = new Guna.UI2.WinForms.Guna2DataGridView();
-            this.task_Application_DBDataSet = new Task_App.Task_Application_DBDataSet();
+            //this.task_Application_DBDataSet = new Task_App.Task_Application_DBDataSet();
             this.congViecBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.congViecTableAdapter = new Task_App.Task_Application_DBDataSetTableAdapters.CongViecTableAdapter();
-            this.tableAdapterManager = new Task_App.Task_Application_DBDataSetTableAdapters.TableAdapterManager();
+            //this.congViecTableAdapter = new Task_App.Task_Application_DBDataSetTableAdapters.CongViecTableAdapter();
+            //this.tableAdapterManager = new Task_App.Task_Application_DBDataSetTableAdapters.TableAdapterManager();
             this.Panel_TDG_main.SuspendLayout();
             this.TDG_Panel_Bottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btn_AddTask)).BeginInit();
             this.Panel_Bottom_Left.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.data_test)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.task_Application_DBDataSet)).BeginInit();
+            //((System.ComponentModel.ISupportInitialize)(this.task_Application_DBDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.congViecBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
@@ -227,36 +227,36 @@ namespace Task_App.views
             // 
             // task_Application_DBDataSet
             // 
-            this.task_Application_DBDataSet.DataSetName = "Task_Application_DBDataSet";
-            this.task_Application_DBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            //this.task_Application_DBDataSet.DataSetName = "Task_Application_DBDataSet";
+            //this.task_Application_DBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // congViecBindingSource
             // 
             this.congViecBindingSource.DataMember = "CongViec";
-            this.congViecBindingSource.DataSource = this.task_Application_DBDataSet;
+            //this.congViecBindingSource.DataSource = this.task_Application_DBDataSet;
             // 
             // congViecTableAdapter
             // 
-            this.congViecTableAdapter.ClearBeforeFill = true;
+            //this.congViecTableAdapter.ClearBeforeFill = true;
             // 
             // tableAdapterManager
             // 
-            this.tableAdapterManager.BackupDataSetBeforeUpdate = false;
-            this.tableAdapterManager.ChiTietCongViecTableAdapter = null;
-            this.tableAdapterManager.ChucVuTableAdapter = null;
-            this.tableAdapterManager.CongViecTableAdapter = this.congViecTableAdapter;
-            this.tableAdapterManager.DonViTableAdapter = null;
-            this.tableAdapterManager.EmailTableAdapter = null;
-            this.tableAdapterManager.MaCongViecSequenceTableAdapter = null;
-            this.tableAdapterManager.NguoiDungTableAdapter = null;
-            this.tableAdapterManager.NguoiLienQuanCongViecTableAdapter = null;
-            this.tableAdapterManager.NguoiNhanEmailTableAdapter = null;
-            this.tableAdapterManager.PhanHoiCongViecTableAdapter = null;
-            this.tableAdapterManager.PhongBanTableAdapter = null;
-            this.tableAdapterManager.TepDinhKemEmailTableAdapter = null;
-            this.tableAdapterManager.TepTinTableAdapter = null;
-            this.tableAdapterManager.UpdateOrder = Task_App.Task_Application_DBDataSetTableAdapters.TableAdapterManager.UpdateOrderOption.InsertUpdateDelete;
-            // 
+            //this.tableAdapterManager.BackupDataSetBeforeUpdate = false;
+            //this.tableAdapterManager.ChiTietCongViecTableAdapter = null;
+            //this.tableAdapterManager.ChucVuTableAdapter = null;
+            //this.tableAdapterManager.CongViecTableAdapter = this.congViecTableAdapter;
+            //this.tableAdapterManager.DonViTableAdapter = null;
+            //this.tableAdapterManager.EmailTableAdapter = null;
+            //this.tableAdapterManager.MaCongViecSequenceTableAdapter = null;
+            //this.tableAdapterManager.NguoiDungTableAdapter = null;
+            //this.tableAdapterManager.NguoiLienQuanCongViecTableAdapter = null;
+            //this.tableAdapterManager.NguoiNhanEmailTableAdapter = null;
+            //this.tableAdapterManager.PhanHoiCongViecTableAdapter = null;
+            //this.tableAdapterManager.PhongBanTableAdapter = null;
+            //this.tableAdapterManager.TepDinhKemEmailTableAdapter = null;
+            //this.tableAdapterManager.TepTinTableAdapter = null;
+            //this.tableAdapterManager.UpdateOrder = Task_App.Task_Application_DBDataSetTableAdapters.TableAdapterManager.UpdateOrderOption.InsertUpdateDelete;
+            //// 
             // Create_Task_Control
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -275,7 +275,7 @@ namespace Task_App.views
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.data_test)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.task_Application_DBDataSet)).EndInit();
+            //((System.ComponentModel.ISupportInitialize)(this.task_Application_DBDataSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.congViecBindingSource)).EndInit();
             this.ResumeLayout(false);
 
@@ -285,9 +285,9 @@ namespace Task_App.views
 
         private Guna.UI2.WinForms.Guna2Panel Panel_TDG_main;
         private System.Windows.Forms.BindingSource congViecBindingSource;
-        private Task_Application_DBDataSet task_Application_DBDataSet;
-        private Task_Application_DBDataSetTableAdapters.CongViecTableAdapter congViecTableAdapter;
-        private Task_Application_DBDataSetTableAdapters.TableAdapterManager tableAdapterManager;
+        //private Task_Application_DBDataSet task_Application_DBDataSet;
+        //private Task_Application_DBDataSetTableAdapters.CongViecTableAdapter congViecTableAdapter;
+        //private Task_Application_DBDataSetTableAdapters.TableAdapterManager tableAdapterManager;
         private Guna.UI2.WinForms.Guna2DataGridView data_test;
         private Guna.UI2.WinForms.Guna2Panel TDG_Panel_Bottom;
         private Guna.UI2.WinForms.Guna2Panel Panel_Bottom_Left;

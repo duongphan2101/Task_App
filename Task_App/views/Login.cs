@@ -1,9 +1,6 @@
-﻿using DevExpress.XtraEditors.SyntaxEditor;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Forms;
-using Task_App.Model;
-using Task_App.Services;
 using Task_App.TaskApp_Dao;
 using Task_App.views;
 
@@ -65,7 +62,7 @@ namespace Task_App
             }
 
             txtPass.Text = string.Empty;
-
+            txtEmail.Focus();
             Hide();
 
             var homeForm = new Home(maNguoiDung, tcpClientDAO);

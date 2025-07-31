@@ -93,10 +93,10 @@ namespace Task_App.views
             this.panelControl1.Appearance.Options.UseBackColor = true;
             this.panelControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.panelControl1.Controls.Add(this.panel);
-            this.panelControl1.Location = new System.Drawing.Point(3, 2);
+            this.panelControl1.Location = new System.Drawing.Point(2, 2);
             this.panelControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(1415, 880);
+            this.panelControl1.Size = new System.Drawing.Size(1417, 880);
             this.panelControl1.TabIndex = 0;
             // 
             // panel
@@ -108,7 +108,7 @@ namespace Task_App.views
             this.panel.Location = new System.Drawing.Point(0, 0);
             this.panel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel.Name = "panel";
-            this.panel.Size = new System.Drawing.Size(1415, 880);
+            this.panel.Size = new System.Drawing.Size(1417, 880);
             this.panel.TabIndex = 4;
             // 
             // panelControlCenter
@@ -121,7 +121,7 @@ namespace Task_App.views
             this.panelControlCenter.Location = new System.Drawing.Point(200, 0);
             this.panelControlCenter.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelControlCenter.Name = "panelControlCenter";
-            this.panelControlCenter.Size = new System.Drawing.Size(1215, 880);
+            this.panelControlCenter.Size = new System.Drawing.Size(1217, 880);
             this.panelControlCenter.TabIndex = 4;
             // 
             // panel_Center
@@ -134,7 +134,7 @@ namespace Task_App.views
             this.panel_Center.Margin = new System.Windows.Forms.Padding(0);
             this.panel_Center.Name = "panel_Center";
             this.panel_Center.Padding = new System.Windows.Forms.Padding(11, 10, 11, 10);
-            this.panel_Center.Size = new System.Drawing.Size(1215, 880);
+            this.panel_Center.Size = new System.Drawing.Size(1217, 880);
             this.panel_Center.TabIndex = 0;
             // 
             // panelControl_Main
@@ -148,7 +148,7 @@ namespace Task_App.views
             this.panelControl_Main.Margin = new System.Windows.Forms.Padding(0);
             this.panelControl_Main.Name = "panelControl_Main";
             this.panelControl_Main.Padding = new System.Windows.Forms.Padding(0, 20, 0, 0);
-            this.panelControl_Main.Size = new System.Drawing.Size(1193, 747);
+            this.panelControl_Main.Size = new System.Drawing.Size(1195, 747);
             this.panelControl_Main.TabIndex = 1;
             // 
             // panel_Center_Main
@@ -161,7 +161,7 @@ namespace Task_App.views
             this.panel_Center_Main.Margin = new System.Windows.Forms.Padding(0);
             this.panel_Center_Main.Name = "panel_Center_Main";
             this.panel_Center_Main.Padding = new System.Windows.Forms.Padding(11, 10, 11, 10);
-            this.panel_Center_Main.Size = new System.Drawing.Size(1193, 727);
+            this.panel_Center_Main.Size = new System.Drawing.Size(1195, 727);
             this.panel_Center_Main.TabIndex = 0;
             // 
             // panel_centerTop
@@ -176,7 +176,7 @@ namespace Task_App.views
             this.panel_centerTop.Margin = new System.Windows.Forms.Padding(0);
             this.panel_centerTop.Name = "panel_centerTop";
             this.panel_centerTop.Padding = new System.Windows.Forms.Padding(11, 10, 11, 10);
-            this.panel_centerTop.Size = new System.Drawing.Size(1193, 113);
+            this.panel_centerTop.Size = new System.Drawing.Size(1195, 113);
             this.panel_centerTop.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -196,7 +196,7 @@ namespace Task_App.views
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(967, 93);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(969, 93);
             this.tableLayoutPanel1.TabIndex = 8;
             // 
             // lblPhongBan
@@ -262,7 +262,7 @@ namespace Task_App.views
             this.panelTop_Right.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.panelTop_Right.Controls.Add(this.guna2Panel1);
             this.panelTop_Right.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panelTop_Right.Location = new System.Drawing.Point(1082, 10);
+            this.panelTop_Right.Location = new System.Drawing.Point(1084, 10);
             this.panelTop_Right.Margin = new System.Windows.Forms.Padding(0);
             this.panelTop_Right.Name = "panelTop_Right";
             this.panelTop_Right.Padding = new System.Windows.Forms.Padding(11, 10, 11, 10);
@@ -516,6 +516,7 @@ namespace Task_App.views
             this.ClientSize = new System.Drawing.Size(1421, 884);
             this.Controls.Add(this.HomelayoutControl1ConvertedLayout);
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.MinimumSize = new System.Drawing.Size(1439, 931);
             this.Name = "Home";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

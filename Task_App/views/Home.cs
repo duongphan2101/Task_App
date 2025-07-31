@@ -6,7 +6,6 @@ using System.Linq;
 using System.Timers;
 using System.Windows.Forms;
 using Task_App.Model;
-using Task_App.Services;
 using Task_App.TaskApp_Dao;
 
 namespace Task_App.views
@@ -39,16 +38,15 @@ namespace Task_App.views
             InitializeComponent();
             
             maNguoiDung = userId;
-            //currentUser = NguonDungService.getNguoiDungById(maNguoiDung);
             currentUser = tcpClientDAO.GetNguoiDung(maNguoiDung);
             SetUserInfo(currentUser);
             this.tcpClientDAO = tcpClientDAO;
 
-            btn_Task_DaGiao.Tag = true;
-            btn_Task_DaGiao.BackColor = selectedColor;
+            btnDashboard.Tag = true;
+            btnDashboard.BackColor = selectedColor;
 
             LoadNotifications();
-            LoadContent(new Create_Task_Control(maNguoiDung, tcpClientDAO));
+            LoadContent(new Dashboard(tcpClientDAO, maNguoiDung));
 
             ntfyTimer.Elapsed += OnNtfyTimerElapsed;
         }
@@ -95,23 +93,29 @@ namespace Task_App.views
                 {
                     btn.Tag = true;
                     btn.BackColor = selectedColor;
-                } 
+                }
                 else
                 {
                     btn.Tag = null;
                     btn.BackColor = defaultColor;
                 }
             }
-            
-            // load content based on button name
-            // TODO should cache this instead of initializing new instances everytime?
-            //   maybe set to a Map instead
+
             SuspendLayout();
-            if (clickedBtn.Name == btnDashboard.Name) LoadContent(new Dashboard());
-            if (clickedBtn.Name == btn_Task_DaGiao.Name) LoadContent(new Create_Task_Control(maNguoiDung, tcpClientDAO));
-            if (clickedBtn.Name == btn_Task_DuocGiao.Name) LoadContent(new Task_Duoc_Giao_Control(maNguoiDung, tcpClientDAO));
+
+            if (clickedBtn.Name == btnDashboard.Name)
+                //LoadContent(new DashboardControlViewer(tcpClientDAO, maNguoiDung));
+                LoadContent(new Dashboard(tcpClientDAO, maNguoiDung));
+
+            if (clickedBtn.Name == btn_Task_DaGiao.Name)
+                LoadContent(new Create_Task_Control(maNguoiDung, tcpClientDAO));
+
+            if (clickedBtn.Name == btn_Task_DuocGiao.Name)
+                LoadContent(new Task_Duoc_Giao_Control(maNguoiDung, tcpClientDAO));
+
             ResumeLayout();
         }
+
 
         private void OnExitBtnClick(object sender, EventArgs e)
         {
@@ -168,7 +172,7 @@ namespace Task_App.views
                     item.BackColor = Color.LightGray;
                 }
 
-                item.Click += (s, e) => OnNtfySelected(s, e, tb.MaThongBao);
+                item.Click += (s, e) => OnNtfySelected(s, e, tb.MaThongBao, tb.MaChiTietCV);
             }
 
             // Thêm item "Xem tất cả"
@@ -203,14 +207,22 @@ namespace Task_App.views
             }
 
             LoadNotifications();
+
+            
         }
 
-        private void OnNtfySelected(object sender, EventArgs e, int tb)
+        private void OnNtfySelected(object sender, EventArgs e, int tb, int maChiTietCV)
         {
             if (tcpClientDAO.UpdateTrangThaiThongBao(tb))
             {
                 LoadNotifications();
             }
+            var isGiaoViec = tcpClientDAO.getIsGiaoViec(maNguoiDung, maChiTietCV);
+            string maCongViec = tcpClientDAO.getMaCongViec(maChiTietCV);
+
+            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, tcpClientDAO);
+            modal.ShowDialog();
+
         }
 
         private void OnNtfyTimerElapsed(object sender, ElapsedEventArgs e)

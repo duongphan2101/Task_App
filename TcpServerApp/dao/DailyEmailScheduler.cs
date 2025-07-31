@@ -37,24 +37,24 @@ public class DailyEmailScheduler
         dailyTimer.Start();
     }
 
-    //private double GetNextInterval()
-    //{
-    //    DateTime now = DateTime.Now;
-    //    DateTime next7AM = now.Hour < 7
-    //        ? now.Date.AddHours(7)
-    //        : now.Date.AddDays(1).AddHours(7);
-
-    //    return (next7AM - now).TotalMilliseconds;
-    //}
-
     private double GetNextInterval()
     {
         DateTime now = DateTime.Now;
-        DateTime nextRunTime = now.Hour < 11 || (now.Hour == 11 && now.Minute < 57)
-            ? now.Date.AddHours(11).AddMinutes(57)
-            : now.Date.AddDays(1).AddHours(11).AddMinutes(57);
+        DateTime next7AM = now.Hour < 7
+            ? now.Date.AddHours(7)
+            : now.Date.AddDays(1).AddHours(7);
 
-        return (nextRunTime - now).TotalMilliseconds;
+        return (next7AM - now).TotalMilliseconds;
     }
+
+    //private double GetNextInterval()
+    //{
+    //    DateTime now = DateTime.Now;
+    //    DateTime nextRunTime = now.Hour < 11 || (now.Hour == 11 && now.Minute < 23)
+    //        ? now.Date.AddHours(11).AddMinutes(23)
+    //        : now.Date.AddDays(1).AddHours(11).AddMinutes(23);
+
+    //    return (nextRunTime - now).TotalMilliseconds;
+    //}
 
 }

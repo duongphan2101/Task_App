@@ -6,9 +6,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.IO.Compression;
-using System.Net;
-using System.Net.Mail;
-using System.Text;
 using System.Text.RegularExpressions;
 using TcpServerApp.database;
 using TcpServerApp.Model;
@@ -1490,5 +1487,568 @@ namespace TcpServerApp.DAO
             int rowsAffected = conn.ExecuteNonQuery(query, parameters);
             return rowsAffected > 0;
         }
+    
+        public int getSoTaskTrongTuanById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+                SELECT COUNT(*) AS SoLuongTaskTrongTuan
+                FROM CongViec cv
+                inner join NguoiLienQuanCongViec nlq on cv.maCongViec = nlq.maCongViec
+                inner join NguoiDung nd on nd.maNguoiDung = nlq.maNguoiDung
+                WHERE ngayGiao >= DATEADD(DAY, 1 - DATEPART(WEEKDAY, GETDATE()), CAST(GETDATE() AS DATE))
+                  AND ngayGiao <  DATEADD(DAY, 8 - DATEPART(WEEKDAY, GETDATE()), CAST(GETDATE() AS DATE))
+                  AND nlq.maNguoiDung = @maNguoiDung AND nlq.vaiTro = 'to'";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskTrongThangById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoTaskTrongThang
+             FROM CongViec cv
+             inner join NguoiLienQuanCongViec nlq on cv.maCongViec = nlq.maCongViec
+             inner join NguoiDung nd on nd.maNguoiDung = nlq.maNguoiDung
+             WHERE MONTH(ngayGiao) = MONTH(GETDATE()) 
+               AND YEAR(ngayGiao) = YEAR(GETDATE()) 
+               AND nlq.maNguoiDung = @maNguoiDung AND nlq.vaiTro = 'to'";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskTrongNamById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+                    SELECT COUNT(*) AS SoTaskTrongNam
+                 FROM CongViec cv
+                 inner join NguoiLienQuanCongViec nlq on cv.maCongViec = nlq.maCongViec
+                    inner join NguoiDung nd on nd.maNguoiDung = nlq.maNguoiDung
+                 WHERE YEAR(ngayGiao) = YEAR(GETDATE())
+                   AND nlq.maNguoiDung = @maNguoiDung AND nlq.vaiTro = 'to'";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskChuaXuLyById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskChuaXuLy
+            FROM ChiTietCongViec ct
+            inner join NguoiLienQuanCongViec nlq on ct.maCongViec = nlq.maCongViec
+            inner join Email e on ct.maChiTietCV = e.maChiTietCV
+            WHERE nlq.maNguoiDung = @maNguoiDung AND nlq.vaiTro = 'to' AND ct.trangThai = 0 AND e.trangThai = 1";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDangXuLyById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskChuaXuLy
+            FROM ChiTietCongViec ct
+            inner join NguoiLienQuanCongViec nlq on ct.maCongViec = nlq.maCongViec
+            inner join Email e on ct.maChiTietCV = e.maChiTietCV
+            WHERE nlq.maNguoiDung = @maNguoiDung AND nlq.vaiTro = 'to' AND ct.trangThai = 1 AND e.trangThai = 1";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskHoanThanhById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskChuaXuLy
+            FROM ChiTietCongViec ct
+            inner join NguoiLienQuanCongViec nlq on ct.maCongViec = nlq.maCongViec
+            inner join Email e on ct.maChiTietCV = e.maChiTietCV
+            WHERE nlq.maNguoiDung = @maNguoiDung AND nlq.vaiTro = 'to' AND ct.trangThai = 2 AND e.trangThai = 1";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskTreById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskChuaXuLy
+            FROM ChiTietCongViec ct
+            inner join NguoiLienQuanCongViec nlq on ct.maCongViec = nlq.maCongViec
+            inner join Email e on ct.maChiTietCV = e.maChiTietCV
+            WHERE nlq.maNguoiDung = @maNguoiDung AND nlq.vaiTro = 'to' AND ct.trangThai = 3 AND e.trangThai = 1";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public DataTable GetNguoiGiaoViec(int id)
+        {
+            string query = @"
+            SELECT cv.nguoiGiao, COUNT(*) AS soLanGiao
+            FROM ChiTietCongViec ct
+            INNER JOIN CongViec cv ON ct.maCongViec = cv.maCongViec
+            INNER JOIN NguoiLienQuanCongViec nlq ON ct.maCongViec = nlq.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE nlq.maNguoiDung = @maNguoiDung AND nlq.vaiTro = 'to' AND e.trangThai = 1
+            GROUP BY cv.nguoiGiao
+            ORDER BY soLanGiao DESC";
+
+            SqlParameter[] parameters = {
+            new SqlParameter("@maNguoiDung", id)
+        };
+
+            return conn.ExecuteQuery(query, parameters);
+        }
+
+        public int getSoTaskHoanThanhByIdByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskDaHoanThanh
+            FROM ChiTietCongViec ct
+            INNER JOIN NguoiLienQuanCongViec nlq ON ct.maCongViec = nlq.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE 
+                nlq.maNguoiDung = @maNguoiDung
+                AND nlq.vaiTro = 'to'
+                AND ct.trangThai = 2
+                AND e.trangThai = 1
+                AND ct.ngayNhanCongViec >= @startDate
+                AND ct.ngayKetThucCongViec <= @endDate";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@startDate", start),
+                new SqlParameter("@endDate", end)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskTreHanByIdByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskTreHan
+            FROM ChiTietCongViec ct
+            INNER JOIN NguoiLienQuanCongViec nlq ON ct.maCongViec = nlq.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE 
+                nlq.maNguoiDung = @maNguoiDung
+                AND nlq.vaiTro = 'to'
+                AND ct.trangThai = 3
+                AND e.trangThai = 1
+                AND ct.ngayNhanCongViec >= @startDate
+                AND ct.ngayKetThucCongViec <= @endDate";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@startDate", start),
+                new SqlParameter("@endDate", end)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskChuaXuLiByIdByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskChuaXuLi
+            FROM ChiTietCongViec ct
+            INNER JOIN NguoiLienQuanCongViec nlq ON ct.maCongViec = nlq.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE 
+                nlq.maNguoiDung = @maNguoiDung
+                AND nlq.vaiTro = 'to'
+                AND ct.trangThai = 0
+                AND e.trangThai = 1
+                AND ct.ngayNhanCongViec >= @startDate
+                AND ct.ngayKetThucCongViec <= @endDate";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@startDate", start),
+                new SqlParameter("@endDate", end)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDangXuLiByIdByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskDangXuLi
+            FROM ChiTietCongViec ct
+            INNER JOIN NguoiLienQuanCongViec nlq ON ct.maCongViec = nlq.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE 
+                nlq.maNguoiDung = @maNguoiDung
+                AND nlq.vaiTro = 'to'
+                AND ct.trangThai = 1
+                AND e.trangThai = 1
+                AND ct.ngayNhanCongViec >= @startDate
+                AND ct.ngayKetThucCongViec <= @endDate";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@startDate", start),
+                new SqlParameter("@endDate", end)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDaGiaoHoanThanhByIdByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskDaHoanThanh
+            FROM ChiTietCongViec ct
+            INNER JOIN CongViec cv on ct.maCongViec = cv.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE 
+                cv.nguoiGiao = @maNguoiDung
+                AND ct.trangThai = 2
+                AND e.trangThai = 1
+                AND ct.ngayNhanCongViec >= @startDate
+                AND ct.ngayKetThucCongViec <= @endDate";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@startDate", start),
+                new SqlParameter("@endDate", end)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDaGiaoTreHanByIdByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskTreHan
+            FROM ChiTietCongViec ct
+            INNER JOIN CongViec cv on ct.maCongViec = cv.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE 
+                cv.nguoiGiao = @maNguoiDung
+                AND ct.trangThai = 3
+                AND e.trangThai = 1
+                AND ct.ngayNhanCongViec >= @startDate
+                AND ct.ngayKetThucCongViec <= @endDate";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@startDate", start),
+                new SqlParameter("@endDate", end)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDaGiaoChuaXuLiByIdByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskChuaXuLi
+            FROM ChiTietCongViec ct
+            INNER JOIN CongViec cv on ct.maCongViec = cv.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE 
+                cv.nguoiGiao = @maNguoiDung
+                AND ct.trangThai = 0
+                AND e.trangThai = 1
+                AND ct.ngayNhanCongViec >= @startDate
+                AND ct.ngayKetThucCongViec <= @endDate";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@startDate", start),
+                new SqlParameter("@endDate", end)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDaGiaoDangXuLiByIdByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoLuongTaskDangXuLi
+            FROM ChiTietCongViec ct
+            INNER JOIN CongViec cv on ct.maCongViec = cv.maCongViec
+            INNER JOIN Email e ON ct.maChiTietCV = e.maChiTietCV
+            WHERE 
+                cv.nguoiGiao = @maNguoiDung
+                AND ct.trangThai = 1
+                AND e.trangThai = 1
+                AND ct.ngayNhanCongViec >= @startDate
+                AND ct.ngayKetThucCongViec <= @endDate";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@startDate", start),
+                new SqlParameter("@endDate", end)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDaGiaoTrongTuanById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+                SELECT COUNT(*) AS SoLuongTaskTrongTuan
+                FROM CongViec cv
+                inner join NguoiDung nd on nd.maNguoiDung = cv.nguoiGiao
+                WHERE ngayGiao >= DATEADD(DAY, 1 - DATEPART(WEEKDAY, GETDATE()), CAST(GETDATE() AS DATE))
+                  AND ngayGiao <  DATEADD(DAY, 8 - DATEPART(WEEKDAY, GETDATE()), CAST(GETDATE() AS DATE))
+                    AND nd.maNguoiDung = @maNguoiDung";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDaGiaoTrongThangById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+            SELECT COUNT(*) AS SoTaskTrongThang
+             FROM CongViec cv
+             inner join NguoiDung nd on nd.maNguoiDung = cv.nguoiGiao
+             WHERE MONTH(ngayGiao) = MONTH(GETDATE()) 
+               AND YEAR(ngayGiao) = YEAR(GETDATE()) 
+               AND nd.maNguoiDung = @maNguoiDung";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public int getSoTaskDaGiaoTrongNamById(int maNguoiDung)
+        {
+            int result = 0;
+            string query = @"
+                    SELECT COUNT(*) AS SoTaskTrongNam
+                 FROM CongViec cv
+                    inner join NguoiDung nd on nd.maNguoiDung = cv.nguoiGiao
+                 WHERE YEAR(ngayGiao) = YEAR(GETDATE())
+                   AND nd.maNguoiDung = @maNguoiDung";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung)
+            };
+            object obj = conn.ExecuteScalar(query, parameters);
+            if (obj != null && obj != DBNull.Value)
+            {
+                result = Convert.ToInt32(obj);
+            }
+            else
+            {
+                result = 0;
+            }
+            return result;
+        }
+
+        public bool getIsGiaoViec(int maNguoiDung, int maChiTietCongViec)
+        {
+            string query = @"
+                SELECT 
+                CASE 
+                    WHEN cv.nguoiGiao = @maNguoiDung THEN CAST(1 AS BIT)
+                    ELSE CAST(0 AS BIT)
+                END AS IsGiao
+            FROM CongViec cv
+            INNER JOIN ChiTietCongViec ct ON ct.maCongViec = cv.maCongViec
+            WHERE ct.maChiTietCV = @maChiTietCongViec";
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@maNguoiDung", maNguoiDung),
+                new SqlParameter("@maChiTietCongViec", maChiTietCongViec),
+            };
+
+            int rowsAffected = conn.ExecuteNonQuery(query, parameters);
+            return rowsAffected > 0;
+        }
+
+        public string getMaCongViecByMaChiTietCV(int maChiTietCongViec)
+        {
+            string query = @"
+                select cv.maCongViec from CongViec cv inner join ChiTietCongViec ct on ct.maCongViec = cv.maCongViec
+                where ct.maChiTietCV = @maChiTietCV";
+
+            SqlParameter[] parameters = {
+                new SqlParameter("@maChiTietCT", maChiTietCongViec),
+            };
+
+            DataTable result = conn.ExecuteQuery(query, parameters);
+
+            if (result.Rows.Count > 0)
+            {
+                return result.Rows[0]["maCongViec"].ToString();
+            }
+
+            return null;
+
+        }
+
+
+
     }
 }

@@ -62,6 +62,9 @@
     <Reference Include="BouncyCastle.Cryptography, Version=2.0.0.0, Culture=neutral, PublicKeyToken=072edcf4a5328938, processorArchitecture=MSIL">
       <HintPath>packages\BouncyCastle.Cryptography.2.6.1\lib\net461\BouncyCastle.Cryptography.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Charts.v24.2.Core, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v24.2.Core, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Dashboard.v24.2.Win, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.Data.Desktop.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Data.Desktop.v24.2.dll</HintPath>
@@ -70,6 +73,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Data.v24.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.DataAccess.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.DataAccess.v24.2.UI, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Dialogs.v24.2.Core, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Dialogs.v24.2.Core.dll</HintPath>
@@ -82,6 +87,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Images.v24.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Map.v24.2.Core, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Office.v24.2.Core, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Office.v24.2.Core.dll</HintPath>
@@ -90,6 +96,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Pdf.v24.2.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.PivotGrid.v24.2.Core, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Printing.v24.2.Core, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Printing.v24.2.Core.dll</HintPath>
@@ -102,14 +109,20 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Sparkline.v24.2.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.TreeMap.v24.2.Core, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Utils.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.Utils.v24.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Utils.v24.2.UI, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Xpo.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraBars.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.XtraBars.v24.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraCharts.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v24.2.UI, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraCharts.v24.2.Wizard, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraDialogs.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.XtraDialogs.v24.2.dll</HintPath>
@@ -118,6 +131,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.XtraEditors.v24.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraGauges.v24.2.Core, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v24.2.Presets, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraGauges.v24.2.Win, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraGrid.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.XtraGrid.v24.2.dll</HintPath>
@@ -126,10 +142,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.XtraLayout.v24.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraMap.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraPivotGrid.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraPrinting.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.XtraPrinting.v24.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraReports.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.XtraRichEdit.v24.2, Version=24.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.XtraRichEdit.v24.2.dll</HintPath>
@@ -138,6 +157,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files\DevExpress 24.2\Components\Bin\Framework\DevExpress.XtraTreeList.v24.2.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.XtraTreeMap.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraTreeMap.v24.2.UI, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="dotenv.net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\dotenv.net.4.0.0\lib\netstandard2.0\dotenv.net.dll</HintPath>
     </Reference>
@@ -412,6 +433,7 @@
       <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -427,10 +449,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DTO\BarChartModel.cs" />
     <Compile Include="DTO\CongViecChiTietDTO.cs" />
     <Compile Include="DTO\CongViecDaGiaoDTO.cs" />
     <Compile Include="DTO\CongViecDuocGiaoDTO.cs" />
+    <Compile Include="DTO\DateRange.cs" />
+    <Compile Include="DTO\NguoiGiaoDTO.cs" />
     <Compile Include="DTO\NguoiLienQuanDTO.cs" />
+    <Compile Include="DTO\PieChartModel.cs" />
     <Compile Include="Model\ChiTietCongViec.cs" />
     <Compile Include="Model\ChucVu.cs" />
     <Compile Include="Model\CongViec.cs" />
@@ -448,16 +474,23 @@
     <Compile Include="Model\ThongBaoNguoiDung.cs" />
     <Compile Include="Services\CongViecService.cs" />
     <Compile Include="TaskApp_Dao\clientDao.cs" />
-    <Compile Include="Task_Application_DBDataSet.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Task_Application_DBDataSet.xsd</DependentUpon>
-    </Compile>
     <Compile Include="views\Dashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="views\Dashboard.Designer.cs">
       <DependentUpon>Dashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="views\DashboardControlViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="views\DashboardControlViewer.Designer.cs">
+      <DependentUpon>DashboardControlViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="views\Dashboard_Express.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="views\Dashboard_Express.Designer.cs">
+      <DependentUpon>Dashboard_Express.cs</DependentUpon>
     </Compile>
     <Compile Include="views\Home.cs">
       <SubType>Form</SubType>
@@ -501,6 +534,12 @@
     <EmbeddedResource Include="views\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="views\DashboardControlViewer.resx">
+      <DependentUpon>DashboardControlViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\Dashboard_Express.resx">
+      <DependentUpon>Dashboard_Express.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="views\Home.resx">
       <DependentUpon>Home.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -532,17 +571,6 @@
       <DependentUpon>Task_Duoc_Giao_Control.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
-    <None Include="Task_Application_DBDataSet.xsc">
-      <DependentUpon>Task_Application_DBDataSet.xsd</DependentUpon>
-    </None>
-    <None Include="Task_Application_DBDataSet.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Task_Application_DBDataSet.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Task_Application_DBDataSet.xss">
-      <DependentUpon>Task_Application_DBDataSet.xsd</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

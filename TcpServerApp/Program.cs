@@ -23,7 +23,7 @@ namespace TcpServerApp
 
             DailyEmailScheduler dailyEmailScheduler = new DailyEmailScheduler();
             dailyEmailScheduler.Start();
-
+ 
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
@@ -146,7 +146,6 @@ namespace TcpServerApp
 
                             case "getcongviecdagiaobyuserid_sortbytrangthai":
                                 var CongViecDaGiao_sort = CongViecDAO.GetCongViecDaGiaoByUserId_SortByTrangThai(((JObject)request.Data)["MaNguoiDung"]?.ToObject<int>() ?? 0);
-                                Console.WriteLine("HHHH " + CongViecDaGiao_sort);
                                 reply = JsonConvert.SerializeObject(CongViecDaGiao_sort, Formatting.None);
                                 break;
 
@@ -521,6 +520,338 @@ namespace TcpServerApp
                                 {
                                     Console.WriteLine("Lỗi GetListThongBaoById: " + ex.Message);
                                     reply = "[]";
+                                }
+                                break;
+
+                            case "getsotasktrongtuan":
+                                try
+                                {
+                                    var data_getsotasktrongtuan = (JObject)request.Data;
+                                    int maNguoiDung_getsotasktrongtuan = data_getsotasktrongtuan["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int soTaskTrongTuan = CongViecDAO.getSoTaskTrongTuanById(maNguoiDung_getsotasktrongtuan);
+                                    reply = JsonConvert.SerializeObject(soTaskTrongTuan, Formatting.None);
+                                }catch(Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotasktrongthang":
+                                try
+                                {
+                                    var data_getsotasktrongthang = (JObject)request.Data;
+                                    int maNguoiDung_getsotasktrongthang = data_getsotasktrongthang["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int soTaskTrongThang = CongViecDAO.getSoTaskTrongThangById(maNguoiDung_getsotasktrongthang);
+                                    reply = JsonConvert.SerializeObject(soTaskTrongThang, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongThangById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotasktrongnam":
+                                try
+                                {
+                                    var data_getsotasktrongnam = (JObject)request.Data;
+                                    int maNguoiDung_getsotasktrongnam = data_getsotasktrongnam["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int soTaskTrongNam = CongViecDAO.getSoTaskTrongNamById(maNguoiDung_getsotasktrongnam);
+                                    reply = JsonConvert.SerializeObject(soTaskTrongNam, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongNamById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskchuaxuly":
+                                try
+                                {
+                                    var data_getsotaskchuaxuly = (JObject)request.Data;
+                                    int maNguoiDung_getsotaskchuaxuly = data_getsotaskchuaxuly["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int getsotaskchuaxuly = CongViecDAO.getSoTaskChuaXuLyById(maNguoiDung_getsotaskchuaxuly);
+                                    reply = JsonConvert.SerializeObject(getsotaskchuaxuly, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskChuaXuLiById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdangxuly":
+                                try
+                                {
+                                    var data_getsotaskdangxuly = (JObject)request.Data;
+                                    int maNguoiDung_getsotaskdangxuly = data_getsotaskdangxuly["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int getsotaskdangxuly = CongViecDAO.getSoTaskDangXuLyById(maNguoiDung_getsotaskdangxuly);
+                                    reply = JsonConvert.SerializeObject(getsotaskdangxuly, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskDangXuLiById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdahoanthanh":
+                                try
+                                {
+                                    var data_getsotaskdahoanthanh = (JObject)request.Data;
+                                    int maNguoiDung_getsotaskdahoanthanh = data_getsotaskdahoanthanh["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int getsotaskdahoanthanh = CongViecDAO.getSoTaskHoanThanhById(maNguoiDung_getsotaskdahoanthanh);
+                                    reply = JsonConvert.SerializeObject(getsotaskdahoanthanh, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskDaHoanThanhById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdatre":
+                                try
+                                {
+                                    var data_getsotaskdatre = (JObject)request.Data;
+                                    int maNguoiDung_getsotaskdatre = data_getsotaskdatre["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int getsotaskdatre = CongViecDAO.getSoTaskTreById(maNguoiDung_getsotaskdatre);
+                                    reply = JsonConvert.SerializeObject(getsotaskdatre, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTreById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getnguoigiao":
+                                try
+                                {
+                                    int maNguoiGiao_getnguoigiao = ((JObject)request.Data)["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var nguoiGiao = CongViecDAO.GetNguoiGiaoViec(maNguoiGiao_getnguoigiao);
+                                    reply = JsonConvert.SerializeObject(nguoiGiao, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi GetNguoiGiaoById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(null);
+                                }
+                                break;
+
+                            case "getsotaskdahoanthanhbyfilter":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var start = data["NgayBatDau"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    var end = data["NgayKetThuc"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    int soTask = CongViecDAO.getSoTaskHoanThanhByIdByFilter(maNguoiDung, start, end);
+                                    reply = JsonConvert.SerializeObject(soTask, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanByfilter: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotasktrehanbyfilter":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var start = data["NgayBatDau"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    var end = data["NgayKetThuc"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    int soTask = CongViecDAO.getSoTaskTreHanByIdByFilter(maNguoiDung, start, end);
+                                    reply = JsonConvert.SerializeObject(soTask, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanByfilter: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskchuxulibyfilter":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var start = data["NgayBatDau"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    var end = data["NgayKetThuc"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    int soTask = CongViecDAO.getSoTaskChuaXuLiByIdByFilter(maNguoiDung, start, end);
+                                    reply = JsonConvert.SerializeObject(soTask, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanByfilter: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdangxulibyfilter":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var start = data["NgayBatDau"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    var end = data["NgayKetThuc"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    int soTask = CongViecDAO.getSoTaskDangXuLiByIdByFilter(maNguoiDung, start, end);
+                                    reply = JsonConvert.SerializeObject(soTask, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanByfilter: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdagiaohoanthanhbyfilter":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var start = data["NgayBatDau"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    var end = data["NgayKetThuc"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    int soTask = CongViecDAO.getSoTaskDaGiaoHoanThanhByIdByFilter(maNguoiDung, start, end);
+                                    reply = JsonConvert.SerializeObject(soTask, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanByfilter: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdagiaotrehanbyfilter":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var start = data["NgayBatDau"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    var end = data["NgayKetThuc"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    int soTask = CongViecDAO.getSoTaskDaGiaoTreHanByIdByFilter(maNguoiDung, start, end);
+                                    reply = JsonConvert.SerializeObject(soTask, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanByfilter: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdagiaochuaxulibyfilter":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var start = data["NgayBatDau"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    var end = data["NgayKetThuc"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    int soTask = CongViecDAO.getSoTaskDaGiaoChuaXuLiByIdByFilter(maNguoiDung, start, end);
+                                    reply = JsonConvert.SerializeObject(soTask, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanByfilter: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdagiaodangxulibyfilter":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    var start = data["NgayBatDau"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    var end = data["NgayKetThuc"]?.ToObject<DateTime>() ?? DateTime.Now;
+                                    int soTask = CongViecDAO.getSoTaskDaGiaoDangXuLiByIdByFilter(maNguoiDung, start, end);
+                                    reply = JsonConvert.SerializeObject(soTask, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanByfilter: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdagiaotrongtuan":
+                                try
+                                {
+                                    var data_getsotasktrongtuan = (JObject)request.Data;
+                                    int maNguoiDung_getsotasktrongtuan = data_getsotasktrongtuan["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int soTaskTrongTuan = CongViecDAO.getSoTaskDaGiaoTrongTuanById(maNguoiDung_getsotasktrongtuan);
+                                    reply = JsonConvert.SerializeObject(soTaskTrongTuan, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongTuanById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdagiaotrongthang":
+                                try
+                                {
+                                    var data_getsotasktrongthang = (JObject)request.Data;
+                                    int maNguoiDung_getsotasktrongthang = data_getsotasktrongthang["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int soTaskTrongThang = CongViecDAO.getSoTaskDaGiaoTrongThangById(maNguoiDung_getsotasktrongthang);
+                                    reply = JsonConvert.SerializeObject(soTaskTrongThang, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongThangById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getsotaskdagiaotrongnam":
+                                try
+                                {
+                                    var data_getsotasktrongnam = (JObject)request.Data;
+                                    int maNguoiDung_getsotasktrongnam = data_getsotasktrongnam["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int soTaskTrongNam = CongViecDAO.getSoTaskDaGiaoTrongNamById(maNguoiDung_getsotasktrongnam);
+                                    reply = JsonConvert.SerializeObject(soTaskTrongNam, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getSoTaskTrongNamById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getisgiaoviec":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maNguoiDung = data["MaNguoiDung"]?.ToObject<int>() ?? 0;
+                                    int maCTCV = data["MaCTCV"]?.ToObject<int>() ?? 0;
+                                    var result = CongViecDAO.getIsGiaoViec(maNguoiDung, maCTCV);
+
+                                    reply = JsonConvert.SerializeObject(result, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getIsGiaoViec: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "getmacongviec":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maCTCV = data["MaCTCV"]?.ToObject<int>() ?? 0;
+                                    var result = CongViecDAO.getMaCongViecByMaChiTietCV(maCTCV);
+
+                                    reply = JsonConvert.SerializeObject(result, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getMaCOngViec: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
                                 }
                                 break;
 
