@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -854,6 +855,68 @@ namespace TcpServerApp
                                     reply = JsonConvert.SerializeObject(0);
                                 }
                                 break;
+
+                            case "gettepbymatep":
+                                try
+                                {
+                                    var data = (JObject)request.Data;
+                                    int maCTCV = data["MaTep"]?.ToObject<int>() ?? 0;
+                                    var result = CongViecDAO.GetTepTinById(maCTCV);
+
+                                    reply = JsonConvert.SerializeObject(result, Formatting.None);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi getTepById: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject(0);
+                                }
+                                break;
+
+                            case "uploadfile":
+                                try
+                                {
+                                    // Parse JSON chứa metadata file
+                                    var data = (JObject)request.Data;
+                                    string fileName = data["FileName"]?.ToString();
+                                    int fileSize = data["FileSize"]?.ToObject<int>() ?? 0;
+
+                                    if (string.IsNullOrWhiteSpace(fileName) || fileSize <= 0)
+                                    {
+                                        reply = JsonConvert.SerializeObject("Thông tin file không hợp lệ.");
+                                        break;
+                                    }
+
+                                    // Nhận tiếp dữ liệu file sau khi nhận JSON
+                                    byte[] fileBuffer = new byte[fileSize];
+                                    int totalReceived = 0;
+                                    while (totalReceived < fileSize)
+                                    {
+                                        int bytesRead = stream.Read(fileBuffer, totalReceived, fileSize - totalReceived);
+                                        if (bytesRead == 0)
+                                        {
+                                            Console.WriteLine("Client ngắt kết nối giữa lúc gửi file.");
+                                            reply = JsonConvert.SerializeObject("Lỗi trong quá trình nhận file.");
+                                            break;
+                                        }
+                                        totalReceived += bytesRead;
+                                    }
+
+                                    // Lưu file vào thư mục Attachments (MyDocuments/Attachments)
+                                    string saveFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
+                                    Directory.CreateDirectory(saveFolder);
+                                    string filePath = Path.Combine(saveFolder, fileName);
+                                    File.WriteAllBytes(filePath, fileBuffer);
+
+                                    Console.WriteLine($"Đã lưu file: {filePath}");
+                                    reply = JsonConvert.SerializeObject("Upload thành công.");
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine("Lỗi upload file: " + ex.Message);
+                                    reply = JsonConvert.SerializeObject("Lỗi upload file: " + ex.Message);
+                                }
+                                break;
+
 
                             default:
                                 reply = "Lệnh không hợp lệ.";

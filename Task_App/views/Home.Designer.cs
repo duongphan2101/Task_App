@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using DevExpress.Utils.Extensions;
+using System.Windows.Forms;
 using Task_App.Model;
 
 namespace Task_App.views
@@ -94,7 +95,7 @@ namespace Task_App.views
             this.panelControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.panelControl1.Controls.Add(this.panel);
             this.panelControl1.Location = new System.Drawing.Point(2, 2);
-            this.panelControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panelControl1.Margin = new System.Windows.Forms.Padding(0);
             this.panelControl1.Name = "panelControl1";
             this.panelControl1.Size = new System.Drawing.Size(1417, 880);
             this.panelControl1.TabIndex = 0;
@@ -106,7 +107,7 @@ namespace Task_App.views
             this.panel.Controls.Add(this.panelControlMenu);
             this.panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel.Location = new System.Drawing.Point(0, 0);
-            this.panel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel.Margin = new System.Windows.Forms.Padding(0);
             this.panel.Name = "panel";
             this.panel.Size = new System.Drawing.Size(1417, 880);
             this.panel.TabIndex = 4;
@@ -466,16 +467,6 @@ namespace Task_App.views
             this.menu_ThongBao.Size = new System.Drawing.Size(61, 4);
             this.menu_ThongBao.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
             // 
-            // cccswxToolStripMenuItem
-            // 
-            this.cccswxToolStripMenuItem.Name = "cccswxToolStripMenuItem";
-            this.cccswxToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
-            // 
-            // eehToolStripMenuItem
-            // 
-            this.eehToolStripMenuItem.Name = "eehToolStripMenuItem";
-            this.eehToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
-            // 
             // HomelayoutControl1ConvertedLayout
             // 
             this.HomelayoutControl1ConvertedLayout.Controls.Add(this.panelControl1);
@@ -500,6 +491,7 @@ namespace Task_App.views
             this.layoutControlGroup1.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
             this.layoutControlGroup1.Size = new System.Drawing.Size(1421, 884);
             this.layoutControlGroup1.TextVisible = false;
+            this.layoutControlGroup1.GroupBordersVisible = false;
             // 
             // panelControl1item
             // 

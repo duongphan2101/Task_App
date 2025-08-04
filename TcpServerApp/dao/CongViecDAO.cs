@@ -2048,6 +2048,28 @@ namespace TcpServerApp.DAO
 
         }
 
+        public TepTin GetTepTinById(int maTep)
+        {
+            string query = "SELECT * FROM TepTin WHERE MaTep = @maTep";
+            SqlParameter[] parameters = {
+                new SqlParameter("@maTep", maTep)
+            };
+
+            DataTable dt = conn.ExecuteQuery(query, parameters);
+            if (dt.Rows.Count > 0)
+            {
+                DataRow row = dt.Rows[0];
+                TepTin tep = new TepTin
+                {
+                    MaTep = (int)row["MaTep"],
+                    TenTep = row["TenTep"].ToString(),
+                    TenTepGoc = row["TenTepGoc"].ToString(),
+                    DuongDan = row["DuongDan"].ToString(),
+                };
+                return tep;
+            }
+            return null;
+        }
 
 
     }

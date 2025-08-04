@@ -1,6 +1,7 @@
-DevExpress.XtraLayout.LayoutControl, DevExpress.XtraLayout.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
 DevExpress.DashboardWin.DashboardViewer, DevExpress.Dashboard.v24.2.Win, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
-DevExpress.XtraEditors.LabelControl, DevExpress.XtraEditors.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
-DevExpress.DashboardWin.DashboardDesigner, DevExpress.Dashboard.v24.2.Win, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
 DevExpress.DashboardCommon.Dashboard, DevExpress.Dashboard.v24.2.Core, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
+DevExpress.XtraLayout.LayoutControl, DevExpress.XtraLayout.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
+DevExpress.DashboardWin.DashboardDesigner, DevExpress.Dashboard.v24.2.Win, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
+DevExpress.XtraEditors.LabelControl, DevExpress.XtraEditors.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
 DevExpress.XtraRichEdit.RichEditControl, DevExpress.XtraRichEdit.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a
+DevExpress.XtraBars.PopupControlContainer, DevExpress.XtraBars.v24.2, Version=24.2.7.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a

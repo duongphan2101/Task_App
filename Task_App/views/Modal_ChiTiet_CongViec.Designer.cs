@@ -38,6 +38,10 @@ namespace Task_App.views
             this.popupContainerControl = new DevExpress.XtraEditors.PopupContainerControl();
             this.flow_FeedBack = new System.Windows.Forms.FlowLayoutPanel();
             this.panel_FB_Bottom = new Guna.UI2.WinForms.Guna2Panel();
+            this.panel_Bottom_Main = new Guna.UI2.WinForms.Guna2Panel();
+            this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
+            this.txtMessage = new Guna.UI2.WinForms.Guna2TextBox();
+            this.btn_Send = new Guna.UI2.WinForms.Guna2CircleButton();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnOpenClose = new Guna.UI2.WinForms.Guna2CircleButton();
             this.lblFeedback = new System.Windows.Forms.Label();
@@ -62,10 +66,8 @@ namespace Task_App.views
             this.lblBc = new System.Windows.Forms.Label();
             this.panel_Content_Top = new Guna.UI2.WinForms.Guna2Panel();
             this.lblTieuDe = new System.Windows.Forms.Label();
-            this.panel_Bottom_Main = new Guna.UI2.WinForms.Guna2Panel();
-            this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
-            this.txtMessage = new Guna.UI2.WinForms.Guna2TextBox();
-            this.btn_Send = new Guna.UI2.WinForms.Guna2CircleButton();
+            this.btnAddFile = new Guna.UI2.WinForms.Guna2CircleButton();
+            this.flowFiles = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl_ChiTietCongViec)).BeginInit();
             this.panelControl_ChiTietCongViec.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl_Content)).BeginInit();
@@ -74,6 +76,8 @@ namespace Task_App.views
             ((System.ComponentModel.ISupportInitialize)(this.popupContainerControl)).BeginInit();
             this.popupContainerControl.SuspendLayout();
             this.panel_FB_Bottom.SuspendLayout();
+            this.panel_Bottom_Main.SuspendLayout();
+            this.flowLayoutPanel5.SuspendLayout();
             this.flowLayoutPanel3.SuspendLayout();
             this.panel_NoiDung.SuspendLayout();
             this.panel_NoiDung_Main.SuspendLayout();
@@ -83,8 +87,6 @@ namespace Task_App.views
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel_Content_Top.SuspendLayout();
-            this.panel_Bottom_Main.SuspendLayout();
-            this.flowLayoutPanel5.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelControl_ChiTietCongViec
@@ -152,7 +154,7 @@ namespace Task_App.views
             this.flow_FeedBack.Margin = new System.Windows.Forms.Padding(0);
             this.flow_FeedBack.Name = "flow_FeedBack";
             this.flow_FeedBack.Padding = new System.Windows.Forms.Padding(5);
-            this.flow_FeedBack.Size = new System.Drawing.Size(570, 539);
+            this.flow_FeedBack.Size = new System.Drawing.Size(570, 492);
             this.flow_FeedBack.TabIndex = 5;
             this.flow_FeedBack.WrapContents = false;
             // 
@@ -161,12 +163,78 @@ namespace Task_App.views
             this.panel_FB_Bottom.BackColor = System.Drawing.Color.Transparent;
             this.panel_FB_Bottom.Controls.Add(this.panel_Bottom_Main);
             this.panel_FB_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel_FB_Bottom.Location = new System.Drawing.Point(0, 599);
+            this.panel_FB_Bottom.Location = new System.Drawing.Point(0, 552);
             this.panel_FB_Bottom.Margin = new System.Windows.Forms.Padding(0);
             this.panel_FB_Bottom.Name = "panel_FB_Bottom";
             this.panel_FB_Bottom.Padding = new System.Windows.Forms.Padding(10);
-            this.panel_FB_Bottom.Size = new System.Drawing.Size(570, 100);
+            this.panel_FB_Bottom.Size = new System.Drawing.Size(570, 147);
             this.panel_FB_Bottom.TabIndex = 4;
+            // 
+            // panel_Bottom_Main
+            // 
+            this.panel_Bottom_Main.BackColor = System.Drawing.Color.Transparent;
+            this.panel_Bottom_Main.BorderRadius = 15;
+            this.panel_Bottom_Main.Controls.Add(this.flowLayoutPanel5);
+            this.panel_Bottom_Main.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_Bottom_Main.FillColor = System.Drawing.Color.WhiteSmoke;
+            this.panel_Bottom_Main.Location = new System.Drawing.Point(10, 10);
+            this.panel_Bottom_Main.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_Bottom_Main.Name = "panel_Bottom_Main";
+            this.panel_Bottom_Main.Size = new System.Drawing.Size(550, 127);
+            this.panel_Bottom_Main.TabIndex = 0;
+            // 
+            // flowLayoutPanel5
+            // 
+            this.flowLayoutPanel5.AutoSize = true;
+            this.flowLayoutPanel5.Controls.Add(this.txtMessage);
+            this.flowLayoutPanel5.Controls.Add(this.btnAddFile);
+            this.flowLayoutPanel5.Controls.Add(this.btn_Send);
+            this.flowLayoutPanel5.Controls.Add(this.flowFiles);
+            this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel5.Name = "flowLayoutPanel5";
+            this.flowLayoutPanel5.Padding = new System.Windows.Forms.Padding(10);
+            this.flowLayoutPanel5.Size = new System.Drawing.Size(550, 127);
+            this.flowLayoutPanel5.TabIndex = 0;
+            // 
+            // txtMessage
+            // 
+            this.txtMessage.BorderRadius = 15;
+            this.txtMessage.BorderThickness = 0;
+            this.txtMessage.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtMessage.DefaultText = "";
+            this.txtMessage.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.txtMessage.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.txtMessage.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtMessage.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtMessage.FillColor = System.Drawing.SystemColors.Window;
+            this.txtMessage.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtMessage.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.txtMessage.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtMessage.Location = new System.Drawing.Point(13, 14);
+            this.txtMessage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.txtMessage.Name = "txtMessage";
+            this.txtMessage.PlaceholderText = "";
+            this.txtMessage.SelectedText = "";
+            this.txtMessage.Size = new System.Drawing.Size(404, 48);
+            this.txtMessage.TabIndex = 0;
+            // 
+            // btn_Send
+            // 
+            this.btn_Send.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btn_Send.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btn_Send.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btn_Send.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btn_Send.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btn_Send.ForeColor = System.Drawing.Color.White;
+            this.btn_Send.Image = ((System.Drawing.Image)(resources.GetObject("btn_Send.Image")));
+            this.btn_Send.Location = new System.Drawing.Point(488, 10);
+            this.btn_Send.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btn_Send.Name = "btn_Send";
+            this.btn_Send.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+            this.btn_Send.Size = new System.Drawing.Size(48, 48);
+            this.btn_Send.TabIndex = 1;
+            this.btn_Send.Click += new System.EventHandler(this.btn_Send_Click);
             // 
             // flowLayoutPanel3
             // 
@@ -484,69 +552,29 @@ namespace Task_App.views
             this.lblTieuDe.Text = "TieuDe";
             this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // panel_Bottom_Main
+            // btnAddFile
             // 
-            this.panel_Bottom_Main.BackColor = System.Drawing.Color.Transparent;
-            this.panel_Bottom_Main.BorderRadius = 15;
-            this.panel_Bottom_Main.Controls.Add(this.flowLayoutPanel5);
-            this.panel_Bottom_Main.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_Bottom_Main.FillColor = System.Drawing.Color.WhiteSmoke;
-            this.panel_Bottom_Main.Location = new System.Drawing.Point(10, 10);
-            this.panel_Bottom_Main.Margin = new System.Windows.Forms.Padding(0);
-            this.panel_Bottom_Main.Name = "panel_Bottom_Main";
-            this.panel_Bottom_Main.Size = new System.Drawing.Size(550, 80);
-            this.panel_Bottom_Main.TabIndex = 0;
+            this.btnAddFile.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnAddFile.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnAddFile.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnAddFile.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnAddFile.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnAddFile.ForeColor = System.Drawing.Color.White;
+            this.btnAddFile.Image = ((System.Drawing.Image)(resources.GetObject("btnAddFile.Image")));
+            this.btnAddFile.Location = new System.Drawing.Point(430, 10);
+            this.btnAddFile.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnAddFile.Name = "btnAddFile";
+            this.btnAddFile.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+            this.btnAddFile.Size = new System.Drawing.Size(48, 48);
+            this.btnAddFile.TabIndex = 2;
+            this.btnAddFile.Click += new System.EventHandler(this.btnAddFile_Click);
             // 
-            // flowLayoutPanel5
+            // flowFiles
             // 
-            this.flowLayoutPanel5.AutoSize = true;
-            this.flowLayoutPanel5.Controls.Add(this.txtMessage);
-            this.flowLayoutPanel5.Controls.Add(this.btn_Send);
-            this.flowLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel5.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel5.Name = "flowLayoutPanel5";
-            this.flowLayoutPanel5.Padding = new System.Windows.Forms.Padding(10);
-            this.flowLayoutPanel5.Size = new System.Drawing.Size(550, 80);
-            this.flowLayoutPanel5.TabIndex = 0;
-            // 
-            // txtMessage
-            // 
-            this.txtMessage.BorderRadius = 15;
-            this.txtMessage.BorderThickness = 0;
-            this.txtMessage.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txtMessage.DefaultText = "";
-            this.txtMessage.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
-            this.txtMessage.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
-            this.txtMessage.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.txtMessage.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.txtMessage.FillColor = System.Drawing.SystemColors.Window;
-            this.txtMessage.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtMessage.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtMessage.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtMessage.Location = new System.Drawing.Point(13, 14);
-            this.txtMessage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtMessage.Name = "txtMessage";
-            this.txtMessage.PlaceholderText = "";
-            this.txtMessage.SelectedText = "";
-            this.txtMessage.Size = new System.Drawing.Size(451, 48);
-            this.txtMessage.TabIndex = 0;
-            // 
-            // btn_Send
-            // 
-            this.btn_Send.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btn_Send.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btn_Send.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btn_Send.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btn_Send.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btn_Send.ForeColor = System.Drawing.Color.White;
-            this.btn_Send.Image = ((System.Drawing.Image)(resources.GetObject("btn_Send.Image")));
-            this.btn_Send.Location = new System.Drawing.Point(487, 10);
-            this.btn_Send.Margin = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.btn_Send.Name = "btn_Send";
-            this.btn_Send.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.btn_Send.Size = new System.Drawing.Size(48, 48);
-            this.btn_Send.TabIndex = 1;
-            this.btn_Send.Click += new System.EventHandler(this.btn_Send_Click);
+            this.flowFiles.Location = new System.Drawing.Point(13, 69);
+            this.flowFiles.Name = "flowFiles";
+            this.flowFiles.Size = new System.Drawing.Size(523, 60);
+            this.flowFiles.TabIndex = 3;
             // 
             // Modal_ChiTiet_CongViec
             // 
@@ -572,6 +600,9 @@ namespace Task_App.views
             ((System.ComponentModel.ISupportInitialize)(this.popupContainerControl)).EndInit();
             this.popupContainerControl.ResumeLayout(false);
             this.panel_FB_Bottom.ResumeLayout(false);
+            this.panel_Bottom_Main.ResumeLayout(false);
+            this.panel_Bottom_Main.PerformLayout();
+            this.flowLayoutPanel5.ResumeLayout(false);
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
             this.panel_NoiDung.ResumeLayout(false);
@@ -587,9 +618,6 @@ namespace Task_App.views
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.panel_Content_Top.ResumeLayout(false);
-            this.panel_Bottom_Main.ResumeLayout(false);
-            this.panel_Bottom_Main.PerformLayout();
-            this.flowLayoutPanel5.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -630,5 +658,7 @@ namespace Task_App.views
         private FlowLayoutPanel flowLayoutPanel5;
         private Guna.UI2.WinForms.Guna2TextBox txtMessage;
         private Guna.UI2.WinForms.Guna2CircleButton btn_Send;
+        private Guna.UI2.WinForms.Guna2CircleButton btnAddFile;
+        private FlowLayoutPanel flowFiles;
     }
 }

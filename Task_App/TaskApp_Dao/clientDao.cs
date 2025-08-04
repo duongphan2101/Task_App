@@ -1207,6 +1207,23 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
+        public TepTin getTepbyId(int maTep)
+        {
+            var requestData = new
+            {
+                MaTep = maTep
+            };
+            var response = SendAndReceive("gettepbymatep", requestData);
+            try
+            {
+                return JsonConvert.DeserializeObject<TepTin>(response);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy tập tin: " + ex.Message);
+                return null;
+            }
+        }
 
 
     }
