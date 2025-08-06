@@ -29,7 +29,7 @@ namespace Task_App.views
             LoadData();
         }
 
-        private void LoadData()
+        public void LoadData()
         {
             DataTable dt = CongViecService.GetCongViecDaGiao(maNguoiDung, !locTheoNgay);
 
@@ -114,8 +114,8 @@ namespace Task_App.views
             var maCTCV = (row.Cells["maChiTietCV"].Value as int?) ?? -1;
             
             buttonCell.Tag = maCongViec;
-
-            var modal = new Modal_ChiTiet_CongViec(maCongViec, maCTCV, maNguoiDung, true, tcpClientDAO);
+            Task_Duoc_Giao_Control tdgiao = new Task_Duoc_Giao_Control(maNguoiDung, tcpClientDAO);
+            var modal = new Modal_ChiTiet_CongViec(maCongViec, maCTCV, maNguoiDung, true, tcpClientDAO, tdgiao);
             modal.FormClosed += (s, args) => { buttonCell.Tag = null; };
             modal.Show();
         }
@@ -149,7 +149,7 @@ namespace Task_App.views
 
         private void btn_AddTask_Click(object sender, EventArgs e)
         {
-            var modal = new Modal_Create_Task(maNguoiDung, tcpClientDAO);
+            var modal = new Modal_Create_Task(maNguoiDung, tcpClientDAO, this);
             modal.ShowDialog(); // xài ShowDialog để làm form này là cái duy nhất interact được
             modal.FormClosed += (s, args) => LoadData();
         }
@@ -164,6 +164,12 @@ namespace Task_App.views
         {
             locTheoNgay = !radio_DaHoanThanh.Checked;
             LoadData();
+        }
+
+        private void btn_AddTask_MouseHover(object sender, EventArgs e)
+        {
+           ToolTip toolTip = new ToolTip();
+            toolTip.SetToolTip(btn_AddTask, "Thêm công việc mới");
         }
     }
 }

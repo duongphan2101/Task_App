@@ -24,16 +24,25 @@ namespace Task_App.views
         private List<string> selectedEmail_bcc = new List<string>();
         private List<TepDinhKemEmail> lstTepDinhKem = new List<TepDinhKemEmail>();
         private List<TepTin> lstTepDaChon = new List<TepTin>();
+        private int mucDo = 0; // 0: Bình thường, 1: Quan trọng, 2: Khẩn cấp
 
-        public Modal_Create_Task(int id, TcpClientDAO tcpClientDAO)
+        private Create_Task_Control tdg;
+
+        public Modal_Create_Task(int id, TcpClientDAO tcpClientDAO, Create_Task_Control tdg)
         {
             maNguoiDung = id;
             this.tcpClientDAO = tcpClientDAO;
+            this.tdg = tdg;
             InitializeComponent();
             radio_Khong.Checked = true;
             emailPopup.Visible = false;
             DeadLine.Value = DateTime.Now;
             StartDay.Value = DateTime.Now;
+
+            cbMucDo.Text = "Bình thường";
+            cbMucDo.SelectedIndex = 0;
+
+            txtTieuDe.Focus();
         }
 
         private List<string> emailSuggestions()
@@ -560,7 +569,9 @@ namespace Task_App.views
                     {
 
                         //MessageBox.Show("Tạo task phân công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Close();
+                        //this.Close();
+                        tdg.LoadData();
+                        empty();
 
                     }
                     else
@@ -839,7 +850,9 @@ namespace Task_App.views
                     if (sendEmail && updateEmail)
                     {
                         MessageBox.Show("Đã gửi email công việc đến người người được phân công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Close();
+                        tdg.LoadData();
+                        empty();
+
                     }
                     else
                     {
@@ -854,7 +867,21 @@ namespace Task_App.views
             }
             //
 
+        }
 
+        private void empty()
+        {
+            txtTieuDe.Text = "";
+            txtNoiDung.Text = "";
+            txtEmailInput.Text = "";
+            txtEmailCC.Text = "";
+            txtEmailBcc.Text = "";
+            txtHanHoanThanh.Text = "";
+            lstTepDaChon.Clear();
+            lstTepDinhKem.Clear();
+            mucDo = 0;
+            cbMucDo.Text = "Bình thường";
+            cbMucDo.SelectedIndex = 0;
         }
 
         private void createNotifications(ThongBaoNguoiDung tb)
@@ -1219,7 +1246,25 @@ namespace Task_App.views
             return $"{maCongViec}_{timePart}_{randomPart}";
         }
 
+        private void cbMucDo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbMucDo.SelectedItem != null)
+            {
+                string selectedValue = cbMucDo.SelectedItem.ToString();
+                if (selectedValue == "Bình Thường")
+                {
+                    mucDo = 0;
+                }
+                else if (selectedValue == "Quan Trọng")
+                {
+                    mucDo = 1;
+                }
+                else if (selectedValue == "Khẩn Cấp")
+                {
+                    mucDo = 2;
+                }
 
-
+            }
+        }
     }
 }

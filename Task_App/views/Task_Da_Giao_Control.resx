@@ -121,26 +121,14 @@
   <data name="btn_AddTask.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DQAACw0B7QfALAAAAZFJREFUWEftl0tKBDEQhlvQpXok8XEDEa/j+PYePq6gbnQu4t7nTpfq/8E0NOFP
-        uhJmoTA/fNCkuyo1SVUq0y3037QstsWFuBLTGTwzxju+mbvWxYn4ED8j8M2xWBNz0b54FW6yEtjsiWYt
-        iSPxLdwEEbA9FPiqFpM7py1MRJVY9sgvvxV3yZgDX+HtIOEie/4pyHj4mo2VeBGhxDwVzkEK2d4rUh3A
-        tha1IqLOWgJ4F8VzYkc4Q0dLALApsuI0c0aO1gDORFY3whmRcEwy5En04jl9j43zxbGd1aNIDSi1lvMd
-        G1eiDyIrFwBOWgO4F6m/YgDXIjUA6jxd4rEtyJ0NxS04F87IwSS9eHbfOIpJuCWckaM1gA2RFfv2Jpxh
-        SksA+B7NJy4TzjilJYBQV6Rh0DicgyG1zehZrIqQaJ2RdkyJulJLwdeuqBI3GeeshQNRLa5RBBFZiRzY
-        MnnTlawX2xHJiRT2vHrZcyIxuUzQz91kQyg1Vi6ccDUi4+nnnGaXov9jwjNjvBut84X+kLruF+vAxP8R
-        M41qAAAAAElFTkSuQmCC
+        DAAACwwBP0AiyAAAAZhJREFUWEftl0lOBDEMRT8SLIEjIYYbIMR1mId7MFwBegNchD3jDpaAnlQlRS4n
+        cSIWIPWXvlSq1LfdsR2npTn+GRYlbUo6l3Qp6WEgz7xjjW9+HauSjiW9S/qukG+OJK1YI73YlfTiOKoR
+        zY411oIFSYeSvhzjUaI9GGw1A+fWYC/3rfEa2PbIL7+RdOu8t8RWOB0UXCTnH0PFw09n3fI5Wpgnjtgj
+        1T4i0h2QtBax1GCsJ4C32jmx5Yhy7AkArie6CTjNrCDH3gBOE90E144AUnA4SfmY6Hi262isHcixncW9
+        I6DVinnLAI3Xonf2wxReABjpDWDm2CsGcOUIIH1ut7iWgtzZUEzBmSPIEScjeLbrORaLcMMR5NgbwFqi
+        m4C8vToijz0BYLtaT1wmrNBjTwChqcjAYHBYsWXrMHqStGyd5cDojIxjWtRrNUtsbVsnNXCTsYZ6uWeN
+        R8A1iiAiO5EjWpx3XclGkI5ITViS8+Ztz4HC5DLBPLeOLGk1di5ccC2g4pnnnGYXyR8TnnnHWrXP5/hT
+        +AHrwMT/sVbblwAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="task_Application_DBDataSet.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
-  <metadata name="congViecBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>265, 17</value>
-  </metadata>
-  <metadata name="congViecTableAdapter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>482, 17</value>
-  </metadata>
-  <metadata name="tableAdapterManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>692, 17</value>
-  </metadata>
 </root>

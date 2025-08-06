@@ -39,6 +39,7 @@
             this.btn_File = new Guna.UI2.WinForms.Guna2PictureBox();
             this.flowFiles = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.StartDay = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.DeadLine = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.radio_Ngay = new Guna.UI2.WinForms.Guna2RadioButton();
@@ -53,12 +54,13 @@
             this.txtEmailCC = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblBcc = new System.Windows.Forms.Label();
             this.txtEmailBcc = new Guna.UI2.WinForms.Guna2TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtHanHoanThanh = new Guna.UI2.WinForms.Guna2TextBox();
             this.panel_TieuDe = new System.Windows.Forms.Panel();
             this.txtTieuDe = new Guna.UI2.WinForms.Guna2TextBox();
             this.emailPopup = new Guna.UI2.WinForms.Guna2ContextMenuStrip();
-            this.StartDay = new Guna.UI2.WinForms.Guna2DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtHanHoanThanh = new Guna.UI2.WinForms.Guna2TextBox();
+            this.cbMucDo = new Guna.UI2.WinForms.Guna2ComboBox();
+            this.lblMucDo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl_main)).BeginInit();
             this.panelControl_main.SuspendLayout();
             this.panel_1.SuspendLayout();
@@ -83,7 +85,7 @@
             this.panelControl_main.Location = new System.Drawing.Point(0, 0);
             this.panelControl_main.Margin = new System.Windows.Forms.Padding(0);
             this.panelControl_main.Name = "panelControl_main";
-            this.panelControl_main.Size = new System.Drawing.Size(1182, 753);
+            this.panelControl_main.Size = new System.Drawing.Size(1212, 753);
             this.panelControl_main.TabIndex = 0;
             // 
             // panel_1
@@ -94,7 +96,7 @@
             this.panel_1.Location = new System.Drawing.Point(2, 73);
             this.panel_1.Margin = new System.Windows.Forms.Padding(4);
             this.panel_1.Name = "panel_1";
-            this.panel_1.Size = new System.Drawing.Size(1178, 678);
+            this.panel_1.Size = new System.Drawing.Size(1208, 678);
             this.panel_1.TabIndex = 1;
             // 
             // panel_2
@@ -103,10 +105,10 @@
             this.panel_2.Controls.Add(this.panel_Bottom);
             this.panel_2.Controls.Add(this.flowLayoutPanel2);
             this.panel_2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_2.Location = new System.Drawing.Point(0, 47);
+            this.panel_2.Location = new System.Drawing.Point(0, 88);
             this.panel_2.Margin = new System.Windows.Forms.Padding(4);
             this.panel_2.Name = "panel_2";
-            this.panel_2.Size = new System.Drawing.Size(1178, 631);
+            this.panel_2.Size = new System.Drawing.Size(1208, 590);
             this.panel_2.TabIndex = 1;
             // 
             // txtNoiDung
@@ -116,7 +118,7 @@
             this.txtNoiDung.Margin = new System.Windows.Forms.Padding(0);
             this.txtNoiDung.Name = "txtNoiDung";
             this.txtNoiDung.Options.DocumentSaveOptions.CurrentFormat = DevExpress.XtraRichEdit.DocumentFormat.PlainText;
-            this.txtNoiDung.Size = new System.Drawing.Size(1178, 437);
+            this.txtNoiDung.Size = new System.Drawing.Size(1208, 396);
             this.txtNoiDung.TabIndex = 3;
             this.txtNoiDung.Text = "Nội dung";
             // 
@@ -125,10 +127,10 @@
             this.panel_Bottom.Controls.Add(this.flowLayoutPanel4);
             this.panel_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel_Bottom.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.panel_Bottom.Location = new System.Drawing.Point(0, 501);
+            this.panel_Bottom.Location = new System.Drawing.Point(0, 460);
             this.panel_Bottom.Margin = new System.Windows.Forms.Padding(0);
             this.panel_Bottom.Name = "panel_Bottom";
-            this.panel_Bottom.Size = new System.Drawing.Size(1178, 130);
+            this.panel_Bottom.Size = new System.Drawing.Size(1208, 130);
             this.panel_Bottom.TabIndex = 2;
             // 
             // flowLayoutPanel4
@@ -141,7 +143,7 @@
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.flowLayoutPanel4.Size = new System.Drawing.Size(1178, 130);
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(1208, 130);
             this.flowLayoutPanel4.TabIndex = 1;
             // 
             // btn_Create
@@ -193,8 +195,25 @@
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(1178, 64);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(1208, 64);
             this.flowLayoutPanel2.TabIndex = 0;
+            // 
+            // StartDay
+            // 
+            this.StartDay.BackColor = System.Drawing.Color.Transparent;
+            this.StartDay.BorderRadius = 10;
+            this.StartDay.Checked = true;
+            this.StartDay.FillColor = System.Drawing.Color.White;
+            this.StartDay.Font = new System.Drawing.Font("Bahnschrift", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StartDay.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.StartDay.Location = new System.Drawing.Point(11, 10);
+            this.StartDay.Margin = new System.Windows.Forms.Padding(4);
+            this.StartDay.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.StartDay.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
+            this.StartDay.Name = "StartDay";
+            this.StartDay.Size = new System.Drawing.Size(267, 44);
+            this.StartDay.TabIndex = 11;
+            this.StartDay.Value = new System.DateTime(2025, 7, 16, 9, 3, 10, 124);
             // 
             // DeadLine
             // 
@@ -223,7 +242,7 @@
             this.flowLayoutPanel3.Location = new System.Drawing.Point(561, 10);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(553, 44);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(634, 44);
             this.flowLayoutPanel3.TabIndex = 10;
             // 
             // radio_Ngay
@@ -338,12 +357,14 @@
             this.flowLayoutPanel1.Controls.Add(this.txtEmailBcc);
             this.flowLayoutPanel1.Controls.Add(this.label1);
             this.flowLayoutPanel1.Controls.Add(this.txtHanHoanThanh);
+            this.flowLayoutPanel1.Controls.Add(this.lblMucDo);
+            this.flowLayoutPanel1.Controls.Add(this.cbMucDo);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(1178, 47);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(1208, 88);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
             // lblTo
@@ -352,9 +373,9 @@
             this.lblTo.Font = new System.Drawing.Font("Bahnschrift", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTo.Location = new System.Drawing.Point(10, 6);
             this.lblTo.Name = "lblTo";
-            this.lblTo.Size = new System.Drawing.Size(30, 16);
+            this.lblTo.Size = new System.Drawing.Size(101, 16);
             this.lblTo.TabIndex = 4;
-            this.lblTo.Text = "Đến";
+            this.lblTo.Text = "Người Nhận Việc";
             this.lblTo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txtEmailInput
@@ -369,7 +390,7 @@
             this.txtEmailInput.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtEmailInput.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.txtEmailInput.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtEmailInput.Location = new System.Drawing.Point(43, 6);
+            this.txtEmailInput.Location = new System.Drawing.Point(114, 6);
             this.txtEmailInput.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.txtEmailInput.Name = "txtEmailInput";
             this.txtEmailInput.PlaceholderText = "";
@@ -384,12 +405,12 @@
             // 
             this.lblCc.AutoSize = true;
             this.lblCc.Font = new System.Drawing.Font("Bahnschrift", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCc.Location = new System.Drawing.Point(308, 6);
+            this.lblCc.Location = new System.Drawing.Point(379, 6);
             this.lblCc.Margin = new System.Windows.Forms.Padding(0);
             this.lblCc.Name = "lblCc";
-            this.lblCc.Size = new System.Drawing.Size(26, 16);
+            this.lblCc.Size = new System.Drawing.Size(131, 16);
             this.lblCc.TabIndex = 6;
-            this.lblCc.Text = "CC:";
+            this.lblCc.Text = "Người  Tham Gia Cùng";
             this.lblCc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txtEmailCC
@@ -404,7 +425,7 @@
             this.txtEmailCC.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtEmailCC.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.txtEmailCC.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtEmailCC.Location = new System.Drawing.Point(334, 6);
+            this.txtEmailCC.Location = new System.Drawing.Point(510, 6);
             this.txtEmailCC.Margin = new System.Windows.Forms.Padding(0, 0, 15, 0);
             this.txtEmailCC.Name = "txtEmailCC";
             this.txtEmailCC.PlaceholderText = "";
@@ -419,12 +440,12 @@
             // 
             this.lblBcc.AutoSize = true;
             this.lblBcc.Font = new System.Drawing.Font("Bahnschrift", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblBcc.Location = new System.Drawing.Point(599, 6);
+            this.lblBcc.Location = new System.Drawing.Point(775, 6);
             this.lblBcc.Margin = new System.Windows.Forms.Padding(0);
             this.lblBcc.Name = "lblBcc";
-            this.lblBcc.Size = new System.Drawing.Size(30, 16);
+            this.lblBcc.Size = new System.Drawing.Size(95, 16);
             this.lblBcc.TabIndex = 8;
-            this.lblBcc.Text = "Bcc:";
+            this.lblBcc.Text = "Người Giám Sát";
             this.lblBcc.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // txtEmailBcc
@@ -439,7 +460,7 @@
             this.txtEmailBcc.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtEmailBcc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.txtEmailBcc.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtEmailBcc.Location = new System.Drawing.Point(629, 6);
+            this.txtEmailBcc.Location = new System.Drawing.Point(870, 6);
             this.txtEmailBcc.Margin = new System.Windows.Forms.Padding(0);
             this.txtEmailBcc.Name = "txtEmailBcc";
             this.txtEmailBcc.PlaceholderText = "";
@@ -449,6 +470,38 @@
             this.txtEmailBcc.TextChanged += new System.EventHandler(this.txtEmailBcc_TextChanged);
             this.txtEmailBcc.Enter += new System.EventHandler(this.txtEmailBcc_Enter);
             this.txtEmailBcc.Leave += new System.EventHandler(this.txtEmailBcc_Leave);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Bahnschrift", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(17, 46);
+            this.label1.Margin = new System.Windows.Forms.Padding(10, 5, 0, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(134, 16);
+            this.label1.TabIndex = 10;
+            this.label1.Text = "Hạn Hoàn Thành/Ngày";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtHanHoanThanh
+            // 
+            this.txtHanHoanThanh.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtHanHoanThanh.DefaultText = "";
+            this.txtHanHoanThanh.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.txtHanHoanThanh.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.txtHanHoanThanh.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtHanHoanThanh.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.txtHanHoanThanh.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtHanHoanThanh.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.txtHanHoanThanh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtHanHoanThanh.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtHanHoanThanh.Location = new System.Drawing.Point(151, 46);
+            this.txtHanHoanThanh.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.txtHanHoanThanh.Name = "txtHanHoanThanh";
+            this.txtHanHoanThanh.PlaceholderText = "";
+            this.txtHanHoanThanh.SelectedText = "";
+            this.txtHanHoanThanh.Size = new System.Drawing.Size(110, 35);
+            this.txtHanHoanThanh.TabIndex = 9;
             // 
             // panel_TieuDe
             // 
@@ -460,7 +513,7 @@
             this.panel_TieuDe.Margin = new System.Windows.Forms.Padding(0);
             this.panel_TieuDe.Name = "panel_TieuDe";
             this.panel_TieuDe.Padding = new System.Windows.Forms.Padding(13, 12, 13, 12);
-            this.panel_TieuDe.Size = new System.Drawing.Size(1178, 71);
+            this.panel_TieuDe.Size = new System.Drawing.Size(1208, 71);
             this.panel_TieuDe.TabIndex = 0;
             // 
             // txtTieuDe
@@ -487,7 +540,7 @@
             this.txtTieuDe.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.txtTieuDe.PlaceholderText = "Tiêu đề";
             this.txtTieuDe.SelectedText = "";
-            this.txtTieuDe.Size = new System.Drawing.Size(1152, 47);
+            this.txtTieuDe.Size = new System.Drawing.Size(1182, 47);
             this.txtTieuDe.TabIndex = 0;
             // 
             // emailPopup
@@ -505,64 +558,47 @@
             this.emailPopup.RenderStyle.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.emailPopup.Size = new System.Drawing.Size(61, 4);
             // 
-            // StartDay
+            // cbMucDo
             // 
-            this.StartDay.BackColor = System.Drawing.Color.Transparent;
-            this.StartDay.BorderRadius = 10;
-            this.StartDay.Checked = true;
-            this.StartDay.FillColor = System.Drawing.Color.White;
-            this.StartDay.Font = new System.Drawing.Font("Bahnschrift", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StartDay.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.StartDay.Location = new System.Drawing.Point(11, 10);
-            this.StartDay.Margin = new System.Windows.Forms.Padding(4);
-            this.StartDay.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
-            this.StartDay.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
-            this.StartDay.Name = "StartDay";
-            this.StartDay.Size = new System.Drawing.Size(267, 44);
-            this.StartDay.TabIndex = 11;
-            this.StartDay.Value = new System.DateTime(2025, 7, 16, 9, 3, 10, 124);
+            this.cbMucDo.BackColor = System.Drawing.Color.Transparent;
+            this.cbMucDo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbMucDo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMucDo.FocusedColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.cbMucDo.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.cbMucDo.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cbMucDo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.cbMucDo.ItemHeight = 30;
+            this.cbMucDo.Items.AddRange(new object[] {
+            "Bình Thường",
+            "Quan Trọng",
+            "Khẩn Cấp"});
+            this.cbMucDo.Location = new System.Drawing.Point(371, 46);
+            this.cbMucDo.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.cbMucDo.Name = "cbMucDo";
+            this.cbMucDo.Size = new System.Drawing.Size(182, 36);
+            this.cbMucDo.TabIndex = 11;
+            this.cbMucDo.SelectedIndexChanged += new System.EventHandler(this.cbMucDo_SelectedIndexChanged);
             // 
-            // label1
+            // lblMucDo
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Bahnschrift", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(889, 6);
-            this.label1.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(134, 16);
-            this.label1.TabIndex = 10;
-            this.label1.Text = "Hạn Hoàn Thành/Ngày";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // txtHanHoanThanh
-            // 
-            this.txtHanHoanThanh.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.txtHanHoanThanh.DefaultText = "";
-            this.txtHanHoanThanh.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
-            this.txtHanHoanThanh.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
-            this.txtHanHoanThanh.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.txtHanHoanThanh.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.txtHanHoanThanh.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtHanHoanThanh.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.txtHanHoanThanh.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtHanHoanThanh.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtHanHoanThanh.Location = new System.Drawing.Point(1023, 6);
-            this.txtHanHoanThanh.Margin = new System.Windows.Forms.Padding(0);
-            this.txtHanHoanThanh.Name = "txtHanHoanThanh";
-            this.txtHanHoanThanh.PlaceholderText = "";
-            this.txtHanHoanThanh.SelectedText = "";
-            this.txtHanHoanThanh.Size = new System.Drawing.Size(110, 35);
-            this.txtHanHoanThanh.TabIndex = 9;
+            this.lblMucDo.AutoSize = true;
+            this.lblMucDo.Location = new System.Drawing.Point(271, 46);
+            this.lblMucDo.Margin = new System.Windows.Forms.Padding(10, 5, 0, 0);
+            this.lblMucDo.Name = "lblMucDo";
+            this.lblMucDo.Size = new System.Drawing.Size(100, 16);
+            this.lblMucDo.TabIndex = 12;
+            this.lblMucDo.Text = "Mức Độ Ưu Tiên";
             // 
             // Modal_Create_Task
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1182, 753);
+            this.ClientSize = new System.Drawing.Size(1212, 753);
             this.Controls.Add(this.panelControl_main);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Modal_Create_Task";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tạo Công Việc";
             ((System.ComponentModel.ISupportInitialize)(this.panelControl_main)).EndInit();
             this.panelControl_main.ResumeLayout(false);
@@ -619,5 +655,7 @@
         private Guna.UI2.WinForms.Guna2DateTimePicker StartDay;
         private System.Windows.Forms.Label label1;
         private Guna.UI2.WinForms.Guna2TextBox txtHanHoanThanh;
+        private System.Windows.Forms.Label lblMucDo;
+        private Guna.UI2.WinForms.Guna2ComboBox cbMucDo;
     }
 }

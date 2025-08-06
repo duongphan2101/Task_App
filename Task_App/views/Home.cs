@@ -26,7 +26,16 @@ namespace Task_App.views
         private readonly Color hoverColor = Color.FromArgb(64, 64, 64);
         private readonly Color clickColor = Color.FromArgb(80, 80, 80);
         private readonly Color selectedColor = Color.FromArgb(80, 80, 80);
-        
+        private ToolTip toolTip = new ToolTip();
+
+        private readonly Dictionary<string, string> buttonTooltips = new Dictionary<string, string>
+        {
+            { "btnDashboard", "Trang tổng quan" },
+            { "btn_Task_DaGiao", "Công việc đã giao" },
+            { "btn_Task_DuocGiao", "Công việc được giao" },
+        };
+
+
         // phần mềm này không chạy 24/7 để tự gửi mail vào lúc 18h
         //private System.Timers.Timer dailyTimer;
         //private bool hasRunToday = false;
@@ -71,7 +80,13 @@ namespace Task_App.views
         private void OnBtnMouseEnter(object sender, EventArgs e)
         {
             var targetBtn = (Guna2ImageButton)sender;
-            if (targetBtn.Tag is null) targetBtn.BackColor = hoverColor;
+            if (targetBtn.Tag is null) {
+                targetBtn.BackColor = hoverColor;
+            }
+            if (buttonTooltips.TryGetValue(targetBtn.Name, out string tooltipText))
+            {
+                toolTip.SetToolTip(targetBtn, tooltipText);
+            }
         }
         private void OnBtnMouseLeaveOrUp(object sender, object _)
         {
@@ -219,8 +234,8 @@ namespace Task_App.views
             }
             var isGiaoViec = tcpClientDAO.getIsGiaoViec(maNguoiDung, maChiTietCV);
             string maCongViec = tcpClientDAO.getMaCongViec(maChiTietCV);
-
-            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, tcpClientDAO);
+            Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(maNguoiDung, tcpClientDAO);
+            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, tcpClientDAO, tdg);
             modal.ShowDialog();
 
         }

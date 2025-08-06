@@ -30,7 +30,6 @@ namespace Task_App.views
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Create_Task_Control));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -43,18 +42,12 @@ namespace Task_App.views
             this.radio_DaHoanThanh = new Guna.UI2.WinForms.Guna2RadioButton();
             this.radio_Xep_Theo_Ngay = new Guna.UI2.WinForms.Guna2RadioButton();
             this.data_test = new Guna.UI2.WinForms.Guna2DataGridView();
-            //this.task_Application_DBDataSet = new Task_App.Task_Application_DBDataSet();
-            this.congViecBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            //this.congViecTableAdapter = new Task_App.Task_Application_DBDataSetTableAdapters.CongViecTableAdapter();
-            //this.tableAdapterManager = new Task_App.Task_Application_DBDataSetTableAdapters.TableAdapterManager();
             this.Panel_TDG_main.SuspendLayout();
             this.TDG_Panel_Bottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.btn_AddTask)).BeginInit();
             this.Panel_Bottom_Left.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.data_test)).BeginInit();
-            //((System.ComponentModel.ISupportInitialize)(this.task_Application_DBDataSet)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.congViecBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // Panel_TDG_main
@@ -64,10 +57,10 @@ namespace Task_App.views
             this.Panel_TDG_main.Controls.Add(this.data_test);
             this.Panel_TDG_main.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel_TDG_main.FillColor = System.Drawing.Color.Teal;
-            this.Panel_TDG_main.Location = new System.Drawing.Point(8, 8);
+            this.Panel_TDG_main.Location = new System.Drawing.Point(11, 10);
             this.Panel_TDG_main.Margin = new System.Windows.Forms.Padding(0);
             this.Panel_TDG_main.Name = "Panel_TDG_main";
-            this.Panel_TDG_main.Size = new System.Drawing.Size(622, 327);
+            this.Panel_TDG_main.Size = new System.Drawing.Size(829, 402);
             this.Panel_TDG_main.TabIndex = 0;
             // 
             // TDG_Panel_Bottom
@@ -77,10 +70,10 @@ namespace Task_App.views
             this.TDG_Panel_Bottom.Controls.Add(this.Panel_Bottom_Left);
             this.TDG_Panel_Bottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.TDG_Panel_Bottom.FillColor = System.Drawing.Color.White;
-            this.TDG_Panel_Bottom.Location = new System.Drawing.Point(0, 288);
+            this.TDG_Panel_Bottom.Location = new System.Drawing.Point(0, 354);
             this.TDG_Panel_Bottom.Margin = new System.Windows.Forms.Padding(0);
             this.TDG_Panel_Bottom.Name = "TDG_Panel_Bottom";
-            this.TDG_Panel_Bottom.Size = new System.Drawing.Size(622, 39);
+            this.TDG_Panel_Bottom.Size = new System.Drawing.Size(829, 48);
             this.TDG_Panel_Bottom.TabIndex = 1;
             // 
             // btn_AddTask
@@ -91,15 +84,16 @@ namespace Task_App.views
             this.btn_AddTask.FillColor = System.Drawing.Color.Transparent;
             this.btn_AddTask.Image = ((System.Drawing.Image)(resources.GetObject("btn_AddTask.Image")));
             this.btn_AddTask.ImageRotate = 0F;
-            this.btn_AddTask.Location = new System.Drawing.Point(586, 0);
-            this.btn_AddTask.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btn_AddTask.Location = new System.Drawing.Point(781, 0);
+            this.btn_AddTask.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_AddTask.Name = "btn_AddTask";
             this.btn_AddTask.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.btn_AddTask.Size = new System.Drawing.Size(36, 39);
+            this.btn_AddTask.Size = new System.Drawing.Size(48, 48);
             this.btn_AddTask.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.btn_AddTask.TabIndex = 1;
             this.btn_AddTask.TabStop = false;
             this.btn_AddTask.Click += new System.EventHandler(this.btn_AddTask_Click);
+            this.btn_AddTask.MouseHover += new System.EventHandler(this.btn_AddTask_MouseHover);
             // 
             // Panel_Bottom_Left
             // 
@@ -107,9 +101,9 @@ namespace Task_App.views
             this.Panel_Bottom_Left.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Panel_Bottom_Left.FillColor = System.Drawing.Color.White;
             this.Panel_Bottom_Left.Location = new System.Drawing.Point(0, 0);
-            this.Panel_Bottom_Left.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Panel_Bottom_Left.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Panel_Bottom_Left.Name = "Panel_Bottom_Left";
-            this.Panel_Bottom_Left.Size = new System.Drawing.Size(622, 39);
+            this.Panel_Bottom_Left.Size = new System.Drawing.Size(829, 48);
             this.Panel_Bottom_Left.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -122,8 +116,8 @@ namespace Task_App.views
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(622, 39);
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(829, 48);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
             // radio_DaHoanThanh
@@ -134,10 +128,10 @@ namespace Task_App.views
             this.radio_DaHoanThanh.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.radio_DaHoanThanh.CheckedState.InnerColor = System.Drawing.Color.White;
             this.radio_DaHoanThanh.CheckedState.InnerOffset = -4;
-            this.radio_DaHoanThanh.Location = new System.Drawing.Point(7, 7);
-            this.radio_DaHoanThanh.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radio_DaHoanThanh.Location = new System.Drawing.Point(10, 8);
+            this.radio_DaHoanThanh.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radio_DaHoanThanh.Name = "radio_DaHoanThanh";
-            this.radio_DaHoanThanh.Size = new System.Drawing.Size(105, 17);
+            this.radio_DaHoanThanh.Size = new System.Drawing.Size(129, 20);
             this.radio_DaHoanThanh.TabIndex = 0;
             this.radio_DaHoanThanh.Text = "Theo Trạng Thái";
             this.radio_DaHoanThanh.UncheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(137)))), ((int)(((byte)(149)))));
@@ -155,10 +149,10 @@ namespace Task_App.views
             this.radio_Xep_Theo_Ngay.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.radio_Xep_Theo_Ngay.CheckedState.InnerColor = System.Drawing.Color.White;
             this.radio_Xep_Theo_Ngay.CheckedState.InnerOffset = -4;
-            this.radio_Xep_Theo_Ngay.Location = new System.Drawing.Point(116, 7);
-            this.radio_Xep_Theo_Ngay.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.radio_Xep_Theo_Ngay.Location = new System.Drawing.Point(145, 8);
+            this.radio_Xep_Theo_Ngay.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.radio_Xep_Theo_Ngay.Name = "radio_Xep_Theo_Ngay";
-            this.radio_Xep_Theo_Ngay.Size = new System.Drawing.Size(78, 17);
+            this.radio_Xep_Theo_Ngay.Size = new System.Drawing.Size(96, 20);
             this.radio_Xep_Theo_Ngay.TabIndex = 1;
             this.radio_Xep_Theo_Ngay.TabStop = true;
             this.radio_Xep_Theo_Ngay.Text = "Theo Ngày";
@@ -199,7 +193,7 @@ namespace Task_App.views
             this.data_test.RowHeadersVisible = false;
             this.data_test.RowHeadersWidth = 50;
             this.data_test.RowTemplate.Height = 24;
-            this.data_test.Size = new System.Drawing.Size(622, 327);
+            this.data_test.Size = new System.Drawing.Size(829, 402);
             this.data_test.TabIndex = 0;
             this.data_test.ThemeStyle.AlternatingRowsStyle.BackColor = System.Drawing.Color.White;
             this.data_test.ThemeStyle.AlternatingRowsStyle.Font = null;
@@ -225,48 +219,16 @@ namespace Task_App.views
             this.data_test.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.data_test_CellClick);
             this.data_test.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.data_test_CellFormatting);
             // 
-            // task_Application_DBDataSet
-            // 
-            //this.task_Application_DBDataSet.DataSetName = "Task_Application_DBDataSet";
-            //this.task_Application_DBDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // congViecBindingSource
-            // 
-            this.congViecBindingSource.DataMember = "CongViec";
-            //this.congViecBindingSource.DataSource = this.task_Application_DBDataSet;
-            // 
-            // congViecTableAdapter
-            // 
-            //this.congViecTableAdapter.ClearBeforeFill = true;
-            // 
-            // tableAdapterManager
-            // 
-            //this.tableAdapterManager.BackupDataSetBeforeUpdate = false;
-            //this.tableAdapterManager.ChiTietCongViecTableAdapter = null;
-            //this.tableAdapterManager.ChucVuTableAdapter = null;
-            //this.tableAdapterManager.CongViecTableAdapter = this.congViecTableAdapter;
-            //this.tableAdapterManager.DonViTableAdapter = null;
-            //this.tableAdapterManager.EmailTableAdapter = null;
-            //this.tableAdapterManager.MaCongViecSequenceTableAdapter = null;
-            //this.tableAdapterManager.NguoiDungTableAdapter = null;
-            //this.tableAdapterManager.NguoiLienQuanCongViecTableAdapter = null;
-            //this.tableAdapterManager.NguoiNhanEmailTableAdapter = null;
-            //this.tableAdapterManager.PhanHoiCongViecTableAdapter = null;
-            //this.tableAdapterManager.PhongBanTableAdapter = null;
-            //this.tableAdapterManager.TepDinhKemEmailTableAdapter = null;
-            //this.tableAdapterManager.TepTinTableAdapter = null;
-            //this.tableAdapterManager.UpdateOrder = Task_App.Task_Application_DBDataSetTableAdapters.TableAdapterManager.UpdateOrderOption.InsertUpdateDelete;
-            //// 
             // Create_Task_Control
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.Panel_TDG_main);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "Create_Task_Control";
-            this.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
-            this.Size = new System.Drawing.Size(638, 343);
+            this.Padding = new System.Windows.Forms.Padding(11, 10, 11, 10);
+            this.Size = new System.Drawing.Size(851, 422);
             this.Panel_TDG_main.ResumeLayout(false);
             this.TDG_Panel_Bottom.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.btn_AddTask)).EndInit();
@@ -275,8 +237,6 @@ namespace Task_App.views
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.data_test)).EndInit();
-            //((System.ComponentModel.ISupportInitialize)(this.task_Application_DBDataSet)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.congViecBindingSource)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -284,7 +244,6 @@ namespace Task_App.views
         #endregion
 
         private Guna.UI2.WinForms.Guna2Panel Panel_TDG_main;
-        private System.Windows.Forms.BindingSource congViecBindingSource;
         //private Task_Application_DBDataSet task_Application_DBDataSet;
         //private Task_Application_DBDataSetTableAdapters.CongViecTableAdapter congViecTableAdapter;
         //private Task_Application_DBDataSetTableAdapters.TableAdapterManager tableAdapterManager;

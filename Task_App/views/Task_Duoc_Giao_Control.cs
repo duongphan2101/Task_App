@@ -25,7 +25,7 @@ namespace Task_App.views
             this.Load += Task_Duoc_Giao_Control_Load;
         }
 
-        private void LoadData()
+        public void LoadData()
         {
             DataTable dt = new DataTable();
 
@@ -126,7 +126,7 @@ namespace Task_App.views
                     row.Cells["maChiTietCV"].Value?.ToString());
                 bool task = false;
 
-                Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, maNguoiDung, task, tcpClientDAO);
+                Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, maNguoiDung, task, tcpClientDAO, this);
                 modal.Show();
                 modal.FormClosed += (s, args) => LoadData();
             }

@@ -35,14 +35,15 @@ namespace Task_App.views
 
         private Timer animationTimer;
         private bool isPopupOpen = true;
-        private int animationStep = 90;
+        private int animationStep = 180;
         private int collapsedWidth = 30;
         private int originalPopupWidth;
         private bool isExpanding = false;
+        private Task_Duoc_Giao_Control tdg;
 
         private List<PhanHoiCongViec> lstFeedback = new List<PhanHoiCongViec>();
 
-        public Modal_ChiTiet_CongViec(string maCongViec, int maChiTietCV, int maNguoiDung, bool task, TcpClientDAO tcpClientDAO)
+        public Modal_ChiTiet_CongViec(string maCongViec, int maChiTietCV, int maNguoiDung, bool task, TcpClientDAO tcpClientDAO, Task_Duoc_Giao_Control tdg)
         {
             InitializeComponent();
             this.maCongViec = maCongViec;
@@ -50,6 +51,7 @@ namespace Task_App.views
             this.maChiTietCV = maChiTietCV;
             this.task = task;
             this.tcpClientDAO = tcpClientDAO;
+            this.tdg = tdg;
 
             this.Load += Modal_ChiTiet_CongViec_Load;
 
@@ -365,6 +367,7 @@ namespace Task_App.views
                     MessageBox.Show("Bạn đã nhận việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //this.Close();
                     loadData();
+                    tdg.LoadData();
                 }
                 else
                 {
@@ -387,6 +390,7 @@ namespace Task_App.views
                         MessageBox.Show("Công việc đã được đánh dấu là hoàn thành.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         //this.Close();
                         loadData();
+                        tdg.LoadData();
                     }
                     else
                     {
@@ -439,6 +443,7 @@ namespace Task_App.views
                             MessageBox.Show("Công việc đã được đánh dấu là hoàn thành.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                             //this.Close();
                             loadData();
+                            tdg.LoadData();
                         }
                         else
                         {
@@ -453,6 +458,7 @@ namespace Task_App.views
                     MessageBox.Show("Báo cáo tiến độ công việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //this.Close();
                     loadData();
+                    tdg.LoadData();
                 }
             }
                 
@@ -907,7 +913,7 @@ namespace Task_App.views
                 byte[] fileBytes = File.ReadAllBytes(zipFilePath);
                 int fileSize = fileBytes.Length;
 
-                using (TcpClient client = new TcpClient("127.0.0.1", 5000))
+                using (TcpClient client = new TcpClient("192.168.1.3", 5000))
                 using (NetworkStream stream = client.GetStream())
                 {
                     // Tạo gói tin JSON metadata
