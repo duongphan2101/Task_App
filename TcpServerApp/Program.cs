@@ -256,7 +256,8 @@ namespace TcpServerApp
                                     var data = (JObject)request.Data;
                                     var taochitiet = CongViecDAO.TaoChiTietCongViecTheoTanSuat(
                                         data["CongViec"]?.ToObject<CongViec>(),
-                                        data["SoNgayHoanThanh"]?.ToObject<int>() ?? 0
+                                        data["SoNgayHoanThanh"]?.ToObject<int>() ?? 0,
+                                        data["MucDoUuTien"]?.ToObject<int>() ?? 0
                                     );
                                     reply = JsonConvert.SerializeObject(taochitiet, Formatting.None);
                                 }

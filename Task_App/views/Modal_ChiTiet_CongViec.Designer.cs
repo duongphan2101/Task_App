@@ -41,7 +41,9 @@ namespace Task_App.views
             this.panel_Bottom_Main = new Guna.UI2.WinForms.Guna2Panel();
             this.flowLayoutPanel5 = new System.Windows.Forms.FlowLayoutPanel();
             this.txtMessage = new Guna.UI2.WinForms.Guna2TextBox();
+            this.btnAddFile = new Guna.UI2.WinForms.Guna2CircleButton();
             this.btn_Send = new Guna.UI2.WinForms.Guna2CircleButton();
+            this.flowFiles = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnOpenClose = new Guna.UI2.WinForms.Guna2CircleButton();
             this.lblFeedback = new System.Windows.Forms.Label();
@@ -66,8 +68,8 @@ namespace Task_App.views
             this.lblBc = new System.Windows.Forms.Label();
             this.panel_Content_Top = new Guna.UI2.WinForms.Guna2Panel();
             this.lblTieuDe = new System.Windows.Forms.Label();
-            this.btnAddFile = new Guna.UI2.WinForms.Guna2CircleButton();
-            this.flowFiles = new System.Windows.Forms.FlowLayoutPanel();
+            this.panel_MucDo = new Guna.UI2.WinForms.Guna2Panel();
+            this.lblMucDo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl_ChiTietCongViec)).BeginInit();
             this.panelControl_ChiTietCongViec.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl_Content)).BeginInit();
@@ -87,6 +89,7 @@ namespace Task_App.views
             this.flowLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel_Content_Top.SuspendLayout();
+            this.panel_MucDo.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelControl_ChiTietCongViec
@@ -219,6 +222,23 @@ namespace Task_App.views
             this.txtMessage.Size = new System.Drawing.Size(404, 48);
             this.txtMessage.TabIndex = 0;
             // 
+            // btnAddFile
+            // 
+            this.btnAddFile.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btnAddFile.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btnAddFile.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btnAddFile.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btnAddFile.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnAddFile.ForeColor = System.Drawing.Color.White;
+            this.btnAddFile.Image = ((System.Drawing.Image)(resources.GetObject("btnAddFile.Image")));
+            this.btnAddFile.Location = new System.Drawing.Point(430, 10);
+            this.btnAddFile.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.btnAddFile.Name = "btnAddFile";
+            this.btnAddFile.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+            this.btnAddFile.Size = new System.Drawing.Size(48, 48);
+            this.btnAddFile.TabIndex = 2;
+            this.btnAddFile.Click += new System.EventHandler(this.btnAddFile_Click);
+            // 
             // btn_Send
             // 
             this.btn_Send.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
@@ -235,6 +255,13 @@ namespace Task_App.views
             this.btn_Send.Size = new System.Drawing.Size(48, 48);
             this.btn_Send.TabIndex = 1;
             this.btn_Send.Click += new System.EventHandler(this.btn_Send_Click);
+            // 
+            // flowFiles
+            // 
+            this.flowFiles.Location = new System.Drawing.Point(13, 69);
+            this.flowFiles.Name = "flowFiles";
+            this.flowFiles.Size = new System.Drawing.Size(523, 60);
+            this.flowFiles.TabIndex = 3;
             // 
             // flowLayoutPanel3
             // 
@@ -384,7 +411,7 @@ namespace Task_App.views
             this.flowLayoutPanel4.AutoSize = true;
             this.flowLayoutPanel4.Controls.Add(this.lblTienDoLable);
             this.flowLayoutPanel4.Controls.Add(this.progress_Bar);
-            this.flowLayoutPanel4.Location = new System.Drawing.Point(4, 33);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(4, 45);
             this.flowLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel4.Name = "flowLayoutPanel4";
             this.flowLayoutPanel4.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
@@ -422,19 +449,20 @@ namespace Task_App.views
             this.flowLayoutPanel2.AutoSize = true;
             this.flowLayoutPanel2.Controls.Add(this.lblTrangThai);
             this.flowLayoutPanel2.Controls.Add(this.lblThoiGianHoanThanh);
+            this.flowLayoutPanel2.Controls.Add(this.panel_MucDo);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(4, 0);
             this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Padding = new System.Windows.Forms.Padding(0, 5, 0, 5);
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(953, 39);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(953, 45);
             this.flowLayoutPanel2.TabIndex = 0;
             // 
             // lblTrangThai
             // 
             this.lblTrangThai.AutoSize = true;
             this.lblTrangThai.Font = new System.Drawing.Font("Bahnschrift", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTrangThai.Location = new System.Drawing.Point(0, 5);
-            this.lblTrangThai.Margin = new System.Windows.Forms.Padding(0);
+            this.lblTrangThai.Location = new System.Drawing.Point(0, 10);
+            this.lblTrangThai.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.lblTrangThai.Name = "lblTrangThai";
             this.lblTrangThai.Size = new System.Drawing.Size(95, 24);
             this.lblTrangThai.TabIndex = 0;
@@ -445,8 +473,8 @@ namespace Task_App.views
             // 
             this.lblThoiGianHoanThanh.AutoSize = true;
             this.lblThoiGianHoanThanh.Font = new System.Drawing.Font("Bahnschrift", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblThoiGianHoanThanh.Location = new System.Drawing.Point(95, 5);
-            this.lblThoiGianHoanThanh.Margin = new System.Windows.Forms.Padding(0);
+            this.lblThoiGianHoanThanh.Location = new System.Drawing.Point(95, 10);
+            this.lblThoiGianHoanThanh.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.lblThoiGianHoanThanh.Name = "lblThoiGianHoanThanh";
             this.lblThoiGianHoanThanh.Size = new System.Drawing.Size(184, 24);
             this.lblThoiGianHoanThanh.TabIndex = 1;
@@ -552,29 +580,30 @@ namespace Task_App.views
             this.lblTieuDe.Text = "TieuDe";
             this.lblTieuDe.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // btnAddFile
+            // panel_MucDo
             // 
-            this.btnAddFile.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btnAddFile.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btnAddFile.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btnAddFile.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btnAddFile.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnAddFile.ForeColor = System.Drawing.Color.White;
-            this.btnAddFile.Image = ((System.Drawing.Image)(resources.GetObject("btnAddFile.Image")));
-            this.btnAddFile.Location = new System.Drawing.Point(430, 10);
-            this.btnAddFile.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.btnAddFile.Name = "btnAddFile";
-            this.btnAddFile.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
-            this.btnAddFile.Size = new System.Drawing.Size(48, 48);
-            this.btnAddFile.TabIndex = 2;
-            this.btnAddFile.Click += new System.EventHandler(this.btnAddFile_Click);
+            this.panel_MucDo.AutoSize = true;
+            this.panel_MucDo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.panel_MucDo.BorderRadius = 10;
+            this.panel_MucDo.BorderThickness = 1;
+            this.panel_MucDo.Controls.Add(this.lblMucDo);
+            this.panel_MucDo.Location = new System.Drawing.Point(284, 5);
+            this.panel_MucDo.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            this.panel_MucDo.Name = "panel_MucDo";
+            this.panel_MucDo.Padding = new System.Windows.Forms.Padding(5);
+            this.panel_MucDo.Size = new System.Drawing.Size(114, 35);
+            this.panel_MucDo.TabIndex = 2;
             // 
-            // flowFiles
+            // lblMucDo
             // 
-            this.flowFiles.Location = new System.Drawing.Point(13, 69);
-            this.flowFiles.Name = "flowFiles";
-            this.flowFiles.Size = new System.Drawing.Size(523, 60);
-            this.flowFiles.TabIndex = 3;
+            this.lblMucDo.AutoSize = true;
+            this.lblMucDo.Font = new System.Drawing.Font("Bahnschrift", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMucDo.Location = new System.Drawing.Point(14, 9);
+            this.lblMucDo.Margin = new System.Windows.Forms.Padding(0);
+            this.lblMucDo.Name = "lblMucDo";
+            this.lblMucDo.Size = new System.Drawing.Size(95, 21);
+            this.lblMucDo.TabIndex = 0;
+            this.lblMucDo.Text = "BinhThuong";
             // 
             // Modal_ChiTiet_CongViec
             // 
@@ -618,6 +647,8 @@ namespace Task_App.views
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.panel_Content_Top.ResumeLayout(false);
+            this.panel_MucDo.ResumeLayout(false);
+            this.panel_MucDo.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -660,5 +691,7 @@ namespace Task_App.views
         private Guna.UI2.WinForms.Guna2CircleButton btn_Send;
         private Guna.UI2.WinForms.Guna2CircleButton btnAddFile;
         private FlowLayoutPanel flowFiles;
+        private Guna.UI2.WinForms.Guna2Panel panel_MucDo;
+        private Label lblMucDo;
     }
 }

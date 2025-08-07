@@ -40,11 +40,16 @@ namespace Task_App.views
 
             // Thêm cột "trangThaiText" để hiển thị chữ
             dt.Columns.Add("trangThaiText", typeof(string));
+            dt.Columns.Add("mucDoUuTienText", typeof(string));
 
             foreach (DataRow row in dt.Rows)
             {
                 int trangThaiInt = Convert.ToInt32(row["trangThai"]);
                 string trangThaiText = "";
+
+                int mucDoInt = Convert.ToInt32(row["mucDoUuTien"]);
+                string mucDoText = "";
+
 
                 switch (trangThaiInt)
                 {
@@ -67,12 +72,28 @@ namespace Task_App.views
                         trangThaiText = "Không xác định";
                         break;
                 }
+                switch (mucDoInt)
+                {
+                    case 0:
+                        mucDoText = "Bình thường";
+                        break;
+                    case 1:
+                        mucDoText = "Quan trọng";
+                        break;
+                    case 2:
+                        mucDoText = "Khẩn cấp";
+                        break;
+                    default:
+                        mucDoText = "Không xác định";
+                        break;
+                }
 
                 row["trangThaiText"] = trangThaiText;
+                row["mucDoUuTienText"] = mucDoText;
             }
 
             DataTable dtDisplay = dt.DefaultView.ToTable(false,
-                "maCongViec", "maChiTietCV", "tieuDe", "ngayNhanCongViec", "ngayKetThucCongViec", "trangThaiText", "tienDo", "nguoiGiao_HoTen"
+                "maCongViec", "maChiTietCV", "tieuDe", "ngayNhanCongViec", "ngayKetThucCongViec", "trangThaiText", "mucDoUuTienText", "tienDo", "nguoiGiao_HoTen"
             );
 
             duocGiao_GridView.DataSource = dtDisplay;
@@ -86,6 +107,7 @@ namespace Task_App.views
             duocGiao_GridView.Columns["ngayNhanCongViec"].HeaderText = "Ngày giao";
             duocGiao_GridView.Columns["ngayKetThucCongViec"].HeaderText = "Ngày Kết Thúc";
             duocGiao_GridView.Columns["trangThaiText"].HeaderText = "Trạng thái";
+            duocGiao_GridView.Columns["mucDoUuTienText"].HeaderText = "Mức độ ưu tiên";
             duocGiao_GridView.Columns["tienDo"].HeaderText = "Tiến độ (%)";
 
             duocGiao_GridView.Columns["nguoiGiao_HoTen"].HeaderText = "Người giao";
@@ -171,6 +193,26 @@ namespace Task_App.views
             else if (trangThai == "Đã hủy")
             {
                 row.DefaultCellStyle.BackColor = Color.LightGray;
+            }
+
+            if (duocGiao_GridView.Columns[e.ColumnIndex].Name == "mucDoUuTienText")
+            {
+                string mucDoUuTien = (e.Value as string) ?? string.Empty;
+                switch (mucDoUuTien)
+                {
+                    case "Bình thường":
+                        e.CellStyle.ForeColor = Color.Green;
+                        break;
+                    case "Quan trọng":
+                        e.CellStyle.ForeColor = Color.Orange;
+                        break;
+                    case "Khẩn cấp":
+                        e.CellStyle.ForeColor = Color.Red;
+                        break;
+                    default:
+                        e.CellStyle.ForeColor = Color.Black;
+                        break;
+                }
             }
         }
     }

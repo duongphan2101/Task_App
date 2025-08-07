@@ -18,7 +18,7 @@ namespace TcpServerApp.Model
         public int SoNgayHoanThanh { get; set; }
         public int TrangThai { get; set; }
         public int? TienDo { get; set; }
-
+        public int MucDoUuTien { get; set; } // 0: bình thường, 1: quan trọng, 2: khẩn cấp
         public CongViec CongViec { get; set; }
     }
 

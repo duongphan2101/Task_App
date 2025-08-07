@@ -129,6 +129,31 @@ namespace Task_App.views
                     }
 
                     lblTrangThai.Text = "Trạng thái: " + tt;
+
+                    int mucDo = Convert.ToInt32(row["mucDoUuTien"]);
+                    string md = "";
+
+                    if (mucDo == 0)
+                    {
+                        md = "Bình thường";
+                        lblMucDo.ForeColor = Color.Green;
+                        panel_MucDo.BorderColor = Color.Green;
+                    }
+                    else if (mucDo == 1)
+                    {
+                        md = "Quan trọng";
+                        lblMucDo.ForeColor = Color.Orange;
+                        panel_MucDo.BorderColor = Color.Orange;
+                    }
+                    else if (mucDo == 2)
+                    {
+                        md = "Khẩn cấp";
+                        lblMucDo.ForeColor = Color.Red;
+                        panel_MucDo.BorderColor = Color.Red;
+                    }
+
+                    lblMucDo.Text = md;
+
                 }
                 else
                 {
@@ -223,6 +248,30 @@ namespace Task_App.views
                     }
 
                     lblTrangThai.Text = "Trạng thái: " + tt;
+
+                    int mucDo = Convert.ToInt32(row["mucDoUuTien"]);
+                    string md = "";
+
+                    if (mucDo == 0)
+                    {
+                        md = "Bình thường";
+                        lblMucDo.ForeColor = Color.Green;
+                        panel_MucDo.BorderColor = Color.Green;
+                    }
+                    else if (mucDo == 1)
+                    {
+                        md = "Quan trọng";
+                        lblMucDo.ForeColor = Color.Orange;
+                        panel_MucDo.BorderColor = Color.Orange;
+                    }
+                    else if (mucDo == 2)
+                    {
+                        md = "Khẩn cấp";
+                        lblMucDo.ForeColor = Color.Red;
+                        panel_MucDo.BorderColor = Color.Red;
+                    }
+
+                    lblMucDo.Text = md;
                 }
                 else
                 {

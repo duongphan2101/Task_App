@@ -28,6 +28,8 @@ namespace Task_App.DTO
         public int TrangThai { get; set; }
         public int TienDo { get; set; }
 
+        public int MucDoUuTien { get; set; } // 0: bình thường, 1: quan trọng, 2: khẩn cấp
+
         // Thông tin người nhận
         public int NguoiNhanID { get; set; }
         public string NguoiNhan_HoTen { get; set; }

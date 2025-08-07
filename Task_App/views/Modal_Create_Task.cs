@@ -39,7 +39,9 @@ namespace Task_App.views
             DeadLine.Value = DateTime.Now;
             StartDay.Value = DateTime.Now;
 
-            cbMucDo.Text = "Bình thường";
+            cbMucDo.Items.Add("Bình Thường");
+            cbMucDo.Items.Add("Quan Trọng");
+            cbMucDo.Items.Add("Khẩn Cấp");
             cbMucDo.SelectedIndex = 0;
 
             txtTieuDe.Focus();
@@ -286,7 +288,7 @@ namespace Task_App.views
             {
                 CongViecService service = new CongViecService(tcpClientDAO);
 
-                List<ChiTietCongViec> danhSachChiTiet = tcpClientDAO.TaoChiTietCongViecTheoTanSuat(congViec, soNgayHoanThanh);
+                List<ChiTietCongViec> danhSachChiTiet = tcpClientDAO.TaoChiTietCongViecTheoTanSuat(congViec, soNgayHoanThanh, mucDo);
 
                 foreach (ChiTietCongViec ct in danhSachChiTiet)
                 {
@@ -597,6 +599,7 @@ namespace Task_App.views
                 chiTietCongViec.TienDo = 0;
                 chiTietCongViec.CongViec = congViec;
                 chiTietCongViec.SoNgayHoanThanh = soNgayHoanThanh;
+                chiTietCongViec.MucDoUuTien = mucDo;
 
                 int maChiTietMoi = tcpClientDAO.CreateChiTietCongViec(chiTietCongViec);
                 if (maChiTietMoi > 0)
@@ -1248,23 +1251,27 @@ namespace Task_App.views
 
         private void cbMucDo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbMucDo.SelectedItem != null)
-            {
-                string selectedValue = cbMucDo.SelectedItem.ToString();
-                if (selectedValue == "Bình Thường")
-                {
-                    mucDo = 0;
-                }
-                else if (selectedValue == "Quan Trọng")
-                {
-                    mucDo = 1;
-                }
-                else if (selectedValue == "Khẩn Cấp")
-                {
-                    mucDo = 2;
-                }
+            if (cbMucDo.SelectedItem == null)
+                return;
 
+            string selectedValue = cbMucDo.SelectedItem.ToString().Trim().ToLower();
+
+            switch (selectedValue)
+            {
+                case "bình thường":
+                    mucDo = 0;
+                    break;
+                case "quan trọng":
+                    mucDo = 1;
+                    break;
+                case "khẩn cấp":
+                    mucDo = 2;
+                    break;
+                default:
+                    mucDo = 0;
+                    break;
             }
         }
+
     }
 }

@@ -56,11 +56,11 @@
             this.txtEmailBcc = new Guna.UI2.WinForms.Guna2TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtHanHoanThanh = new Guna.UI2.WinForms.Guna2TextBox();
+            this.lblMucDo = new System.Windows.Forms.Label();
+            this.cbMucDo = new Guna.UI2.WinForms.Guna2ComboBox();
             this.panel_TieuDe = new System.Windows.Forms.Panel();
             this.txtTieuDe = new Guna.UI2.WinForms.Guna2TextBox();
             this.emailPopup = new Guna.UI2.WinForms.Guna2ContextMenuStrip();
-            this.cbMucDo = new Guna.UI2.WinForms.Guna2ComboBox();
-            this.lblMucDo = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl_main)).BeginInit();
             this.panelControl_main.SuspendLayout();
             this.panel_1.SuspendLayout();
@@ -503,6 +503,33 @@
             this.txtHanHoanThanh.Size = new System.Drawing.Size(110, 35);
             this.txtHanHoanThanh.TabIndex = 9;
             // 
+            // lblMucDo
+            // 
+            this.lblMucDo.AutoSize = true;
+            this.lblMucDo.Location = new System.Drawing.Point(271, 46);
+            this.lblMucDo.Margin = new System.Windows.Forms.Padding(10, 5, 0, 0);
+            this.lblMucDo.Name = "lblMucDo";
+            this.lblMucDo.Size = new System.Drawing.Size(100, 16);
+            this.lblMucDo.TabIndex = 12;
+            this.lblMucDo.Text = "Mức Độ Ưu Tiên";
+            // 
+            // cbMucDo
+            // 
+            this.cbMucDo.BackColor = System.Drawing.Color.Transparent;
+            this.cbMucDo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cbMucDo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbMucDo.FocusedColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.cbMucDo.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.cbMucDo.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.cbMucDo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.cbMucDo.ItemHeight = 30;
+            this.cbMucDo.Location = new System.Drawing.Point(371, 46);
+            this.cbMucDo.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.cbMucDo.Name = "cbMucDo";
+            this.cbMucDo.Size = new System.Drawing.Size(182, 36);
+            this.cbMucDo.TabIndex = 11;
+            this.cbMucDo.SelectedIndexChanged += new System.EventHandler(this.cbMucDo_SelectedIndexChanged);
+            // 
             // panel_TieuDe
             // 
             this.panel_TieuDe.AutoSize = true;
@@ -557,37 +584,6 @@
             this.emailPopup.RenderStyle.SeparatorColor = System.Drawing.Color.Gainsboro;
             this.emailPopup.RenderStyle.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.emailPopup.Size = new System.Drawing.Size(61, 4);
-            // 
-            // cbMucDo
-            // 
-            this.cbMucDo.BackColor = System.Drawing.Color.Transparent;
-            this.cbMucDo.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cbMucDo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbMucDo.FocusedColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.cbMucDo.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.cbMucDo.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.cbMucDo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
-            this.cbMucDo.ItemHeight = 30;
-            this.cbMucDo.Items.AddRange(new object[] {
-            "Bình Thường",
-            "Quan Trọng",
-            "Khẩn Cấp"});
-            this.cbMucDo.Location = new System.Drawing.Point(371, 46);
-            this.cbMucDo.Margin = new System.Windows.Forms.Padding(0, 5, 0, 0);
-            this.cbMucDo.Name = "cbMucDo";
-            this.cbMucDo.Size = new System.Drawing.Size(182, 36);
-            this.cbMucDo.TabIndex = 11;
-            this.cbMucDo.SelectedIndexChanged += new System.EventHandler(this.cbMucDo_SelectedIndexChanged);
-            // 
-            // lblMucDo
-            // 
-            this.lblMucDo.AutoSize = true;
-            this.lblMucDo.Location = new System.Drawing.Point(271, 46);
-            this.lblMucDo.Margin = new System.Windows.Forms.Padding(10, 5, 0, 0);
-            this.lblMucDo.Name = "lblMucDo";
-            this.lblMucDo.Size = new System.Drawing.Size(100, 16);
-            this.lblMucDo.TabIndex = 12;
-            this.lblMucDo.Text = "Mức Độ Ưu Tiên";
             // 
             // Modal_Create_Task
             // 

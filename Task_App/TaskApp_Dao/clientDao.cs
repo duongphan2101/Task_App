@@ -473,12 +473,13 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
-        public List<ChiTietCongViec> TaoChiTietCongViecTheoTanSuat(CongViec congViec, int soNgayHoanThanh)
+        public List<ChiTietCongViec> TaoChiTietCongViecTheoTanSuat(CongViec congViec, int soNgayHoanThanh, int mucDoUuTien)
         {
             var requestData = new
             {
                 CongViec = congViec,
-                SoNgayHoanThanh = soNgayHoanThanh
+                SoNgayHoanThanh = soNgayHoanThanh,
+                MucDoUuTien = mucDoUuTien
             };
             string response = SendAndReceive("TaoChiTietCongViecTheoTanSuat", requestData);
             try

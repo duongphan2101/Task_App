@@ -40,6 +40,7 @@ out/
 ## Environment & sensitive files
 .env
 TcpServerApp/.env
+APIServerApp/.env
 Task_App/.env
 
 ## Custom folders

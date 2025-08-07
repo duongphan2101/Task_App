@@ -34,6 +34,7 @@ namespace TcpServerApp.DAO
                     ct.soNgayHoanThanh,
                     ct.trangThai,
                     ct.tienDo,
+                    ct.mucDoUuTien,
                     nguoiNhan.maNguoiDung AS nguoiNhanID,
                     nguoiNhan.hoTen AS nguoiNhan_HoTen,
                     nguoiNhan.email AS nguoiNhan_Email,
@@ -75,6 +76,7 @@ namespace TcpServerApp.DAO
                     ct.soNgayHoanThanh,
                     ct.trangThai,
                     ct.tienDo,
+                    ct.mucDoUuTien,
                     nguoiNhan.maNguoiDung AS nguoiNhanID,
                     nguoiNhan.hoTen AS nguoiNhan_HoTen,
                     nguoiNhan.email AS nguoiNhan_Email,
@@ -116,7 +118,7 @@ namespace TcpServerApp.DAO
                 ct.soNgayHoanThanh,
                 ct.trangThai,
                 ct.tienDo,
-
+                ct.mucDoUuTien,
                 -- Người giao
                 nguoiGiao.hoTen AS nguoiGiao_HoTen,
                 nguoiGiao.email AS nguoiGiao_Email,
@@ -167,6 +169,7 @@ namespace TcpServerApp.DAO
                 ct.soNgayHoanThanh,
                 ct.trangThai,
                 ct.tienDo,
+                ct.mucDoUuTien,
 
                 nguoiGiao.hoTen AS nguoiGiao_HoTen,
                 nguoiGiao.email AS nguoiGiao_Email,
@@ -224,6 +227,7 @@ namespace TcpServerApp.DAO
                     ct.soNgayHoanThanh,
                     ct.trangThai,
                     ct.tienDo,
+                    ct.mucDoUuTien,
                     nguoiNhan.maNguoiDung AS nguoiNhanID,
                     nguoiNhan.hoTen AS nguoiNhan_HoTen,
                     nguoiNhan.email AS nguoiNhan_Email,
@@ -598,10 +602,10 @@ namespace TcpServerApp.DAO
         {
             string query = @"
             INSERT INTO ChiTietCongViec 
-                (maCongViec, tieuDe, noiDung, ngayNhanCongViec, ngayKetThucCongViec, ngayHoanThanh, soNgayHoanThanh, trangThai, tienDo)
+                (maCongViec, tieuDe, noiDung, ngayNhanCongViec, ngayKetThucCongViec, ngayHoanThanh, soNgayHoanThanh, trangThai, tienDo, mucDoUuTien)
             OUTPUT INSERTED.maChiTietCV
             VALUES 
-            (@maCongViec, @tieuDe, @noiDung, @ngayNhanCongViec, @ngayKetThucCongViec, @ngayHoanThanh, @soNgayHoanThanh, @trangThai, @tienDo)";
+            (@maCongViec, @tieuDe, @noiDung, @ngayNhanCongViec, @ngayKetThucCongViec, @ngayHoanThanh, @soNgayHoanThanh, @trangThai, @tienDo, @mucDoUuTien)";
 
             SqlParameter[] parameters = {
                 new SqlParameter("@maCongViec", ct.MaCongViec ?? (object)DBNull.Value),
@@ -612,7 +616,8 @@ namespace TcpServerApp.DAO
                 new SqlParameter("@ngayHoanThanh", ct.NgayHoanThanh.HasValue ? (object)ct.NgayHoanThanh.Value : DBNull.Value),
                 new SqlParameter("@soNgayHoanThanh", ct.SoNgayHoanThanh),
                 new SqlParameter("@trangThai", ct.TrangThai),
-                new SqlParameter("@tienDo", ct.TienDo.HasValue ? (object)ct.TienDo.Value : DBNull.Value)
+                new SqlParameter("@tienDo", ct.TienDo.HasValue ? (object)ct.TienDo.Value : DBNull.Value),
+                new SqlParameter("@mucDoUuTien", ct.MucDoUuTien)
             };
 
             object result = conn.ExecuteScalar(query, parameters);
@@ -623,7 +628,7 @@ namespace TcpServerApp.DAO
             return -1;
         }
 
-        public List<ChiTietCongViec> TaoChiTietCongViecTheoTanSuat(CongViec congViec, int soNgayHoanThanh)
+        public List<ChiTietCongViec> TaoChiTietCongViecTheoTanSuat(CongViec congViec, int soNgayHoanThanh, int mucDoUuTien)
         {
             List<ChiTietCongViec> danhSachChiTiet = new List<ChiTietCongViec>();
 
@@ -644,7 +649,8 @@ namespace TcpServerApp.DAO
                     NgayNhanCongViec = ngayLap,
                     NgayKetThucCongViec = ngayKetThucCongViec,
                     TrangThai = 0, // 0: chưa xử lý
-                    TienDo = 0
+                    TienDo = 0,
+                    MucDoUuTien = mucDoUuTien,
                 };
 
                 danhSachChiTiet.Add(chiTiet);

@@ -1,8 +1,8 @@
---GO
---CREATE DATABASE TASK_APP_DB
---GO
+GO
+CREATE DATABASE TASK_APP_DB
+GO
 
---USE TASK_APP_DB
+USE TASK_APP_DB
 
 -- Đơn vị
 CREATE TABLE DonVi (
@@ -61,6 +61,7 @@ CREATE TABLE ChiTietCongViec (
     soNgayHoanThanh INT,
     trangThai INT DEFAULT 0, --0 : chua xu li, 1: dang xu li, 2: hoan thanh, 3: tre, 4: huy
     tienDo INT DEFAULT 0,
+    mucDoUuTien INT DEFAULT 0, --0: binh thuong, 1: quan trong, 2: khancap
     FOREIGN KEY (maCongViec) REFERENCES CongViec(maCongViec)
 );
 

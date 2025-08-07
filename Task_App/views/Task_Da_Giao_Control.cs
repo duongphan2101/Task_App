@@ -34,6 +34,7 @@ namespace Task_App.views
             DataTable dt = CongViecService.GetCongViecDaGiao(maNguoiDung, !locTheoNgay);
 
             dt.Columns.Add("trangThaiText", typeof(string));
+            dt.Columns.Add("mucDoUuTienText", typeof(string));
 
             foreach (DataRow row in dt.Rows)
             {
@@ -58,11 +59,27 @@ namespace Task_App.views
                         row["trangThaiText"] = "Không xác định";
                         break;
                 }
+
+                switch (row["mucDoUuTien"] as int?)
+                {
+                    case 0:
+                        row["mucDoUuTienText"] = "Bình thường";
+                        break;
+                    case 1:
+                        row["mucDoUuTienText"] = "Quan trọng";
+                        break;
+                    case 2:
+                        row["mucDoUuTienText"] = "Khẩn cấp";
+                        break;
+                    default:
+                        row["mucDoUuTienText"] = "Không xác định";
+                        break;
+                }
             }
 
             // Chọn các cột cần hiển thị
             DataTable dtDisplay = dt.DefaultView.ToTable(false, "maCongViec",
-                "maChiTietCV", "tieuDe", "ngayNhanCongViec", "ngayKetThucCongViec", "trangThaiText", "tienDo",
+                "maChiTietCV", "tieuDe", "ngayNhanCongViec", "ngayKetThucCongViec", "trangThaiText", "mucDoUuTienText", "tienDo",
                 "nguoiNhan_HoTen", "tenDonVi", "tenPhongBan", "tenChucVu");
 
             // Gán dữ liệu vào DataGridView
@@ -75,6 +92,7 @@ namespace Task_App.views
             data_test.Columns["ngayNhanCongViec"].HeaderText = "Ngày Nhận";
             data_test.Columns["ngayKetThucCongViec"].HeaderText = "Ngày KTCV";
             data_test.Columns["trangThaiText"].HeaderText = "Trạng thái";
+            data_test.Columns["mucDoUuTienText"].HeaderText = "Mức độ ưu tiên";
             data_test.Columns["tienDo"].HeaderText = "Tiến độ (%)";
             data_test.Columns["nguoiNhan_HoTen"].HeaderText = "Người nhận";
             data_test.Columns["tenDonVi"].HeaderText = "Đơn vị";
@@ -145,12 +163,33 @@ namespace Task_App.views
                     row.DefaultCellStyle.BackColor = Color.LightGray;
                     break;
             }
+
+            if (data_test.Columns[e.ColumnIndex].Name == "mucDoUuTienText")
+            {
+                string mucDoUuTien = (e.Value as string) ?? string.Empty;
+                switch (mucDoUuTien)
+                {
+                    case "Bình thường":
+                        e.CellStyle.ForeColor = Color.Green;
+                        break;
+                    case "Quan trọng":
+                        e.CellStyle.ForeColor = Color.Orange;
+                        break;
+                    case "Khẩn cấp":
+                        e.CellStyle.ForeColor = Color.Red;
+                        break;
+                    default:
+                        e.CellStyle.ForeColor = Color.Black;
+                        break;
+                }
+            }
+
         }
 
         private void btn_AddTask_Click(object sender, EventArgs e)
         {
             var modal = new Modal_Create_Task(maNguoiDung, tcpClientDAO, this);
-            modal.ShowDialog(); // xài ShowDialog để làm form này là cái duy nhất interact được
+            modal.ShowDialog();
             modal.FormClosed += (s, args) => LoadData();
         }
 
@@ -171,5 +210,6 @@ namespace Task_App.views
            ToolTip toolTip = new ToolTip();
             toolTip.SetToolTip(btn_AddTask, "Thêm công việc mới");
         }
+
     }
 }
