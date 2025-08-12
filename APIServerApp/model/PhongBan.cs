@@ -15,12 +15,6 @@ namespace APIServerApp.Model
         [StringLength(100)]
         public string TenPhongBan { get; set; }
 
-        [StringLength(50)]
-        public string MaDonVi { get; set; }
-
-        [ForeignKey("MaDonVi")]
-        public virtual DonVi DonVi { get; set; }
-
         public virtual ICollection<NguoiDung> NguoiDungs { get; set; }
         public virtual ICollection<MaCongViecSequence> MaCongViecSequences { get; set; }
     }

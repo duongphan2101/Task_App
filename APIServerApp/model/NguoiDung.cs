@@ -12,38 +12,38 @@ namespace APIServerApp.Model
         public int MaNguoiDung { get; set; }
 
         [StringLength(100)]
-        public string HoTen { get; set; }
+        public string? HoTen { get; set; }
 
         [StringLength(100)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [StringLength(255)]
         public string MatKhau { get; set; }
 
         [StringLength(50)]
-        public string MaPhongBan { get; set; }
+        public string? MaPhongBan { get; set; }
 
         [StringLength(50)]
-        public string MaDonVi { get; set; }
+        public string? MaDonVi { get; set; }
 
         [StringLength(50)]
-        public string MaChucVu { get; set; }
+        public string? MaChucVu { get; set; }
 
         public bool? LaLanhDao { get; set; }
 
         [ForeignKey("MaDonVi")]
-        public virtual DonVi DonVi { get; set; }
+        public virtual DonVi? DonVi { get; set; }
 
         [ForeignKey("MaPhongBan")]
-        public virtual PhongBan PhongBan { get; set; }
+        public virtual PhongBan? PhongBan { get; set; }
 
         [ForeignKey("MaChucVu")]
-        public virtual ChucVu ChucVu { get; set; }
+        public virtual ChucVu? ChucVu { get; set; }
 
-        public virtual ICollection<CongViec> CongViecs { get; set; }
-        public virtual ICollection<NguoiLienQuanCongViec> NguoiLienQuanCongViecs { get; set; }
-        public virtual ICollection<PhanHoiCongViec> PhanHoiCongViecs { get; set; }
-        public virtual ICollection<NguoiNhanEmail> NguoiNhanEmails { get; set; }
-        public virtual ICollection<ThongBaoNguoiDung> ThongBaoNguoiDungs { get; set; }
+        public virtual ICollection<CongViec>? CongViecs { get; set; }
+        public virtual ICollection<NguoiLienQuanCongViec>? NguoiLienQuanCongViecs { get; set; }
+        public virtual ICollection<PhanHoiCongViec>? PhanHoiCongViecs { get; set; }
+        public virtual ICollection<NguoiNhanEmail>? NguoiNhanEmails { get; set; }
+        public virtual ICollection<ThongBaoNguoiDung>? ThongBaoNguoiDungs { get; set; }
     }
 }

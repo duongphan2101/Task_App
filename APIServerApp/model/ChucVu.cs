@@ -8,12 +8,12 @@ namespace APIServerApp.Model
     {
         [Key]
         [StringLength(50)]
-        public string MaChucVu { get; set; }
+        public string? MaChucVu { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string TenChucVu { get; set; }
+        public string? TenChucVu { get; set; }
 
-        public virtual ICollection<NguoiDung> NguoiDungs { get; set; }
+        public virtual ICollection<NguoiDung>? NguoiDungs { get; set; }
     }
 }

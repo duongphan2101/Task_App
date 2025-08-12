@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
 using Task_App.Model;
+using Task_App.Response;
 using Task_App.TaskApp_Dao;
 
 namespace Task_App.views
@@ -22,11 +24,15 @@ namespace Task_App.views
         private readonly NguoiDung currentUser;
         private readonly int maNguoiDung;
 
+        private ApiClientDAO apiClientDAO;
+
         private readonly Color defaultColor = Color.FromArgb(0, 0, 0, 0);
         private readonly Color hoverColor = Color.FromArgb(64, 64, 64);
         private readonly Color clickColor = Color.FromArgb(80, 80, 80);
         private readonly Color selectedColor = Color.FromArgb(80, 80, 80);
         private ToolTip toolTip = new ToolTip();
+
+        private LoginResponse response;
 
         private readonly Dictionary<string, string> buttonTooltips = new Dictionary<string, string>
         {
@@ -35,37 +41,36 @@ namespace Task_App.views
             { "btn_Task_DuocGiao", "Công việc được giao" },
         };
 
-
-        // phần mềm này không chạy 24/7 để tự gửi mail vào lúc 18h
-        //private System.Timers.Timer dailyTimer;
-        //private bool hasRunToday = false;
-
         private TcpClientDAO tcpClientDAO;
+        private Task<ViecDaGiaoResponse> vdg;
+        private Task<ViecDuocGiaoResponse> vduocg;
 
-        public Home(int userId, TcpClientDAO tcpClientDAO)
+        public Home(LoginResponse response, ApiClientDAO apiClientDAO)
         {
             InitializeComponent();
             
-            maNguoiDung = userId;
-            currentUser = tcpClientDAO.GetNguoiDung(maNguoiDung);
-            SetUserInfo(currentUser);
-            this.tcpClientDAO = tcpClientDAO;
+            this.response = response;
+            SetUserInfo(response);
+            this.apiClientDAO = apiClientDAO;
 
             btnDashboard.Tag = true;
             btnDashboard.BackColor = selectedColor;
 
-            LoadNotifications();
-            LoadContent(new Dashboard(tcpClientDAO, maNguoiDung));
+            //LoadNotifications();
 
-            ntfyTimer.Elapsed += OnNtfyTimerElapsed;
+            var DaGiaoResponse = apiClientDAO.GetViecDaGiaoAsync(response.MaNguoiDung, true);
+            vdg = DaGiaoResponse;
+            var DuocGiaoResponse = apiClientDAO.GetViecDuocGiaoAsync(response.MaNguoiDung, true);
+            vduocg = DuocGiaoResponse;
+            LoadContent(new Create_Task_Control(response, DaGiaoResponse, DuocGiaoResponse, apiClientDAO));
         }
 
-        private void SetUserInfo(NguoiDung user)
+        private void SetUserInfo(LoginResponse response)
         {
-            lblName.Text = user.HoTen;
-            lblPhongBan.Text = user.PhongBan?.TenPhongBan ?? "Chưa có";
-            lblChucVu.Text = user.ChucVu?.TenChucVu ?? "Chưa có";
-            lblDonVi.Text = user.DonVi?.TenDonVi ?? "Chưa có";
+            lblName.Text = response.HoTen;
+            lblPhongBan.Text = response.MaPhongBan ?? "Chưa có";
+            lblChucVu.Text = response.MaChucVu ?? "Chưa có";
+            lblDonVi.Text = response.MaDonVi ?? "Chưa có";
         }
 
         private void LoadContent(UserControl control)
@@ -123,10 +128,10 @@ namespace Task_App.views
                 LoadContent(new Dashboard(tcpClientDAO, maNguoiDung));
 
             if (clickedBtn.Name == btn_Task_DaGiao.Name)
-                LoadContent(new Create_Task_Control(maNguoiDung, tcpClientDAO));
+                LoadContent(new Create_Task_Control(response, vdg, vduocg, apiClientDAO));
 
             if (clickedBtn.Name == btn_Task_DuocGiao.Name)
-                LoadContent(new Task_Duoc_Giao_Control(maNguoiDung, tcpClientDAO));
+                LoadContent(new Task_Duoc_Giao_Control(response, vduocg,apiClientDAO));
 
             ResumeLayout();
         }
@@ -234,8 +239,8 @@ namespace Task_App.views
             }
             var isGiaoViec = tcpClientDAO.getIsGiaoViec(maNguoiDung, maChiTietCV);
             string maCongViec = tcpClientDAO.getMaCongViec(maChiTietCV);
-            Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(maNguoiDung, tcpClientDAO);
-            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, tcpClientDAO, tdg);
+            Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(response, vduocg, apiClientDAO);
+            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, apiClientDAO, tdg);
             modal.ShowDialog();
 
         }

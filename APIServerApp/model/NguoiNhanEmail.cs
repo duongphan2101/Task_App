@@ -15,7 +15,7 @@ namespace APIServerApp.Model
 
         [Required]
         [StringLength(10)]
-        public string VaiTro { get; set; }
+        public string? VaiTro { get; set; }
 
         [ForeignKey("MaEmail")]
         public virtual Email Email { get; set; }

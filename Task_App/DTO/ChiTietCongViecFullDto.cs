@@ -6,31 +6,29 @@ using System.Threading.Tasks;
 
 namespace Task_App.DTO
 {
-    public class CongViecDaGiaoDTO
+    public class ChiTietCongViecFullDto
     {
         public string MaCongViec { get; set; }
-        public DateTime? NgayGiao { get; set; }
+        public DateTime NgayGiao { get; set; }
+        public string NguoiGiao_HoTen { get; set; }
         public string LapLai { get; set; }
         public string TanSuat { get; set; }
-        public List<ChiTietCongViecDTO> ChiTiet { get; set; }
-        public NguoiNhanDTO NguoiNhan { get; set; }
-    }
 
-    public class ChiTietCongViecDTO
-    {
         public DateTime? NgayNhanCongViec { get; set; }
         public DateTime? NgayKetThucCongViec { get; set; }
         public int MaChiTietCV { get; set; }
         public string TieuDe { get; set; }
         public string NoiDung { get; set; }
         public DateTime? NgayHoanThanh { get; set; }
-        public int SoNgayHoanThanh { get; set; }
+        public int? SoNgayHoanThanh { get; set; }
         public int TrangThai { get; set; }
-        public int TienDo { get; set; }
-        public int MucDoUuTien { get; set; }
+        public int? TienDo { get; set; }
+        public int? MucDoUuTien { get; set; }
+
+        public NguoiNhanDto NguoiNhan { get; set; }
     }
 
-    public class NguoiNhanDTO
+    public class NguoiNhanDto
     {
         public int MaNguoiDung { get; set; }
         public string HoTen { get; set; }
@@ -39,6 +37,5 @@ namespace Task_App.DTO
         public string TenPhongBan { get; set; }
         public string TenChucVu { get; set; }
     }
-
 
 }

@@ -37,27 +37,25 @@ namespace APIServerApp.Migrations
                     b.Property<int>("MucDoUuTien")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("NgayHoanThanh")
+                    b.Property<DateTime>("NgayHoanThanh")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("NgayKetThucCongViec")
+                    b.Property<DateTime>("NgayKetThucCongViec")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("NgayNhanCongViec")
+                    b.Property<DateTime>("NgayNhanCongViec")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NoiDung")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SoNgayHoanThanh")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TienDo")
+                    b.Property<int>("TienDo")
                         .HasColumnType("int");
 
                     b.Property<string>("TieuDe")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -99,17 +97,16 @@ namespace APIServerApp.Migrations
                     b.Property<DateTime?>("NgayBatDau")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("NgayGiao")
+                    b.Property<DateTime>("NgayGiao")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("NgayKetThuc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("NguoiGiao")
+                    b.Property<int?>("NguoiGiao")
                         .HasColumnType("int");
 
                     b.Property<string>("TanSuat")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -142,6 +139,9 @@ namespace APIServerApp.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int?>("ChiTietCongViecMaChiTietCV")
+                        .HasColumnType("int");
+
                     b.Property<int>("MaChiTietCV")
                         .HasColumnType("int");
 
@@ -152,11 +152,9 @@ namespace APIServerApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NoiDung")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TieuDe")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -164,6 +162,8 @@ namespace APIServerApp.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("MaEmail");
+
+                    b.HasIndex("ChiTietCongViecMaChiTietCV");
 
                     b.HasIndex("MaChiTietCV");
 
@@ -203,12 +203,10 @@ namespace APIServerApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaNguoiDung"));
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("HoTen")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -216,17 +214,14 @@ namespace APIServerApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("MaChucVu")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("MaDonVi")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("MaPhongBan")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -335,19 +330,12 @@ namespace APIServerApp.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("MaDonVi")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("TenPhongBan")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("MaPhongBan");
-
-                    b.HasIndex("MaDonVi");
 
                     b.ToTable("PhongBan");
                 });
@@ -446,15 +434,17 @@ namespace APIServerApp.Migrations
                 {
                     b.HasOne("APIServerApp.Model.NguoiDung", "NguoiGiaoObj")
                         .WithMany("CongViecs")
-                        .HasForeignKey("NguoiGiao")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("NguoiGiao");
 
                     b.Navigation("NguoiGiaoObj");
                 });
 
             modelBuilder.Entity("APIServerApp.Model.Email", b =>
                 {
+                    b.HasOne("APIServerApp.Model.ChiTietCongViec", null)
+                        .WithMany("Emails")
+                        .HasForeignKey("ChiTietCongViecMaChiTietCV");
+
                     b.HasOne("APIServerApp.Model.ChiTietCongViec", "ChiTietCongViec")
                         .WithMany()
                         .HasForeignKey("MaChiTietCV")
@@ -496,20 +486,17 @@ namespace APIServerApp.Migrations
                     b.HasOne("APIServerApp.Model.ChucVu", "ChucVu")
                         .WithMany("NguoiDungs")
                         .HasForeignKey("MaChucVu")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("APIServerApp.Model.DonVi", "DonVi")
                         .WithMany("NguoiDungs")
                         .HasForeignKey("MaDonVi")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("APIServerApp.Model.PhongBan", "PhongBan")
                         .WithMany("NguoiDungs")
                         .HasForeignKey("MaPhongBan")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("ChucVu");
 
@@ -575,17 +562,6 @@ namespace APIServerApp.Migrations
                     b.Navigation("NguoiDung");
                 });
 
-            modelBuilder.Entity("APIServerApp.Model.PhongBan", b =>
-                {
-                    b.HasOne("APIServerApp.Model.DonVi", "DonVi")
-                        .WithMany("PhongBans")
-                        .HasForeignKey("MaDonVi")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DonVi");
-                });
-
             modelBuilder.Entity("APIServerApp.Model.TepDinhKemEmail", b =>
                 {
                     b.HasOne("APIServerApp.Model.Email", "Email")
@@ -624,6 +600,11 @@ namespace APIServerApp.Migrations
                     b.Navigation("NguoiDung");
                 });
 
+            modelBuilder.Entity("APIServerApp.Model.ChiTietCongViec", b =>
+                {
+                    b.Navigation("Emails");
+                });
+
             modelBuilder.Entity("APIServerApp.Model.ChucVu", b =>
                 {
                     b.Navigation("NguoiDungs");
@@ -643,8 +624,6 @@ namespace APIServerApp.Migrations
                     b.Navigation("MaCongViecSequences");
 
                     b.Navigation("NguoiDungs");
-
-                    b.Navigation("PhongBans");
                 });
 
             modelBuilder.Entity("APIServerApp.Model.Email", b =>

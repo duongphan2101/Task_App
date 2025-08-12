@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Task_App.Response;
 using Task_App.TaskApp_Dao;
 using Task_App.views;
 
@@ -9,11 +11,13 @@ namespace Task_App
     public partial class FormLogin : Form
     {
         private readonly EmailAddressAttribute emailChecker = new EmailAddressAttribute();
-        private readonly TcpClientDAO tcpClientDAO;
-        public FormLogin(TcpClientDAO tcpClientDAO)
+        private readonly ApiClientDAO apiClientDAO;
+        private LoginResponse response;
+
+        public FormLogin(ApiClientDAO apiClientDAO)
         {
             InitializeComponent();
-            this.tcpClientDAO = tcpClientDAO;
+            this.apiClientDAO = apiClientDAO;
             txtEmail.Focus();
         }
 
@@ -22,9 +26,6 @@ namespace Task_App
             Login();
         }
 
-        // note that the form itself doesn't trigger this event
-        //   and the Form.Enter is NOT the same as the Enter key
-        // this event handler is bound to the 2 inputs instead
         private void OnKeyPressed(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar != (char)Keys.Enter) return;
@@ -36,7 +37,7 @@ namespace Task_App
             Application.Exit();
         }
 
-        private void Login()
+        private async Task Login()
         {
             string email = txtEmail.Text.Trim();
             string pass = txtPass.Text.Trim();
@@ -54,18 +55,22 @@ namespace Task_App
                 return;
             }
 
-            int maNguoiDung = tcpClientDAO.CheckLogin(email, pass);
-            if (maNguoiDung == -1)
+            var loginResult = await apiClientDAO.CheckLoginAsync(email, pass);
+            response = loginResult;
+
+            if (loginResult == null)
             {
-                MessageBox.Show("Sai Email hoặc mật khẩu!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Sai email hoặc mật khẩu.", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            GlobalSession.Token = response.Token;
 
             txtPass.Text = string.Empty;
-            txtEmail.Focus();
+            txtEmail.Focus();   
+
             Hide();
 
-            var homeForm = new Home(maNguoiDung, tcpClientDAO);
+            var homeForm = new Home(response, apiClientDAO);
             homeForm.FormClosed += (s, args) => Show();
             homeForm.Show();
         }

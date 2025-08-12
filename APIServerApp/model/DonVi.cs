@@ -16,7 +16,6 @@ namespace APIServerApp.Model
         public string TenDonVi { get; set; }
 
         public virtual ICollection<NguoiDung> NguoiDungs { get; set; }
-        public virtual ICollection<PhongBan> PhongBans { get; set; }
         public virtual ICollection<MaCongViecSequence> MaCongViecSequences { get; set; }
     }
 }

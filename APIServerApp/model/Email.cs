@@ -17,12 +17,11 @@ namespace APIServerApp.Model
         [ForeignKey("ChiTietCongViec")]
         public int MaChiTietCV { get; set; }
 
-        [Required]
         [StringLength(255)]
-        public string TieuDe { get; set; }
+        public string? TieuDe { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]
-        public string NoiDung { get; set; }
+        public string? NoiDung { get; set; }
 
         public DateTime? NgayGui { get; set; }
         public int TrangThai { get; set; }

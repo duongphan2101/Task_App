@@ -17,8 +17,8 @@ INSERT INTO ChucVu (maChucVu, tenChucVu) VALUES
 
 -- NguoiDung
 INSERT INTO NguoiDung (hoTen, email, matKhau, maPhongBan, maDonVi, maChucVu, laLanhDao) VALUES
-(N'Nguyễn Văn A', 'a@example.com', '123', 'PB01', 'DV01', 'CV01', 1),
-(N'Trần Thị B', 'b@example.com', '123', 'PB01', 'DV01', 'CV02', 0),
+(N'SPPP', 'a@gmail.com', '123', 'PB01', 'DV01', 'CV01', 1),
+(N'Trần Văn NxC', 'b@gmail.com', '123', 'PB01', 'DV01', 'CV02', 0),
 (N'Lê Văn C', 'c@example.com', '123', 'PB02', 'DV02', 'CV02', 0),
 (N'Nguyễn Văn D', 'd@example.com', '123', 'PB01', 'DV01', 'CV01', 0),
 (N'Trần Thị E', 'e@example.com', '123', 'PB01', 'DV01', 'CV02', 0),

@@ -9,7 +9,9 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Task_App.DTO;
 using Task_App.Model;
 using Task_App.Services;
 using Task_App.TaskApp_Dao;
@@ -26,7 +28,7 @@ namespace Task_App.views
 
         private List<TepTin> lstTepDaChon = new List<TepTin>();
 
-        private TcpClientDAO tcpClientDAO;
+        private ApiClientDAO apiClientDAO;
 
         private string tt = "";
         private ChiTietCongViec ctcv = new ChiTietCongViec();
@@ -43,14 +45,14 @@ namespace Task_App.views
 
         private List<PhanHoiCongViec> lstFeedback = new List<PhanHoiCongViec>();
 
-        public Modal_ChiTiet_CongViec(string maCongViec, int maChiTietCV, int maNguoiDung, bool task, TcpClientDAO tcpClientDAO, Task_Duoc_Giao_Control tdg)
+        public Modal_ChiTiet_CongViec(string maCongViec, int maChiTietCV, int maNguoiDung, bool task, ApiClientDAO apiClientDAO, Task_Duoc_Giao_Control tdg)
         {
             InitializeComponent();
             this.maCongViec = maCongViec;
             this.maNguoiDung = maNguoiDung;
             this.maChiTietCV = maChiTietCV;
             this.task = task;
-            this.tcpClientDAO = tcpClientDAO;
+            this.apiClientDAO = apiClientDAO;
             this.tdg = tdg;
 
             this.Load += Modal_ChiTiet_CongViec_Load;
@@ -67,44 +69,46 @@ namespace Task_App.views
             loadData();
         }
 
-        private void loadData()
+        private async Task loadData()
         {
-            CongViecService service = new CongViecService(tcpClientDAO);
-            DataTable dt = service.GetCongViecChiTiet(maChiTietCV);
-            DataTable ds = service.GetDanhSachNguoiLienQuanCongViecByIdCongViec(maCongViec);
+            var chiTietRes = await apiClientDAO.GetChiTietConViecAsync(maChiTietCV);
 
-            List<NguoiLienQuanCongViec> lstCc = new List<NguoiLienQuanCongViec>();
-            List<NguoiLienQuanCongViec> lstBcc = new List<NguoiLienQuanCongViec>();
-            List<NguoiLienQuanCongViec> lstTo = new List<NguoiLienQuanCongViec>();
-            lstFeedback = tcpClientDAO.GetFeedbacksByMaCongViec(maCongViec);
+            var ChiTiet = chiTietRes.Data;
 
-            NguoiDung nd = tcpClientDAO.GetNguoiDung(maNguoiDung);
-            flow_FeedBack.Controls.Clear();
-            foreach (PhanHoiCongViec fb in lstFeedback)
-            {
-                bool isMe = fb.NguoiDung.HoTen == nd.HoTen;
-                AddFeedback(fb, isMe);
-            }
+            var nlqRes = await apiClientDAO.GetNguoiLienQuanCongViecAsync(maCongViec);
 
-            HienThiDanhSachFile();
+            var nlq = nlqRes.Data;
+
+            List<NguoiLienQuanDTO> lstCc = new List<NguoiLienQuanDTO>();
+            List<NguoiLienQuanDTO> lstBcc = new List<NguoiLienQuanDTO>();
+            List<NguoiLienQuanDTO> lstTo = new List<NguoiLienQuanDTO>();
+
+            //lstFeedback = tcpClientDAO.GetFeedbacksByMaCongViec(maCongViec);
+
+            //NguoiDung nd = tcpClientDAO.GetNguoiDung(maNguoiDung);
+            //flow_FeedBack.Controls.Clear();
+            //foreach (PhanHoiCongViec fb in lstFeedback)
+            //{
+            //    bool isMe = fb.NguoiDung.HoTen == nd.HoTen;
+            //    AddFeedback(fb, isMe);
+            //}
+
+            //HienThiDanhSachFile();
 
             //DaGiao
             if (task)
             {
-                if (dt.Rows.Count > 0)
-                {
-                    DataRow row = dt.Rows[0];
 
-                    lblTieuDe.Text = row["tieuDe"].ToString();
-                    txtNoiDung.Text = row["noiDung"].ToString();
+                    lblTieuDe.Text = ChiTiet.TieuDe.ToString();
+                    txtNoiDung.Text = ChiTiet.NoiDung.ToString();
                     //lblThoiGianHoanThanh.Text = Convert.ToDateTime(row["hanHoanThanh"]).ToString("dd/MM/yyyy HH:mm");
                     lblThoiGianHoanThanh.Text = "Thời gian hoàn thành: Chưa có";
 
-                    progress_Bar.Value = Convert.ToInt32(row["tienDo"]);
+                    progress_Bar.Value = Convert.ToInt32(ChiTiet.TienDo);
                     progress_Bar.ShowPercentage = true;
-                    lblNgayBatDau.Text = Convert.ToDateTime(row["ngayNhanCongViec"]).ToString("dd/MM/yyyy");
-                    lblHanHoanThanh.Text = " - " + Convert.ToDateTime(row["ngayKetThucCongViec"]).ToString("dd/MM/yyyy");
-                    int trangThai = Convert.ToInt32(row["trangThai"]);
+                    lblNgayBatDau.Text = Convert.ToDateTime(ChiTiet.NgayNhanCongViec).ToString("dd/MM/yyyy");
+                    lblHanHoanThanh.Text = " - " + Convert.ToDateTime(ChiTiet.NgayKetThucCongViec).ToString("dd/MM/yyyy");
+                    int trangThai = Convert.ToInt32(ChiTiet.TrangThai);
                     string tt = "";
 
                     if (trangThai == 0)
@@ -130,7 +134,7 @@ namespace Task_App.views
 
                     lblTrangThai.Text = "Trạng thái: " + tt;
 
-                    int mucDo = Convert.ToInt32(row["mucDoUuTien"]);
+                    int mucDo = Convert.ToInt32(ChiTiet.MucDoUuTien);
                     string md = "";
 
                     if (mucDo == 0)
@@ -152,104 +156,99 @@ namespace Task_App.views
                         panel_MucDo.BorderColor = Color.Red;
                     }
 
-                    lblMucDo.Text = md;
+                lblMucDo.Text = md;
 
-                }
-                else
-                {
-                    MessageBox.Show("Không tìm thấy thông tin công việc.");
-                    this.Close();
-                }
-
-                List<NguoiLienQuanCongViec> lst = service.GetListNguoiLienQuanCongViecByIdCongViec(maCongViec);
+                List<NguoiLienQuanDTO> lst = nlq;
                 if (lst.Count > 0)
                 {
-                    foreach (NguoiLienQuanCongViec nlq in lst)
+                    foreach (NguoiLienQuanDTO nlqcv in lst)
                     {
-                        if (nlq.VaiTro == "to")
+                        if (nlqcv.vaiTro == "to")
                         {
-                            lstTo.Add(nlq);
+                            lstTo.Add(nlqcv);
                         }
-                        if (nlq.VaiTro == "cc")
+                        if (nlqcv.vaiTro == "cc")
                         {
-                            lstCc.Add(nlq);
+                            lstCc.Add(nlqcv);
                         }
-                        if (nlq.VaiTro == "bcc")
+                        if (nlqcv.vaiTro == "bcc")
                         {
-                            lstBcc.Add(nlq);
+                            lstBcc.Add(nlqcv);
                         }
                     }
-                    lblCc.Text = "CC: " + string.Join(", ", lstCc.Select(x => x.NguoiDung.HoTen));
-                    lblBc.Text = "BCC: " + string.Join(", ", lstBcc.Select(x => x.NguoiDung.HoTen));
-                    lblNguoi.Text = "To: " + string.Join(", ", lstTo.Select(x => x.NguoiDung.HoTen));
+                    lblCc.Text = "CC: " + string.Join(", ", lstCc.Select(x => x.hoTen));
+                    lblBc.Text = "BCC: " + string.Join(", ", lstBcc.Select(x => x.hoTen));
+                    lblNguoi.Text = "To: " + string.Join(", ", lstTo.Select(x => x.hoTen));
 
                 }
+
                 btnHoanThanh.Visible = false;
             }
             //DuocGiao
             else
             {
-                if (dt.Rows.Count > 0)
-                {
-                    DataRow row = dt.Rows[0];
 
-                    lblTieuDe.Text = row["tieuDe"].ToString();
-                    txtNoiDung.Text = row["noiDung"].ToString();
+                    lblTieuDe.Text = ChiTiet.TieuDe.ToString();
+                    txtNoiDung.Text = ChiTiet.NoiDung.ToString();
 
                     lblThoiGianHoanThanh.Text = "Thời gian hoàn thành: Chưa có";
 
-                    progress_Bar.Value = Convert.ToInt32(row["tienDo"]);
+                    progress_Bar.Value = Convert.ToInt32(ChiTiet.TienDo);
                     progress_Bar.ShowPercentage = true;
-                    lblNgayBatDau.Text = Convert.ToDateTime(row["ngayNhanCongViec"]).ToString("dd/MM/yyyy");
-                    lblHanHoanThanh.Text = " - " + Convert.ToDateTime(row["ngayKetThucCongViec"]).ToString("dd/MM/yyyy");
-                    lblNguoi.Text = "From: " + row["nguoiGiao_HoTen"].ToString();
+                    lblNgayBatDau.Text = Convert.ToDateTime(ChiTiet.NgayNhanCongViec).ToString("dd/MM/yyyy");
+                    lblHanHoanThanh.Text = " - " + Convert.ToDateTime(ChiTiet.NgayKetThucCongViec).ToString("dd/MM/yyyy");
+                    lblNguoi.Text = "From: " + ChiTiet.NguoiGiao_HoTen.ToString();
 
                     btnHoanThanh.Enabled = false;
                     btnHoanThanh.BackColor = Color.Transparent;
-                    int trangThai = Convert.ToInt32(row["trangThai"]);
-                    if (trangThai == 0)
-                    {
-                        tt = "Chưa xử lí";
-                        btnHoanThanh.FillColor = Color.LightSkyBlue;
-                        btnHoanThanh.Enabled = true;
-                        btnHoanThanh.Text = "Nhận việc";
+                    int trangThai = Convert.ToInt32(ChiTiet.TrangThai);
 
-                        ctcv = tcpClientDAO.getChiTietCongViecById(maChiTietCV);
-                        ctcv.MaCongViec = row["maCongViec"].ToString();
-                        ctcv.TrangThai = 1;
-                        ctcv.TienDo = 0;
-                        ctcv.NgayHoanThanh = DateTime.Now;
-                    }
-                    else if (trangThai == 1)
-                    {
-                        tt = "Đang xử lí";
-                        btnHoanThanh.FillColor = Color.LightGreen;
-                        btnHoanThanh.Enabled = true;
-                        btnHoanThanh.Text = "Hoàn thành";
-                        ctcv = tcpClientDAO.getChiTietCongViecById(maChiTietCV);
-                        ctcv.MaCongViec = row["maCongViec"].ToString();
-                        ctcv.TrangThai = 2;
-                        ctcv.TienDo = 100;
-                        ctcv.NgayHoanThanh = DateTime.Now;
-                    }
-                    else if (trangThai == 2)
-                    {
-                        tt = "Hoàn thành";
-                        lblThoiGianHoanThanh.Text = "Hoàn thành lúc: " + Convert.ToDateTime(row["ngayHoanThanh"]).ToString("dd/MM/yyyy HH:mm");
-                    }
-                    else if (trangThai == 3)
-                    {
-                        tt = "Trễ";
-                        //lblThoiGianHoanThanh.Text = "Hoàn thành lúc: " + Convert.ToDateTime(row["ngayHoanThanh"]).ToString("dd/MM/yyyy HH:mm");
-                    }
-                    else
-                    {
-                        tt = "Hủy";
-                    }
+                if (trangThai == 0)
+                {
+                    tt = "Chưa xử lí";
+                    btnHoanThanh.FillColor = Color.LightSkyBlue;
+                    btnHoanThanh.Enabled = true;
+                    btnHoanThanh.Text = "Nhận việc";
 
-                    lblTrangThai.Text = "Trạng thái: " + tt;
+                    //ctcv = apiClientDAO.GetChiTietConViecAsync(maChiTietCV);
+                    ctcv.MaChiTietCV = maChiTietCV;
+                    ctcv.MaCongViec = ChiTiet.MaCongViec.ToString();
+                    ctcv.TrangThai = 1;
+                    ctcv.TienDo = 0;
+                    ctcv.NgayHoanThanh = DateTime.Now;
+                }
+                else if (trangThai == 1)
+                {
+                    tt = "Đang xử lí";
+                    btnHoanThanh.FillColor = Color.LightGreen;
+                    btnHoanThanh.Enabled = true;
+                    btnHoanThanh.Text = "Hoàn thành";
+                    //ctcv = tcpClientDAO.getChiTietCongViecById(maChiTietCV);
+                    ctcv.MaChiTietCV = maChiTietCV;
+                    ctcv.MaCongViec = ChiTiet.MaCongViec.ToString();
+                    ctcv.TrangThai = 2;
+                    ctcv.TienDo = 100;
+                    ctcv.NgayHoanThanh = DateTime.Now;
+                }
+                else if (trangThai == 2)
+                {
+                    tt = "Hoàn thành";
+                    lblThoiGianHoanThanh.Text = "Hoàn thành lúc: " + Convert.ToDateTime(ChiTiet.NgayHoanThanh).ToString("dd/MM/yyyy HH:mm");
+                }
+                else if (trangThai == 3)
+                {
+                    tt = "Trễ";
+                    //lblThoiGianHoanThanh.Text = "Hoàn thành lúc: " + Convert.ToDateTime(row["ngayHoanThanh"]).ToString("dd/MM/yyyy HH:mm");
+                }
+                else
+                {
+                    tt = "Hủy";
+                }
 
-                    int mucDo = Convert.ToInt32(row["mucDoUuTien"]);
+
+                lblTrangThai.Text = "Trạng thái: " + tt;
+
+                    int mucDo = Convert.ToInt32(ChiTiet.MucDoUuTien);
                     string md = "";
 
                     if (mucDo == 0)
@@ -272,114 +271,108 @@ namespace Task_App.views
                     }
 
                     lblMucDo.Text = md;
-                }
-                else
-                {
-                    MessageBox.Show("Không tìm thấy thông tin công việc.");
-                    this.Close();
-                }
 
-                List<NguoiLienQuanCongViec> lst = service.GetListNguoiLienQuanCongViecByIdCongViec(maCongViec);
+                List<NguoiLienQuanDTO> lst = nlq;
                 if (lst.Count > 0)
                 {
-                    foreach (NguoiLienQuanCongViec nlq in lst)
+                    foreach (NguoiLienQuanDTO nlqcv in lst)
                     {
-                        if (nlq.VaiTro == "to")
+                        if (nlqcv.vaiTro == "to")
                         {
-                            lstTo.Add(nlq);
+                            lstTo.Add(nlqcv);
                         }
-                        if (nlq.VaiTro == "cc")
+                        if (nlqcv.vaiTro == "cc")
                         {
-                            lstCc.Add(nlq);
+                            lstCc.Add(nlqcv);
                         }
-                        if (nlq.VaiTro == "bcc")
+                        if (nlqcv.vaiTro == "bcc")
                         {
-                            lstBcc.Add(nlq);
+                            lstBcc.Add(nlqcv);
                         }
                     }
-                    lblCc.Text = "CC: " + string.Join(", ", lstCc.Select(x => x.NguoiDung.HoTen));
-                    lblBc.Text = "BCC: " + string.Join(", ", lstBcc.Select(x => x.NguoiDung.HoTen));
-                    //lblNguoi.Text = "To: " + string.Join(", ", lstTo.Select(x => x.NguoiDung.HoTen));
-
+                    lblCc.Text = "CC: " + string.Join(", ", lstCc.Select(x => x.hoTen));
+                    lblBc.Text = "BCC: " + string.Join(", ", lstBcc.Select(x => x.hoTen));
+                    //lblNguoi.Text = "To: " + string.Join(", ", lstTo.Select(x => x.hoTen));
                 }
+
             }
         }
 
-        private void HienThiDanhSachFile()
-        {
-            List<TepDinhKemEmail> lstTep = tcpClientDAO.GetTepDinhKemEmailByMaCongViec(maCongViec);
-            flow_Files.Controls.Clear();
+        //private void HienThiDanhSachFile()
+        //{
+        //    List<TepDinhKemEmail> lstTep = tcpClientDAO.GetTepDinhKemEmailByMaCongViec(maCongViec);
+        //    flow_Files.Controls.Clear();
 
-            foreach (TepDinhKemEmail teps in lstTep)
-            {
-                TepTin tep = teps.TepTin;
-                Panel panel = new Panel();
-                panel.Width = 60;
-                panel.Height = flow_Files.Height;
-                panel.Margin = new Padding(5);
-                panel.BackColor = Color.Transparent;
+        //    foreach (TepDinhKemEmail teps in lstTep)
+        //    {
+        //        TepTin tep = teps.TepTin;
+        //        Panel panel = new Panel();
+        //        panel.Width = 60;
+        //        panel.Height = flow_Files.Height;
+        //        panel.Margin = new Padding(5);
+        //        panel.BackColor = Color.Transparent;
 
-                string extension = Path.GetExtension(tep.TenTep).ToLower();
+        //        string extension = Path.GetExtension(tep.TenTep).ToLower();
 
 
-                Image iconImage = Properties.Resources.icons8_document_48;
+        //        Image iconImage = Properties.Resources.icons8_document_48;
 
-                if (extension == ".pdf")
-                    iconImage = Properties.Resources.pdf_icon;
-                else if (extension == ".doc" || extension == ".docx")
-                    iconImage = Properties.Resources.word_icon;
-                else if (extension == ".xls" || extension == ".xlsx")
-                    iconImage = Properties.Resources.excel_icon;
-                else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
-                    iconImage = Properties.Resources.image_icon;
-                else
-                    iconImage = Properties.Resources.icons8_document_48;
+        //        if (extension == ".pdf")
+        //            iconImage = Properties.Resources.pdf_icon;
+        //        else if (extension == ".doc" || extension == ".docx")
+        //            iconImage = Properties.Resources.word_icon;
+        //        else if (extension == ".xls" || extension == ".xlsx")
+        //            iconImage = Properties.Resources.excel_icon;
+        //        else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
+        //            iconImage = Properties.Resources.image_icon;
+        //        else
+        //            iconImage = Properties.Resources.icons8_document_48;
 
-                PictureBox icon = new PictureBox();
-                icon.Width = 48;
-                icon.Height = 48;
-                icon.SizeMode = PictureBoxSizeMode.StretchImage;
-                icon.Image = iconImage;
-                icon.Location = new Point(0, 0);
-                icon.BackColor = Color.Transparent;
+        //        PictureBox icon = new PictureBox();
+        //        icon.Width = 48;
+        //        icon.Height = 48;
+        //        icon.SizeMode = PictureBoxSizeMode.StretchImage;
+        //        icon.Image = iconImage;
+        //        icon.Location = new Point(0, 0);
+        //        icon.BackColor = Color.Transparent;
 
-                icon.Cursor = Cursors.Hand;
+        //        icon.Cursor = Cursors.Hand;
 
-                Label lbl = new Label();
-                lbl.Text = ShortenFileName(tep.TenTepGoc, 8);
-                lbl.TextAlign = ContentAlignment.TopCenter;
-                lbl.Width = panel.Width;
-                lbl.Height = 30;
-                lbl.Location = new Point(0, icon.Bottom);
-                lbl.Font = new Font("Arial", 8);
-                lbl.AutoEllipsis = true;
+        //        Label lbl = new Label();
+        //        lbl.Text = ShortenFileName(tep.TenTepGoc, 8);
+        //        lbl.TextAlign = ContentAlignment.TopCenter;
+        //        lbl.Width = panel.Width;
+        //        lbl.Height = 30;
+        //        lbl.Location = new Point(0, icon.Bottom);
+        //        lbl.Font = new Font("Arial", 8);
+        //        lbl.AutoEllipsis = true;
 
-                panel.Controls.Add(icon);
-                panel.Controls.Add(lbl);
-                flow_Files.Controls.Add(panel);
+        //        panel.Controls.Add(icon);
+        //        panel.Controls.Add(lbl);
+        //        flow_Files.Controls.Add(panel);
 
-                icon.Click += (s, e) =>
-                {
-                    try
-                    {
-                        if (File.Exists(tep.DuongDan))
-                        {
-                            System.Diagnostics.Process.Start(tep.DuongDan);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Không tìm thấy tệp: " + tep.TenTep);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Không thể mở tệp: " + ex.Message);
-                    }
-                };
+        //        icon.Click += (s, e) =>
+        //        {
+        //            try
+        //            {
+        //                if (File.Exists(tep.DuongDan))
+        //                {
+        //                    System.Diagnostics.Process.Start(tep.DuongDan);
+        //                }
+        //                else
+        //                {
+        //                    MessageBox.Show("Không tìm thấy tệp: " + tep.TenTep);
+        //                }
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                MessageBox.Show("Không thể mở tệp: " + ex.Message);
+        //            }
+        //        };
 
-            }
+        //    }
 
-        }
+        //}
 
         private string ShortenFileName(string fileName, int maxLength)
         {
@@ -407,15 +400,17 @@ namespace Task_App.views
             }
         }
 
-        private void btnHoanThanh_Click(object sender, EventArgs e)
+        private async void btnHoanThanh_Click(object sender, EventArgs e)
         {
+
             if (tt == "Chưa xử lí")
             {
-                if (tcpClientDAO.UpdateTrangThaiCongViec(ctcv))
+                var res = await apiClientDAO.UpdateTrangThaiCongViecAsync(ctcv);
+                if (res.Success)
                 {
                     MessageBox.Show("Bạn đã nhận việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //this.Close();
-                    loadData();
+                    //loadData();
                     tdg.LoadData();
                 }
                 else
@@ -434,11 +429,12 @@ namespace Task_App.views
 
                 if (result == DialogResult.Yes)
                 {
-                    if (tcpClientDAO.UpdateTrangThaiCongViec(ctcv))
+                    var res = await apiClientDAO.UpdateTrangThaiCongViecAsync(ctcv);
+                    if (res.Success)
                     {
                         MessageBox.Show("Công việc đã được đánh dấu là hoàn thành.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         //this.Close();
-                        loadData();
+                        //loadData();
                         tdg.LoadData();
                     }
                     else
@@ -451,6 +447,7 @@ namespace Task_App.views
             {
                 MessageBox.Show("Trạng thái công việc không hợp lệ để cập nhật.", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
         }
 
         private void progress_Bar_MouseHover(object sender, EventArgs e)
@@ -474,42 +471,42 @@ namespace Task_App.views
 
         private void progress_Bar_Click(object sender, EventArgs e)
         {
-            if (tt == "Đang xử lí")
-            {
-                if (tienDoReport == 100)
-                {
-                    DialogResult result = MessageBox.Show(
-                        "Bạn có chắc chắn tiến độ là 100% không?",
-                        "Xác nhận hoàn thành",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question
-                    );
+            //if (tt == "Đang xử lí")
+            //{
+            //    if (tienDoReport == 100)
+            //    {
+            //        DialogResult result = MessageBox.Show(
+            //            "Bạn có chắc chắn tiến độ là 100% không?",
+            //            "Xác nhận hoàn thành",
+            //            MessageBoxButtons.YesNo,
+            //            MessageBoxIcon.Question
+            //        );
 
-                    if (result == DialogResult.Yes)
-                    {
-                        if (tcpClientDAO.UpdateTrangThaiCongViec(ctcv))
-                        {
-                            MessageBox.Show("Công việc đã được đánh dấu là hoàn thành.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            //this.Close();
-                            loadData();
-                            tdg.LoadData();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Cập nhật thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-                else
-                {
-                    ctcv.TienDo = tienDoReport;
-                    tcpClientDAO.UpdateTienDoCongViec(ctcv);
-                    MessageBox.Show("Báo cáo tiến độ công việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    //this.Close();
-                    loadData();
-                    tdg.LoadData();
-                }
-            }
+            //        if (result == DialogResult.Yes)
+            //        {
+            //            if (tcpClientDAO.UpdateTrangThaiCongViec(ctcv))
+            //            {
+            //                MessageBox.Show("Công việc đã được đánh dấu là hoàn thành.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //                //this.Close();
+            //                loadData();
+            //                tdg.LoadData();
+            //            }
+            //            else
+            //            {
+            //                MessageBox.Show("Cập nhật thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        ctcv.TienDo = tienDoReport;
+            //        tcpClientDAO.UpdateTienDoCongViec(ctcv);
+            //        MessageBox.Show("Báo cáo tiến độ công việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //        //this.Close();
+            //        loadData();
+            //        tdg.LoadData();
+            //    }
+            //}
                 
         }
 
@@ -555,258 +552,258 @@ namespace Task_App.views
             }
         }
 
-        private void AddFeedback(PhanHoiCongViec fb, bool isMe)
-        {
-            Guna2Panel feedbackPanel = new Guna2Panel
-            {
-                Width = flow_FeedBack.ClientSize.Width - 40,
-                Padding = new Padding(5),
-                Margin = new Padding(5),
-                BorderRadius = 0,
-                FillColor = Color.Transparent,
-                BorderThickness = 0
-            };
+        //private void AddFeedback(PhanHoiCongViec fb, bool isMe)
+        //{
+        //    Guna2Panel feedbackPanel = new Guna2Panel
+        //    {
+        //        Width = flow_FeedBack.ClientSize.Width - 40,
+        //        Padding = new Padding(5),
+        //        Margin = new Padding(5),
+        //        BorderRadius = 0,
+        //        FillColor = Color.Transparent,
+        //        BorderThickness = 0
+        //    };
 
-            // Người gửi
-            Label lblNguoiGui = new Label
-            {
-                Text = fb.NguoiDung.HoTen + " - " + fb.ThoiGian,
-                Font = new Font("Segoe UI", 8, FontStyle.Italic),
-                ForeColor = Color.White,
-                AutoSize = true,
-                BackColor = Color.Transparent
-            };
+        //    // Người gửi
+        //    Label lblNguoiGui = new Label
+        //    {
+        //        Text = fb.NguoiDung.HoTen + " - " + fb.ThoiGian,
+        //        Font = new Font("Segoe UI", 8, FontStyle.Italic),
+        //        ForeColor = Color.White,
+        //        AutoSize = true,
+        //        BackColor = Color.Transparent
+        //    };
 
-            // Nội dung
-            Control contentControl;
-            if (fb.Loai == "Feedback")
-            {
-                Label lblNoiDung = new Label
-                {
-                    Text = fb.NoiDung,
-                    Font = new Font("Segoe UI", 10),
-                    MaximumSize = new Size(feedbackPanel.Width - 60, 0),
-                    AutoSize = true,
-                    ForeColor = Color.White,
-                    Padding = new Padding(8),
-                    BackColor = Color.Transparent
-                };
-                contentControl = lblNoiDung;
-            }
-            else if (fb.Loai == "Attach")
-            {
-                int maTep = int.Parse(fb.NoiDung);
-                TepTin tep = tcpClientDAO.getTepbyId(maTep);
-                string extension = Path.GetExtension(tep.TenTepGoc).ToLower();
+        //    // Nội dung
+        //    Control contentControl;
+        //    if (fb.Loai == "Feedback")
+        //    {
+        //        Label lblNoiDung = new Label
+        //        {
+        //            Text = fb.NoiDung,
+        //            Font = new Font("Segoe UI", 10),
+        //            MaximumSize = new Size(feedbackPanel.Width - 60, 0),
+        //            AutoSize = true,
+        //            ForeColor = Color.White,
+        //            Padding = new Padding(8),
+        //            BackColor = Color.Transparent
+        //        };
+        //        contentControl = lblNoiDung;
+        //    }
+        //    else if (fb.Loai == "Attach")
+        //    {
+        //        int maTep = int.Parse(fb.NoiDung);
+        //        TepTin tep = tcpClientDAO.getTepbyId(maTep);
+        //        string extension = Path.GetExtension(tep.TenTepGoc).ToLower();
 
-                // Chọn icon tương ứng
-                Image iconImage = Properties.Resources.icons8_document_48;
-                if (extension == ".pdf")
-                    iconImage = Properties.Resources.pdf_icon;
-                else if (extension == ".doc" || extension == ".docx")
-                    iconImage = Properties.Resources.word_icon;
-                else if (extension == ".xls" || extension == ".xlsx")
-                    iconImage = Properties.Resources.excel_icon;
-                else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
-                    iconImage = Properties.Resources.image_icon;
+        //        // Chọn icon tương ứng
+        //        Image iconImage = Properties.Resources.icons8_document_48;
+        //        if (extension == ".pdf")
+        //            iconImage = Properties.Resources.pdf_icon;
+        //        else if (extension == ".doc" || extension == ".docx")
+        //            iconImage = Properties.Resources.word_icon;
+        //        else if (extension == ".xls" || extension == ".xlsx")
+        //            iconImage = Properties.Resources.excel_icon;
+        //        else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
+        //            iconImage = Properties.Resources.image_icon;
 
-                // PictureBox cho icon
-                PictureBox icon = new PictureBox
-                {
-                    Image = iconImage,
-                    SizeMode = PictureBoxSizeMode.StretchImage,
-                    Size = new Size(48, 48),
-                    Margin = new Padding(0, 2, 5, 0)
-                };
+        //        // PictureBox cho icon
+        //        PictureBox icon = new PictureBox
+        //        {
+        //            Image = iconImage,
+        //            SizeMode = PictureBoxSizeMode.StretchImage,
+        //            Size = new Size(48, 48),
+        //            Margin = new Padding(0, 2, 5, 0)
+        //        };
 
-                // LinkLabel cho tên tệp
-                LinkLabel link = new LinkLabel
-                {
-                    Text = tep.TenTepGoc,
-                    Tag = tep.DuongDan,
-                    LinkColor = Color.White,
-                    AutoSize = true,
-                    Font = new Font("Segoe UI", 10, FontStyle.Underline),
-                    Margin = new Padding(0, 5, 0, 0)
-                };
+        //        // LinkLabel cho tên tệp
+        //        LinkLabel link = new LinkLabel
+        //        {
+        //            Text = tep.TenTepGoc,
+        //            Tag = tep.DuongDan,
+        //            LinkColor = Color.White,
+        //            AutoSize = true,
+        //            Font = new Font("Segoe UI", 10, FontStyle.Underline),
+        //            Margin = new Padding(0, 5, 0, 0)
+        //        };
 
-                link.Click += (s, e) =>
-                {
-                    try
-                    {
-                        System.Diagnostics.Process.Start(tep.DuongDan);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Không thể mở tệp: " + ex.Message);
-                    }
-                };
+        //        link.Click += (s, e) =>
+        //        {
+        //            try
+        //            {
+        //                System.Diagnostics.Process.Start(tep.DuongDan);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                MessageBox.Show("Không thể mở tệp: " + ex.Message);
+        //            }
+        //        };
 
-                // Panel xếp ngang icon và link
-                FlowLayoutPanel filePanel = new FlowLayoutPanel
-                {
-                    AutoSize = true,
-                    FlowDirection = FlowDirection.LeftToRight,
-                    WrapContents = false,
-                    Margin = new Padding(0),
-                    Padding = new Padding(0),
-                    BackColor = Color.Transparent
-                };
+        //        // Panel xếp ngang icon và link
+        //        FlowLayoutPanel filePanel = new FlowLayoutPanel
+        //        {
+        //            AutoSize = true,
+        //            FlowDirection = FlowDirection.LeftToRight,
+        //            WrapContents = false,
+        //            Margin = new Padding(0),
+        //            Padding = new Padding(0),
+        //            BackColor = Color.Transparent
+        //        };
 
-                filePanel.Controls.Add(icon);
-                filePanel.Controls.Add(link);
+        //        filePanel.Controls.Add(icon);
+        //        filePanel.Controls.Add(link);
 
-                contentControl = filePanel;
-            }
+        //        contentControl = filePanel;
+        //    }
 
-            else
-            {
-                // Nếu loại không xác định
-                contentControl = new Label
-                {
-                    Text = "[Không xác định loại phản hồi]",
-                    ForeColor = Color.Gray
-                };
-            }
+        //    else
+        //    {
+        //        // Nếu loại không xác định
+        //        contentControl = new Label
+        //        {
+        //            Text = "[Không xác định loại phản hồi]",
+        //            ForeColor = Color.Gray
+        //        };
+        //    }
 
-            // Nội dung panel
-            Guna2Panel innerPanel = new Guna2Panel
-            {
-                AutoSize = true,
-                BorderRadius = 10,
-                FillColor = isMe ? Color.FromArgb(87, 166, 255) : Color.FromArgb(65, 200, 94),
-                BorderThickness = 0,
-                Margin = new Padding(0),
-                Padding = new Padding(5)
-            };
+        //    // Nội dung panel
+        //    Guna2Panel innerPanel = new Guna2Panel
+        //    {
+        //        AutoSize = true,
+        //        BorderRadius = 10,
+        //        FillColor = isMe ? Color.FromArgb(87, 166, 255) : Color.FromArgb(65, 200, 94),
+        //        BorderThickness = 0,
+        //        Margin = new Padding(0),
+        //        Padding = new Padding(5)
+        //    };
 
-            lblNguoiGui.Location = new Point(5, 5);
-            contentControl.Location = new Point(5, lblNguoiGui.Bottom + 2);
+        //    lblNguoiGui.Location = new Point(5, 5);
+        //    contentControl.Location = new Point(5, lblNguoiGui.Bottom + 2);
 
-            innerPanel.Controls.Add(lblNguoiGui);
-            innerPanel.Controls.Add(contentControl);
+        //    innerPanel.Controls.Add(lblNguoiGui);
+        //    innerPanel.Controls.Add(contentControl);
 
-            FlowLayoutPanel container = new FlowLayoutPanel
-            {
-                Width = feedbackPanel.Width,
-                AutoSize = true,
-                WrapContents = false,
-                Margin = new Padding(0),
-                Padding = new Padding(0),
-                FlowDirection = isMe ? FlowDirection.RightToLeft : FlowDirection.LeftToRight
-            };
+        //    FlowLayoutPanel container = new FlowLayoutPanel
+        //    {
+        //        Width = feedbackPanel.Width,
+        //        AutoSize = true,
+        //        WrapContents = false,
+        //        Margin = new Padding(0),
+        //        Padding = new Padding(0),
+        //        FlowDirection = isMe ? FlowDirection.RightToLeft : FlowDirection.LeftToRight
+        //    };
 
-            container.Controls.Add(innerPanel);
-            feedbackPanel.Controls.Add(container);
-            flow_FeedBack.Controls.Add(feedbackPanel);
+        //    container.Controls.Add(innerPanel);
+        //    feedbackPanel.Controls.Add(container);
+        //    flow_FeedBack.Controls.Add(feedbackPanel);
 
-            flow_FeedBack.ScrollControlIntoView(feedbackPanel);
-        }
+        //    flow_FeedBack.ScrollControlIntoView(feedbackPanel);
+        //}
 
         private void btn_Send_Click(object sender, EventArgs e)
         {
-            string mess = txtMessage.Text;
+            //string mess = txtMessage.Text;
 
-            CongViec cv = tcpClientDAO.getCongViecById(maCongViec);
-            NguoiDung nd = tcpClientDAO.GetNguoiDung(maNguoiDung);
+            //CongViec cv = tcpClientDAO.getCongViecById(maCongViec);
+            //NguoiDung nd = tcpClientDAO.GetNguoiDung(maNguoiDung);
 
-            string targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
-            Directory.CreateDirectory(targetFolder);
+            //string targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
+            //Directory.CreateDirectory(targetFolder);
 
-            if (lstTepDaChon.Count > 0)
-            {
-                string zipPath = ZipFiles(lstTepDaChon, maCongViec.ToString());
+            //if (lstTepDaChon.Count > 0)
+            //{
+            //    string zipPath = ZipFiles(lstTepDaChon, maCongViec.ToString());
 
-                SendFileToServer(zipPath);
+            //    SendFileToServer(zipPath);
 
-                foreach (TepTin t in lstTepDaChon)
-                {
-                    string fileName = Path.GetFileName(t.DuongDan);
-                    string extension = Path.GetExtension(fileName);
+            //    foreach (TepTin t in lstTepDaChon)
+            //    {
+            //        string fileName = Path.GetFileName(t.DuongDan);
+            //        string extension = Path.GetExtension(fileName);
 
-                    // Tạo tên mới duy nhất
-                    string timePart = DateTime.Now.ToString("yyyyMMddHHmmss");
-                    string randomPart = Guid.NewGuid().ToString("N").Substring(0, 6);
-                    string newFileName = $"{maCongViec}_{timePart}_{randomPart}{extension}";
+            //        // Tạo tên mới duy nhất
+            //        string timePart = DateTime.Now.ToString("yyyyMMddHHmmss");
+            //        string randomPart = Guid.NewGuid().ToString("N").Substring(0, 6);
+            //        string newFileName = $"{maCongViec}_{timePart}_{randomPart}{extension}";
 
-                    string destPath = Path.Combine(targetFolder, newFileName);
-                    File.Copy(t.DuongDan, destPath, true);
+            //        string destPath = Path.Combine(targetFolder, newFileName);
+            //        File.Copy(t.DuongDan, destPath, true);
 
-                    t.DuongDan = destPath;
-                    t.TenTep = newFileName;
-                    t.TenTepGoc = fileName;
+            //        t.DuongDan = destPath;
+            //        t.TenTep = newFileName;
+            //        t.TenTepGoc = fileName;
 
-                    int maTep = tcpClientDAO.CreateTepTin(t);
-                    if (maTep > 0)
-                    {
-                        t.MaTep = maTep;
-                        Console.WriteLine("Tạo Tệp PhanHoi Thành Công!");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Tạo Tệp PhanHoi Thất Bại");
-                    }
+            //        int maTep = tcpClientDAO.CreateTepTin(t);
+            //        if (maTep > 0)
+            //        {
+            //            t.MaTep = maTep;
+            //            Console.WriteLine("Tạo Tệp PhanHoi Thành Công!");
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Tạo Tệp PhanHoi Thất Bại");
+            //        }
 
-                    PhanHoiCongViec phcv = new PhanHoiCongViec
-                    {
-                        MaCongViec = maCongViec,
-                        CongViec = cv,
-                        MaNguoiDung = maNguoiDung,
-                        NguoiDung = nd,
-                        NoiDung = t.MaTep.ToString(),
-                        ThoiGian = DateTime.Now,
-                        Loai = "Attach"
-                    };
+            //        PhanHoiCongViec phcv = new PhanHoiCongViec
+            //        {
+            //            MaCongViec = maCongViec,
+            //            CongViec = cv,
+            //            MaNguoiDung = maNguoiDung,
+            //            NguoiDung = nd,
+            //            NoiDung = t.MaTep.ToString(),
+            //            ThoiGian = DateTime.Now,
+            //            Loai = "Attach"
+            //        };
 
-                    tcpClientDAO.createPhanHoiCongViec(phcv);
-                }
-            }
+            //        tcpClientDAO.createPhanHoiCongViec(phcv);
+            //    }
+            //}
 
-            if (!string.IsNullOrWhiteSpace(mess))
-            {
-                PhanHoiCongViec phcv = new PhanHoiCongViec
-                {
-                    MaCongViec = maCongViec,
-                    CongViec = cv,
-                    MaNguoiDung = maNguoiDung,
-                    NguoiDung = nd,
-                    NoiDung = mess,
-                    ThoiGian = DateTime.Now,
-                    Loai = "Feedback"
-                };
+            //if (!string.IsNullOrWhiteSpace(mess))
+            //{
+            //    PhanHoiCongViec phcv = new PhanHoiCongViec
+            //    {
+            //        MaCongViec = maCongViec,
+            //        CongViec = cv,
+            //        MaNguoiDung = maNguoiDung,
+            //        NguoiDung = nd,
+            //        NoiDung = mess,
+            //        ThoiGian = DateTime.Now,
+            //        Loai = "Feedback"
+            //    };
 
-                tcpClientDAO.createPhanHoiCongViec(phcv);
-            }
+            //    tcpClientDAO.createPhanHoiCongViec(phcv);
+            //}
 
-            var lstLienQuanCongViec = tcpClientDAO.GetListNguoiLienQuanByIdCongViec(maCongViec);
-            var nguoiNhanThongBao = new HashSet<int> { cv.NguoiGiao, maNguoiDung };
+            //var lstLienQuanCongViec = tcpClientDAO.GetListNguoiLienQuanByIdCongViec(maCongViec);
+            //var nguoiNhanThongBao = new HashSet<int> { cv.NguoiGiao, maNguoiDung };
 
-            foreach (var nlq in lstLienQuanCongViec)
-                nguoiNhanThongBao.Add(nlq.MaNguoiDung);
+            //foreach (var nlq in lstLienQuanCongViec)
+            //    nguoiNhanThongBao.Add(nlq.MaNguoiDung);
 
-            foreach (int maNguoiNhan in nguoiNhanThongBao)
-            {
-                if (maNguoiNhan == maNguoiDung)
-                    continue;
+            //foreach (int maNguoiNhan in nguoiNhanThongBao)
+            //{
+            //    if (maNguoiNhan == maNguoiDung)
+            //        continue;
 
-                ThongBaoNguoiDung tb = new ThongBaoNguoiDung
-                {
-                    MaChiTietCV = maChiTietCV,
-                    MaNguoiDung = maNguoiNhan,
-                    NoiDung = "Có phản hồi công việc: " + ctcv.TieuDe,
-                    TrangThai = 0,
-                    NgayThongBao = DateTime.Now,
-                    ChiTietCongViec = ctcv,
-                    NguoiDung = nd
-                };
+            //    ThongBaoNguoiDung tb = new ThongBaoNguoiDung
+            //    {
+            //        MaChiTietCV = maChiTietCV,
+            //        MaNguoiDung = maNguoiNhan,
+            //        NoiDung = "Có phản hồi công việc: " + ctcv.TieuDe,
+            //        TrangThai = 0,
+            //        NgayThongBao = DateTime.Now,
+            //        ChiTietCongViec = ctcv,
+            //        NguoiDung = nd
+            //    };
 
-                tcpClientDAO.CreateThongBao(tb);
-            }
+            //    tcpClientDAO.CreateThongBao(tb);
+            //}
 
-            lstTepDaChon.Clear();
-            loadData();
+            //lstTepDaChon.Clear();
+            //loadData();
 
-            txtMessage.Text = "";
+            //txtMessage.Text = "";
 
         }
 

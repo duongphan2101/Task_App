@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Task_App.TaskApp_Dao;
 
@@ -11,23 +12,36 @@ namespace Task_App
         /// </summary>
         public static TcpClientDAO TcpDao;
         [STAThread]
-        static void Main()
-        {
+        //static void Main()
+        //{
 
+        //    Application.EnableVisualStyles();
+        //    Application.SetCompatibleTextRenderingDefault(false);
+
+        //    TcpDao = new TcpClientDAO();
+        //    bool connected = TcpDao.Connect("127.0.0.1", 5000);
+
+        //    if (!connected)
+        //    {
+        //        MessageBox.Show("Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng hoặc server đang chạy!", "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        return;
+        //    }
+
+        //    Application.Run(new FormLogin(TcpDao));
+        //}
+
+        static async Task Main()
+        {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            TcpDao = new TcpClientDAO();
-            bool connected = TcpDao.Connect("127.0.0.1", 5000);
+            var apiDao = new ApiClientDAO();
 
-            if (!connected)
-            {
-                MessageBox.Show("Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng hoặc server đang chạy!", "Lỗi kết nối", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            Application.Run(new FormLogin(TcpDao));
+            // Không cần kết nối TCP nữa
+            Application.Run(new FormLogin(apiDao));
         }
+
+
     }
 
 

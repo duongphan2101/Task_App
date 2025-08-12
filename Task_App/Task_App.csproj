@@ -450,6 +450,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTO\BarChartModel.cs" />
+    <Compile Include="DTO\ChiTietCongViecFullDto.cs" />
     <Compile Include="DTO\CongViecChiTietDTO.cs" />
     <Compile Include="DTO\CongViecDaGiaoDTO.cs" />
     <Compile Include="DTO\CongViecDuocGiaoDTO.cs" />
@@ -472,7 +473,14 @@
     <Compile Include="Model\TepDinhKemEmail.cs" />
     <Compile Include="Model\TepTin.cs" />
     <Compile Include="Model\ThongBaoNguoiDung.cs" />
+    <Compile Include="Response\ApiResponse.cs" />
+    <Compile Include="Response\GlobalSession.cs" />
+    <Compile Include="Response\LoginResponse.cs" />
+    <Compile Include="Response\ChiTietCongViecResponse.cs" />
+    <Compile Include="Response\ViecDuocGiaoResponse.cs" />
+    <Compile Include="Response\ViecDaGiaoResponse.cs" />
     <Compile Include="Services\CongViecService.cs" />
+    <Compile Include="TaskApp_Dao\ApiClientDAO.cs" />
     <Compile Include="TaskApp_Dao\clientDao.cs" />
     <Compile Include="views\Dashboard.cs">
       <SubType>UserControl</SubType>

@@ -11,26 +11,27 @@ namespace APIServerApp.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MaChiTietCV { get; set; }
 
-        [Required]
         [ForeignKey("CongViec")]
         public string MaCongViec { get; set; }
 
-        [Required]
         [StringLength(255)]
-        public string TieuDe { get; set; }
+        public string? TieuDe { get; set; }
 
         [Column(TypeName = "nvarchar(max)")]
-        public string NoiDung { get; set; }
+        public string? NoiDung { get; set; }
 
-        public DateTime? NgayNhanCongViec { get; set; }
-        public DateTime? NgayKetThucCongViec { get; set; }
-        public DateTime? NgayHoanThanh { get; set; }
+        public DateTime NgayNhanCongViec { get; set; }
+        public DateTime NgayKetThucCongViec { get; set; }
+        public DateTime NgayHoanThanh { get; set; }
         public int SoNgayHoanThanh { get; set; }
 
         public int TrangThai { get; set; }
-        public int? TienDo { get; set; }
+        public int TienDo { get; set; }
         public int MucDoUuTien { get; set; }
 
-        public virtual CongViec CongViec { get; set; }
+        public virtual CongViec? CongViec { get; set; }
+
+        public virtual ICollection<Email>? Emails { get; set; }
+
     }
 }

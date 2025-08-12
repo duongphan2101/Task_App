@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Task_App.Response;
 using Task_App.Services;
 using Task_App.TaskApp_Dao;
 
@@ -11,15 +14,23 @@ namespace Task_App.views
     {
         private readonly TcpClientDAO tcpClientDAO;
         private readonly CongViecService CongViecService;
+        private LoginResponse loginResponse;
 
         private readonly int maNguoiDung;
         private bool locTheoNgay = true;
+        private ApiClientDAO apiClientDAO;
+        private Task<ViecDaGiaoResponse> DaGiaoResponse;
+        private Task<ViecDuocGiaoResponse> DuocGiaoResponse;
 
-        public Create_Task_Control(int idUser, TcpClientDAO tcpClientDAO)
+        public Create_Task_Control(LoginResponse loginResponse, Task<ViecDaGiaoResponse> daGiaoResponse, Task<ViecDuocGiaoResponse> duocGiaoResponse, ApiClientDAO apiClientDAO)
         {
-            maNguoiDung = idUser;
-            CongViecService = new CongViecService(tcpClientDAO);
-            this.tcpClientDAO = tcpClientDAO;
+            this.loginResponse = loginResponse;
+            this.DaGiaoResponse = daGiaoResponse;
+            this.DuocGiaoResponse = duocGiaoResponse;
+            maNguoiDung = loginResponse.MaNguoiDung;
+
+            //CongViecService = new CongViecService(tcpClientDAO);
+            this.apiClientDAO = apiClientDAO;
             InitializeComponent();
         }
 
@@ -29,78 +40,74 @@ namespace Task_App.views
             LoadData();
         }
 
-        public void LoadData()
+        public async Task LoadData()
         {
-            DataTable dt = CongViecService.GetCongViecDaGiao(maNguoiDung, !locTheoNgay);
+            var response = await DaGiaoResponse;
 
-            dt.Columns.Add("trangThaiText", typeof(string));
-            dt.Columns.Add("mucDoUuTienText", typeof(string));
-
-            foreach (DataRow row in dt.Rows)
+            if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
             {
-                switch (row["trangThai"] as int?)
-                {
-                    case 0:
-                        row["trangThaiText"] = "Chưa xử lý";
-                        break;
-                    case 1:
-                        row["trangThaiText"] = "Đang xử lý";
-                        break;
-                    case 2:
-                        row["trangThaiText"] = "Hoàn thành";
-                        break;
-                    case 3:
-                        row["trangThaiText"] = "Trễ";
-                        break;
-                    case 4:
-                        row["trangThaiText"] = "Đã hủy";
-                        break;
-                    default:
-                        row["trangThaiText"] = "Không xác định";
-                        break;
-                }
-
-                switch (row["mucDoUuTien"] as int?)
-                {
-                    case 0:
-                        row["mucDoUuTienText"] = "Bình thường";
-                        break;
-                    case 1:
-                        row["mucDoUuTienText"] = "Quan trọng";
-                        break;
-                    case 2:
-                        row["mucDoUuTienText"] = "Khẩn cấp";
-                        break;
-                    default:
-                        row["mucDoUuTienText"] = "Không xác định";
-                        break;
-                }
+                MessageBox.Show("Không có dữ liệu.");
+                return;
             }
 
-            // Chọn các cột cần hiển thị
-            DataTable dtDisplay = dt.DefaultView.ToTable(false, "maCongViec",
-                "maChiTietCV", "tieuDe", "ngayNhanCongViec", "ngayKetThucCongViec", "trangThaiText", "mucDoUuTienText", "tienDo",
-                "nguoiNhan_HoTen", "tenDonVi", "tenPhongBan", "tenChucVu");
+            // Flatten dữ liệu: mỗi chi tiết công việc thành 1 dòng, lấy thông tin người nhận ở cấp công việc
+            var displayData = response.Data
+                .SelectMany(cv => cv.ChiTiet.Select(ct => new
+                {
+                    MaCongViec = cv.MaCongViec,
+                    NgayGiao = cv.NgayGiao,
+                    //LapLai = cv.LapLai,
+                    //TanSuat = cv.TanSuat,
 
-            // Gán dữ liệu vào DataGridView
-            data_test.DataSource = dtDisplay;
+                    MaChiTietCV = ct.MaChiTietCV,
+                    //TieuDe = ct.TieuDe,
+                    //NoiDung = ct.NoiDung,
+                    //NgayNhanCongViec = ct.NgayNhanCongViec,
+                    //NgayKetThucCongViec = ct.NgayKetThucCongViec,
+                    //NgayHoanThanh = ct.NgayHoanThanh,
+                    SoNgayHoanThanh = ct.SoNgayHoanThanh,
+                    //TrangThai = ct.TrangThai,
+                    TrangThaiText = GetTrangThaiText(ct.TrangThai),
+                    TienDo = ct.TienDo,
+                    //MucDoUuTien = ct.MucDoUuTien,
+                    MucDoUuTienText = GetMucDoUuTienText(ct.MucDoUuTien),
 
-            // Đổi header
-            data_test.Columns["maCongViec"].HeaderText = "Mã CV";
-            data_test.Columns["maChiTietCV"].HeaderText = "Mã CTCV";
-            data_test.Columns["tieuDe"].HeaderText = "Tiêu đề";
-            data_test.Columns["ngayNhanCongViec"].HeaderText = "Ngày Nhận";
-            data_test.Columns["ngayKetThucCongViec"].HeaderText = "Ngày KTCV";
-            data_test.Columns["trangThaiText"].HeaderText = "Trạng thái";
-            data_test.Columns["mucDoUuTienText"].HeaderText = "Mức độ ưu tiên";
-            data_test.Columns["tienDo"].HeaderText = "Tiến độ (%)";
-            data_test.Columns["nguoiNhan_HoTen"].HeaderText = "Người nhận";
-            data_test.Columns["tenDonVi"].HeaderText = "Đơn vị";
-            data_test.Columns["tenPhongBan"].HeaderText = "Phòng ban";
-            data_test.Columns["tenChucVu"].HeaderText = "Chức vụ";
+                    NguoiNhan_HoTen = cv.NguoiNhan?.HoTen ?? "",
+                    //NguoiNhan_Email = cv.NguoiNhan?.Email ?? "",
+                    //TenDonVi = cv.NguoiNhan?.TenDonVi ?? "",
+                    //TenPhongBan = cv.NguoiNhan?.TenPhongBan ?? "",
+                    //TenChucVu = cv.NguoiNhan?.TenChucVu ?? ""
+                }))
+                .ToList();
 
-            // Thêm cột xem thông tin chi tiết
-            if (data_test.Columns["btnAction"] == null) {
+            data_test.DataSource = displayData;
+
+            // Đổi header cho DataGridView
+            data_test.Columns["MaCongViec"].HeaderText = "Mã CV";
+            data_test.Columns["NgayGiao"].HeaderText = "Ngày giao";
+            //data_test.Columns["LapLai"].HeaderText = "Lặp lại";
+            //data_test.Columns["TanSuat"].HeaderText = "Tần suất";
+
+            data_test.Columns["MaChiTietCV"].HeaderText = "Mã CTCV";
+            //data_test.Columns["TieuDe"].HeaderText = "Tiêu đề";
+            //data_test.Columns["NoiDung"].HeaderText = "Nội dung";
+            //data_test.Columns["NgayNhanCongViec"].HeaderText = "Ngày nhận";
+            //data_test.Columns["NgayKetThucCongViec"].HeaderText = "Ngày kết thúc";
+            //data_test.Columns["NgayHoanThanh"].HeaderText = "Ngày hoàn thành";
+            data_test.Columns["SoNgayHoanThanh"].HeaderText = "Số ngày hoàn thành";
+            data_test.Columns["TrangThaiText"].HeaderText = "Trạng thái";
+            data_test.Columns["TienDo"].HeaderText = "Tiến độ (%)";
+            data_test.Columns["MucDoUuTienText"].HeaderText = "Mức độ ưu tiên";
+
+            data_test.Columns["NguoiNhan_HoTen"].HeaderText = "Người nhận";
+            //data_test.Columns["NguoiNhan_Email"].HeaderText = "Email người nhận";
+            //data_test.Columns["TenDonVi"].HeaderText = "Đơn vị";
+            //data_test.Columns["TenPhongBan"].HeaderText = "Phòng ban";
+            //data_test.Columns["TenChucVu"].HeaderText = "Chức vụ";
+
+            // Thêm nút Xem nếu chưa có
+            if (data_test.Columns["btnAction"] == null)
+            {
                 var btnColumn = new DataGridViewButtonColumn
                 {
                     HeaderText = "Thao tác",
@@ -111,12 +118,35 @@ namespace Task_App.views
                 data_test.Columns.Add(btnColumn);
             }
 
-            // Căn giữa
             data_test.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             data_test.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             data_test.AllowUserToAddRows = false;
             data_test.Refresh();
+        }
+
+        private string GetTrangThaiText(int trangThai)
+        {
+            switch (trangThai)
+            {
+                case 0: return "Chưa xử lý";
+                case 1: return "Đang xử lý";
+                case 2: return "Hoàn thành";
+                case 3: return "Trễ";
+                case 4: return "Đã hủy";
+                default: return "Không xác định";
+            }
+        }
+
+        private string GetMucDoUuTienText(int mucDo)
+        {
+            switch (mucDo)
+            {
+                case 0: return "Bình thường";
+                case 1: return "Quan trọng";
+                case 2: return "Khẩn cấp";
+                default: return "Không xác định";
+            }
         }
 
         private void data_test_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -132,8 +162,8 @@ namespace Task_App.views
             var maCTCV = (row.Cells["maChiTietCV"].Value as int?) ?? -1;
             
             buttonCell.Tag = maCongViec;
-            Task_Duoc_Giao_Control tdgiao = new Task_Duoc_Giao_Control(maNguoiDung, tcpClientDAO);
-            var modal = new Modal_ChiTiet_CongViec(maCongViec, maCTCV, maNguoiDung, true, tcpClientDAO, tdgiao);
+            Task_Duoc_Giao_Control tdgiao = new Task_Duoc_Giao_Control(loginResponse, DuocGiaoResponse, apiClientDAO);
+            var modal = new Modal_ChiTiet_CongViec(maCongViec, maCTCV, maNguoiDung, true, apiClientDAO, tdgiao);
             modal.FormClosed += (s, args) => { buttonCell.Tag = null; };
             modal.Show();
         }
