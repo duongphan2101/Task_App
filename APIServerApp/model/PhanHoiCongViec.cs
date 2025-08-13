@@ -10,7 +10,6 @@ namespace APIServerApp.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MaPhanHoi { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string MaCongViec { get; set; }
 

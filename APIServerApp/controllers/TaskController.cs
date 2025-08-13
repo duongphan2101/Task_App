@@ -249,23 +249,79 @@ namespace APIServerApp.controllers
             });
         }
 
+        [HttpGet("tep/{maTepTin}")]
+        public async Task<IActionResult> GetTepTin(int maTepTin)
+        {
+            var tepTin = await _context.TepTins
+                .FirstOrDefaultAsync(tt => tt.MaTep == maTepTin);
 
+            if (tepTin == null)
+            {
+                return Ok(new TepTinResponse
+                {
+                    Success = false,
+                    Message = "Không tìm thấy tệp tin",
+                    TepTin = null
+                });
+            }
+
+            return Ok(new TepTinResponse
+            {
+                Success = true,
+                Message = "Lấy tệp tin thành công",
+                TepTin = tepTin
+            });
+        }
+
+        [HttpGet("tep-dinh-kem-email/{maCongViec}")]
+        public async Task<GetTepDinhKemResponse> GetTepDinhKemEmailByMaCongViecAsync(string maCongViec)
+        {
+            var tepDinhKemList = await _context.TepDinhKemEmails
+                .Include(tdk => tdk.Email)
+                    .ThenInclude(e => e.ChiTietCongViec)
+                .Include(tdk => tdk.TepTin)
+                .Where(tdk => tdk.Email.ChiTietCongViec.MaCongViec == maCongViec)
+                .ToListAsync();
+
+            return new GetTepDinhKemResponse
+            {
+                Success = true,
+                Message = tepDinhKemList.Any() ? "Lấy tệp đính kèm thành công" : "Không có tệp đính kèm cho công việc này",
+                TepDinhKemEmail = tepDinhKemList
+            };
+        }
+
+        [HttpGet("phan-hoi-cong-viec/{maCongViec}")]
+        public async Task<IActionResult> GetPhanHoiByMaCongViec(string maCongViec)
+        {
+            var phanHoiList = await _context.PhanHoiCongViecs
+                .Where(p => p.MaCongViec == maCongViec)
+                .Include(p => p.NguoiDung)
+                .ToListAsync();
+
+            return Ok(new FeedBackResponse
+            {
+                Success = true,
+                Message = phanHoiList.Any() ? "Lấy danh sách phản hồi thành công" : "Không có phản hồi nào cho công việc này",
+                PhanHoiCongViec = phanHoiList
+            });
+        }
 
         [HttpPost("tao-cong-viec")]
-        public IActionResult TaoCongViec([FromBody] CongViecRequestDto request, [FromQuery] NguoiGiaoRequestDto nguoiGiaoInfo)
+        public async Task<IActionResult> TaoCongViec(
+            [FromBody] CongViecRequestDto request,
+            [FromQuery] NguoiGiaoRequestDto nguoiGiaoInfo)
         {
-            using var transaction = _context.Database.BeginTransaction();
+            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 // --- Tạo mã công việc ---
                 string prefix = (nguoiGiaoInfo.MaDonVi ?? "") + (nguoiGiaoInfo.MaPhongBan ?? "");
-
-                // Lấy mã công việc cuối cùng bắt đầu bằng prefix
-                var lastMaCV = _context.CongViecs
+                var lastMaCV = await _context.CongViecs
                     .Where(cv => cv.MaCongViec.StartsWith(prefix))
                     .OrderByDescending(cv => cv.MaCongViec)
                     .Select(cv => cv.MaCongViec)
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
                 int newStt = 1;
                 if (!string.IsNullOrEmpty(lastMaCV))
@@ -276,18 +332,7 @@ namespace APIServerApp.controllers
                         newStt = lastStt + 1;
                     }
                 }
-
-                string maCongViec;
-                do
-                {
-                    maCongViec = $"{prefix}_{newStt}";
-                    bool exists = _context.CongViecs.Any(cv => cv.MaCongViec == maCongViec);
-                    if (exists)
-                        newStt++;
-                    else
-                        break;
-                }
-                while (true);
+                string maCongViec = $"{prefix}_{newStt}";
 
                 // --- Lưu Công Việc ---
                 var cv = new CongViec
@@ -301,9 +346,8 @@ namespace APIServerApp.controllers
                     NgayKetThuc = request.NgayKetThuc
                 };
                 _context.CongViecs.Add(cv);
-                _context.SaveChanges();
 
-                // --- Lưu Chi Tiết Công Việc ---
+                // --- Lưu Chi Tiết Công Việc + liên quan ---
                 if (request.ChiTietCongViecs != null)
                 {
                     foreach (var ctDto in request.ChiTietCongViecs)
@@ -322,7 +366,6 @@ namespace APIServerApp.controllers
                             MucDoUuTien = ctDto.MucDoUuTien
                         };
                         _context.ChiTietCongViecs.Add(ct);
-                        _context.SaveChanges();
 
                         // NguoiLienQuan
                         if (ctDto.NguoiLienQuans != null)
@@ -338,7 +381,7 @@ namespace APIServerApp.controllers
                             }
                         }
 
-                        // Email
+                        // Email + NguoiNhan + TepDinhKem
                         if (ctDto.Emails != null)
                         {
                             foreach (var emailDto in ctDto.Emails)
@@ -354,9 +397,7 @@ namespace APIServerApp.controllers
                                     TrangThai = emailDto.TrangThai
                                 };
                                 _context.Emails.Add(email);
-                                _context.SaveChanges();
 
-                                // NguoiNhanEmail
                                 if (emailDto.NguoiNhans != null)
                                 {
                                     foreach (var nn in emailDto.NguoiNhans)
@@ -370,7 +411,6 @@ namespace APIServerApp.controllers
                                     }
                                 }
 
-                                // TepDinhKem
                                 if (emailDto.TepDinhKems != null)
                                 {
                                     foreach (var tep in emailDto.TepDinhKems)
@@ -382,7 +422,6 @@ namespace APIServerApp.controllers
                                             DuongDan = tep.DuongDan
                                         };
                                         _context.TepTins.Add(tepTin);
-                                        _context.SaveChanges();
 
                                         _context.TepDinhKemEmails.Add(new TepDinhKemEmail
                                         {
@@ -396,17 +435,43 @@ namespace APIServerApp.controllers
                     }
                 }
 
-                _context.SaveChanges();
-                transaction.Commit();
+                // Lưu tất cả cùng lúc
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
 
                 return Ok(new ApiResponseDto { Success = true, Message = "Tạo công việc thành công" });
             }
             catch (Exception ex)
             {
-                transaction.Rollback();
+                await transaction.RollbackAsync();
                 return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
             }
         }
+
+        [HttpPost("user-list-donvi-phongban")]
+        public async Task<IActionResult> GetNguoiDungCungDonViPhongBanAsync([FromBody] DonViPhongBanRequest request)
+        {
+            var nguoiDungs = await _context.NguoiDungs
+                .Where(nd => nd.MaDonVi == request.MaDonVi
+                          && nd.MaPhongBan == request.MaPhongBan
+                          && nd.Email != request.Email)
+                .ToListAsync();
+
+            var rel = nguoiDungs.Select(nd => new NguoiDungDTO
+            {
+                MaNguoiDung = nd.MaNguoiDung,
+                HoTen = nd.HoTen,
+                Email = nd.Email
+            }).ToList();
+
+            return Ok(new GetNguoiDungCungDonViPhongBanResponse
+            {
+                Success = true,
+                Message = "Lấy danh sách người dùng thành công",
+                NguoiDungs = rel
+            });
+        }
+
 
     }
 }

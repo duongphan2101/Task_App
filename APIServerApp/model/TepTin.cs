@@ -11,15 +11,12 @@ namespace APIServerApp.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MaTep { get; set; }
 
-        [Required]
         [StringLength(255)]
         public string TenTep { get; set; }
 
-        [Required]
         [StringLength(255)]
         public string TenTepGoc { get; set; }
 
-        [Required]
         [StringLength(500)]
         public string DuongDan { get; set; }
 

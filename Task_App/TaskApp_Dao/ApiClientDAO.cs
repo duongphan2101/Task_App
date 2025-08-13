@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Task_App.DTO;
 using Task_App.Model;
 using Task_App.Response;
 
@@ -123,15 +125,15 @@ namespace Task_App.TaskApp_Dao
         {
             try
             {
-                using (var jsonContent = new StringContent(
+                var jsonContent = new StringContent(
                     JsonConvert.SerializeObject(updateData),
                     Encoding.UTF8,
                     "application/json"
-                ))
+                );
+
                 {
-                    // Kèm token nếu cần
-                    //client.DefaultRequestHeaders.Authorization =
-                    //    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
 
                     var response = await client.PostAsync("api/task/update-trang-thai", jsonContent);
                     var result = await response.Content.ReadAsStringAsync();
@@ -153,14 +155,588 @@ namespace Task_App.TaskApp_Dao
                 return new ApiResponse
                 {
                     Success = false,
-                    Message = "Lỗi khi cập nhật người liên quan công việc: " + ex.Message
+                    Message = "Lỗi khi cập nhật trạng thái công việc: " + ex.Message
                 };
             }
         }
 
+        public async Task<ApiResponse> UpdateTrangThaiEmail(Email e)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(e),
+                    Encoding.UTF8,
+                    "application/json"
+                );
 
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
 
+                    var response = await client.PostAsync("api/task/update-trang-thai-email", jsonContent);
+                    var result = await response.Content.ReadAsStringAsync();
 
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    }
+
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"Cập nhật email thất bại ({(int)response.StatusCode}): {result}"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi cập nhật trạng thái email: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<TepTinResponse> GetTepTinByAsync(int maTep)
+        {
+            try
+            {
+                var response = await client.GetAsync($"api/task/tep/{maTep}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<TepTinResponse>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy Tep Tin: " + ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<TepDinhKemEmailResponse> GetTepDinhKemEmailByMaCongViecAsync(string maCongViec)
+        {
+            try
+            {
+                var response = await client.GetAsync($"api/task/tep-dinh-kem-email/{maCongViec}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<TepDinhKemEmailResponse>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy Tep Dinh Kem Email: " + ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<PhanHoiCongViecResponse> GetPhanHoiCongViecAsync(string maCongViec)
+        {
+            try
+            {
+                var response = await client.GetAsync($"api/task/phan-hoi-cong-viec/{maCongViec}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<PhanHoiCongViecResponse>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy phản hồi công việc: " + ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<ApiResponse> CreateCongViec(CongViec cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-cong-viec", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Tạo công việc thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo công việc: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> CreateChiTietCongViec(ChiTietCongViec cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-chi-tiet-cong-viec", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"Tạo chi tiết công việc thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo chi tiết công việc: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<ChiTietCongViec>>> CreateDanhSachChiTietCongViec(CongViec congViec, int soNgayHoanThanh, int mucDo)
+        {
+            try
+            {
+                var payload = new
+                {
+                    CongViec = congViec,
+                    SoNgayHoanThanh = soNgayHoanThanh,
+                    MucDo = mucDo
+                };
+
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-chi-tiet-cong-viec", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<ChiTietCongViec>>>(result);
+                }
+
+                return new Object_Response<List<ChiTietCongViec>>
+                {
+                    Success = false,
+                    Message = $"Tạo chi tiết công việc thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<ChiTietCongViec>>
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo chi tiết công việc: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<ApiResponse> CreateNguoiLienQuanCongViec(NguoiLienQuanCongViec cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-nguoi-lien-quan-cong-viec", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Tạo NLQ công việc thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo NLQ công việc: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> CreateTepTin(TepTin cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-tep-tin", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"Tạo TepTin thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo TepTin: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<ApiResponse> CreateEmail(Email cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-email", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Tạo Email thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo Email: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<ApiResponse> CreateNguoiNhanEmail(NguoiNhanEmail cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-nguoi-nhan-email", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Tạo NNEmail thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo NNEmail: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<ApiResponse> CreateTepDinhKem(TepDinhKemEmail cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-tep-dinh-kem", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Tạo TepDinhKem thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo TepDinhKem: " + ex.Message
+                };
+            }
+        }
+        
+        public async Task<ApiResponse> CreateThongBao(ThongBaoNguoiDung cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-thong-bao", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Tạo ThongBao thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo ThongBao: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<ApiResponse> CreatePhanHoiCongViec(PhanHoiCongViec cv)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(cv),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/tao-phan-hoi-cong-viec", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Tạo PhanHoiCongViec thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi tạo PhanHoiCongViec: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<NguoiDungDTO>>> getUserListByDonViPhongBan(string maDonVi, string maPhongBan, string email)
+        {
+            try
+            {
+                var body = new
+                {
+                    MaDonVi = maDonVi,
+                    MaPhongBan = maPhongBan,
+                    Email = email
+                };
+
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(body),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                var response = await client.PostAsync("api/task/user-list-donvi-phongban", jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Object_Response<List<NguoiDungDTO>>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy UserList-DonViPhongBan: " + ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<Object_Response<List<NguoiDung>>> getNguoiDungByEmails(List<string> emails)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(emails),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                var response = await client.PostAsync("api/task/get-nguoi-dung-by-email", jsonContent);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Object_Response<List<NguoiDung>>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy UserList-byEmail: " + ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser)
+        {
+            try
+            {
+                var payload = new
+                {
+                    Email = email,
+                    DanhSachNguoiNhanEmail = lstNNE,
+                    DanhSachTepDinhKem = lstTDK,
+                    NguoiDung = currentUser
+                };
+
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                    var response = await client.PostAsync("api/task/gui-email", jsonContent);
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    }
+
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"Gui Email That Bai ({(int)response.StatusCode}): {result}"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi Gui Email: " + ex.Message
+                };
+            }
+        }
 
     }
 }

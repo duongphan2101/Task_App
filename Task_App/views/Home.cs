@@ -53,8 +53,8 @@ namespace Task_App.views
             SetUserInfo(response);
             this.apiClientDAO = apiClientDAO;
 
-            btnDashboard.Tag = true;
-            btnDashboard.BackColor = selectedColor;
+            btn_Task_DaGiao.Tag = true;
+            btn_Task_DaGiao.BackColor = selectedColor;
 
             //LoadNotifications();
 
@@ -240,7 +240,7 @@ namespace Task_App.views
             var isGiaoViec = tcpClientDAO.getIsGiaoViec(maNguoiDung, maChiTietCV);
             string maCongViec = tcpClientDAO.getMaCongViec(maChiTietCV);
             Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(response, vduocg, apiClientDAO);
-            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, apiClientDAO, tdg);
+            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(response, maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, apiClientDAO, tdg);
             modal.ShowDialog();
 
         }

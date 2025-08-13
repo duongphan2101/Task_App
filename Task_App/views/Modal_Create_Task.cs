@@ -6,8 +6,11 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Task_App.Model;
+using Task_App.Response;
 using Task_App.Services;
 using Task_App.TaskApp_Dao;
+using Task_App.DTO;
+using System.Threading.Tasks;
 
 namespace Task_App.views
 {
@@ -16,7 +19,6 @@ namespace Task_App.views
         //private readonly NguoiDungService NguoiDungService = new NguoiDungService();
         //private readonly NguoiDungDAO NguoiDungDAO = new NguoiDungDAO();
         //private readonly CongViecDAO CongViecDAO = new CongViecDAO();
-        private readonly TcpClientDAO tcpClientDAO;
 
         private int maNguoiDung;
         private List<string> selectedEmail_to = new List<string>();
@@ -26,12 +28,15 @@ namespace Task_App.views
         private List<TepTin> lstTepDaChon = new List<TepTin>();
         private int mucDo = 0; // 0: Bình thường, 1: Quan trọng, 2: Khẩn cấp
 
+        private LoginResponse loginResponse;
+        private ApiClientDAO apiClientDAO;
         private Create_Task_Control tdg;
 
-        public Modal_Create_Task(int id, TcpClientDAO tcpClientDAO, Create_Task_Control tdg)
+        public Modal_Create_Task(LoginResponse loginResponse, ApiClientDAO apiClientDAO, Create_Task_Control tdg)
         {
-            maNguoiDung = id;
-            this.tcpClientDAO = tcpClientDAO;
+            this.apiClientDAO = apiClientDAO;
+            this.loginResponse = loginResponse;
+            maNguoiDung = loginResponse.MaNguoiDung;
             this.tdg = tdg;
             InitializeComponent();
             radio_Khong.Checked = true;
@@ -47,12 +52,12 @@ namespace Task_App.views
             txtTieuDe.Focus();
         }
 
-        private List<string> emailSuggestions()
+        private async Task<List<string>> emailSuggestions()
         {
-            List<string> lstStr = new List<string>();
-            NguoiDung u = tcpClientDAO.GetNguoiDung(maNguoiDung);
-            List<NguoiDung> lst = tcpClientDAO.getDanhSachNguoiDungByDonViVaPhongBan(u.DonVi.MaDonVi, u.PhongBan.MaPhongBan, u.Email);
-            foreach(NguoiDung nd in lst)
+            List<string> lstStr = new List<string>();;
+            var res = await apiClientDAO.getUserListByDonViPhongBan(loginResponse.MaDonVi, loginResponse.MaPhongBan, loginResponse.Email);
+            List<NguoiDungDTO> lst = res.Data;
+            foreach(NguoiDungDTO nd in lst)
             {
                 lstStr.Add(nd.Email);
             }
@@ -198,7 +203,7 @@ namespace Task_App.views
             }
         }
 
-        private void btn_Create_Click(object sender, EventArgs e)
+        private async Task btn_Create_Click(object sender, EventArgs e)
         {
             string tieuDe = txtTieuDe.Text;
             string noiDung = txtNoiDung.Text;
@@ -224,7 +229,16 @@ namespace Task_App.views
                 return;
             }
 
-            NguoiDung currentUser = tcpClientDAO.GetNguoiDung(maNguoiDung);
+            NguoiDung currentUser = new NguoiDung
+            {
+                MaNguoiDung = maNguoiDung,
+                MaChucVu = loginResponse.MaChucVu,
+                MaPhongBan = loginResponse.MaPhongBan,
+
+                HoTen = loginResponse.HoTen,
+                Email = loginResponse.Email,
+                LaLanhDao = loginResponse.LaLanhDao
+            };
 
             selectedEmail_to = txtEmailInput.Text
             .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
@@ -248,7 +262,7 @@ namespace Task_App.views
             .ToList();
 
             CongViec congViec = new CongViec();
-            congViec.MaCongViec = tcpClientDAO.GenerateMaCongViecFromLast(currentUser.DonVi.MaDonVi, currentUser.PhongBan.MaPhongBan);
+            //congViec.MaCongViec = tcpClientDAO.GenerateMaCongViecFromLast(currentUser.DonVi.MaDonVi, currentUser.PhongBan.MaPhongBan);
             congViec.NguoiGiao = currentUser.MaNguoiDung;
             congViec.NguoiGiaoObj = currentUser;
             congViec.NgayGiao = ngayBatDau;
@@ -273,8 +287,8 @@ namespace Task_App.views
             }
 
             congViec.TanSuat = tanSuat;
-
-            if (tcpClientDAO.createCongViec(congViec))
+            var resCV = await apiClientDAO.CreateCongViec(congViec);
+            if (resCV.Success)
             {
                 Console.WriteLine("Tạo Task Thành Công!");
             }
@@ -286,9 +300,9 @@ namespace Task_App.views
             //
             if (dinhKy)
             {
-                CongViecService service = new CongViecService(tcpClientDAO);
+                var resCreateListChiTiet = await apiClientDAO.CreateDanhSachChiTietCongViec(congViec, soNgayHoanThanh, mucDo);
+                List<ChiTietCongViec> danhSachChiTiet = resCreateListChiTiet.Data;
 
-                List<ChiTietCongViec> danhSachChiTiet = tcpClientDAO.TaoChiTietCongViecTheoTanSuat(congViec, soNgayHoanThanh, mucDo);
 
                 foreach (ChiTietCongViec ct in danhSachChiTiet)
                 {
@@ -302,7 +316,8 @@ namespace Task_App.views
 
                     //ct.HanHoanThanh = TinhHanHoanThanh(txtHanHoanThanh.Text, ngayBatDau);
 
-                    int maChiTietMoi = tcpClientDAO.CreateChiTietCongViec(ct);
+                    var resCreateCTCV = await apiClientDAO.CreateChiTietCongViec(ct);
+                    int maChiTietMoi = resCreateCTCV.Data;
                     if (maChiTietMoi > 0)
                     {
                         ct.MaChiTietCV = maChiTietMoi;
@@ -314,7 +329,8 @@ namespace Task_App.views
                     }
 
                     //TO
-                    List<NguoiDung> lstNguoiNhan_to = tcpClientDAO.getDanhSachNguoiDungByEmails(selectedEmail_to);
+                    var resGetUser_to_byEmail = await apiClientDAO.getNguoiDungByEmails(selectedEmail_to);
+                    List<NguoiDung> lstNguoiNhan_to = resGetUser_to_byEmail.Data;
                     foreach (NguoiDung nd in lstNguoiNhan_to)
                     {
                         NguoiLienQuanCongViec nlqcv = new NguoiLienQuanCongViec();
@@ -323,9 +339,9 @@ namespace Task_App.views
                         nlqcv.VaiTro = "to";
                         nlqcv.CongViec = congViec;
                         nlqcv.NguoiDung = nd;
-                        if (!tcpClientDAO.IsNguoiLienQuanExists(congViec.MaCongViec, nd.MaNguoiDung, "to"))
-                        {
-                            if (tcpClientDAO.CreateNguoiLienQuan(nlqcv))
+
+                        var resCreateNLQ_to = await apiClientDAO.CreateNguoiLienQuanCongViec(nlqcv);
+                            if (resCreateNLQ_to.Success)
                             {
                                 Console.WriteLine("Tạo NLQCV_to Thành Công!");
                             }
@@ -333,11 +349,12 @@ namespace Task_App.views
                             {
                                 Console.WriteLine("Tạo NLQCV_to Thất Bại");
                             }
-                        }
+                        
                     }
 
                     //CC
-                    List<NguoiDung> lstNguoiNhan_cc = tcpClientDAO.getDanhSachNguoiDungByEmails(selectedEmail_cc);
+                    var resGetUser_cc_byEmail = await apiClientDAO.getNguoiDungByEmails(selectedEmail_cc);
+                    List<NguoiDung> lstNguoiNhan_cc = resGetUser_cc_byEmail.Data;
                     foreach (NguoiDung nd in lstNguoiNhan_cc)
                     {
                         NguoiLienQuanCongViec nlqcv = new NguoiLienQuanCongViec();
@@ -346,9 +363,9 @@ namespace Task_App.views
                         nlqcv.VaiTro = "cc";
                         nlqcv.CongViec = congViec;
                         nlqcv.NguoiDung = nd;
-                        if (!tcpClientDAO.IsNguoiLienQuanExists(congViec.MaCongViec, nd.MaNguoiDung, "cc"))
-                        {
-                            if (tcpClientDAO.CreateNguoiLienQuan(nlqcv))
+
+                        var resCreateNLQ_cc = await apiClientDAO.CreateNguoiLienQuanCongViec(nlqcv);
+                        if (resCreateNLQ_cc.Success)
                             {
                                 Console.WriteLine("Tạo NLQCV_cc Thành Công!");
                             }
@@ -356,11 +373,12 @@ namespace Task_App.views
                             {
                                 Console.WriteLine("Tạo NLQCV_cc Thất Bại");
                             }
-                        }
+                        
                     }
 
                     //BCC
-                    List<NguoiDung> lstNguoiNhan_bcc = tcpClientDAO.getDanhSachNguoiDungByEmails(selectedEmail_bcc);
+                    var resGetUser_bcc_byEmail = await apiClientDAO.getNguoiDungByEmails(selectedEmail_bcc);
+                    List<NguoiDung> lstNguoiNhan_bcc = resGetUser_bcc_byEmail.Data;
                     foreach (NguoiDung nd in lstNguoiNhan_bcc)
                     {
                         NguoiLienQuanCongViec nlqcv = new NguoiLienQuanCongViec();
@@ -369,9 +387,9 @@ namespace Task_App.views
                         nlqcv.VaiTro = "bcc";
                         nlqcv.CongViec = congViec;
                         nlqcv.NguoiDung = nd;
-                        if (!tcpClientDAO.IsNguoiLienQuanExists(congViec.MaCongViec, nd.MaNguoiDung, "bcc"))
-                        {
-                            if (tcpClientDAO.CreateNguoiLienQuan(nlqcv))
+
+                        var resCreateNLQ_bcc = await apiClientDAO.CreateNguoiLienQuanCongViec(nlqcv);
+                        if (resGetUser_bcc_byEmail.Success)
                             {
                                 Console.WriteLine("Tạo NLQCV_bcc Thành Công!");
                             }
@@ -379,7 +397,7 @@ namespace Task_App.views
                             {
                                 Console.WriteLine("Tạo NLQCV_bcc Thất Bại");
                             }
-                        }
+                        
                     }
 
                     Email email1 = new Email();
@@ -393,7 +411,8 @@ namespace Task_App.views
                     email1.ChiTietCongViec = ct;
                     email1.NguoiGuiObj = currentUser;
 
-                    if (tcpClientDAO.CreateEmail(email1))
+                    var resCreateEmail = await apiClientDAO.CreateEmail(email1);
+                    if (resCreateEmail.Success)
                     {
                         Console.WriteLine("Tạo Email_DinhKy Thành Công!");
                     }
@@ -406,8 +425,6 @@ namespace Task_App.views
 
                     foreach (NguoiDung nd in lstNguoiNhan_to)
                     {
-                        if (!tcpClientDAO.IsNguoiNhanEmailExists(email1.MaEmail, nd.MaNguoiDung, "to"))
-                        {
 
                             NguoiNhanEmail nguoiNhanEmail = new NguoiNhanEmail();
                             nguoiNhanEmail.MaEmail = email1.MaEmail;
@@ -416,7 +433,8 @@ namespace Task_App.views
                             nguoiNhanEmail.NguoiDung = nd;
                             nguoiNhanEmail.Email = email1;
 
-                            if (tcpClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail))
+                        var resCreateNguoiNhanEmail = await apiClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail);
+                            if (resCreateNguoiNhanEmail.Success)
                             {
                                 Console.WriteLine("Tạo NNE_to Thành Công!");
                                 success = true;
@@ -439,13 +457,11 @@ namespace Task_App.views
                             tb.NguoiDung = nd;
 
                             createNotifications(tb);
-                        }
+                        
                     }
 
                     foreach (NguoiDung nd in lstNguoiNhan_cc)
                     {
-                        if (!tcpClientDAO.IsNguoiNhanEmailExists(email1.MaEmail, nd.MaNguoiDung, "cc"))
-                        {
 
                             NguoiNhanEmail nguoiNhanEmail = new NguoiNhanEmail();
                             nguoiNhanEmail.MaEmail = email1.MaEmail;
@@ -453,7 +469,9 @@ namespace Task_App.views
                             nguoiNhanEmail.VaiTro = "cc";
                             nguoiNhanEmail.NguoiDung = nd;
                             nguoiNhanEmail.Email = email1;
-                            if (tcpClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail))
+
+                        var resCreateNNE_cc = await apiClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail);
+                            if (resCreateNNE_cc.Success)
                             {
                                 Console.WriteLine("Tạo NNE_cc Thành Công!");
                                 success = true;
@@ -476,13 +494,11 @@ namespace Task_App.views
                             tb.NguoiDung = nd;
 
                             createNotifications(tb);
-                        }
+                        
                     }
 
                     foreach (NguoiDung nd in lstNguoiNhan_bcc)
                     {
-                        if (!tcpClientDAO.IsNguoiNhanEmailExists(email1.MaEmail, nd.MaNguoiDung, "bcc"))
-                        {
 
                             NguoiNhanEmail nguoiNhanEmail = new NguoiNhanEmail();
                             nguoiNhanEmail.MaEmail = email1.MaEmail;
@@ -490,9 +506,11 @@ namespace Task_App.views
                             nguoiNhanEmail.VaiTro = "bcc";
                             nguoiNhanEmail.NguoiDung = nd;
                             nguoiNhanEmail.Email = email1;
-                            if (tcpClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail))
+
+                            var resCreateNNE_bcc = await apiClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail);
+                            if (resCreateNNE_bcc.Success)
                             {
-                                Console.WriteLine("Tạo NNE_bcc Thành Công!");
+                            Console.WriteLine("Tạo NNE_bcc Thành Công!");
                                 success = true;
                             }
                             else
@@ -513,7 +531,7 @@ namespace Task_App.views
                             tb.NguoiDung = nd;
 
                             createNotifications(tb);
-                        }
+                        
                     }
 
                     int stt = 1;
@@ -535,7 +553,8 @@ namespace Task_App.views
                         t.TenTep = newFileName;
                         t.TenTepGoc = fileName;
 
-                        int maTep = tcpClientDAO.CreateTepTin(t);
+                        var resCreateTep = await apiClientDAO.CreateTepTin(t);
+                        int maTep = resCreateTep.Data;
                         if (maTep > 0)
                         {
                             t.MaTep = maTep;
@@ -554,7 +573,8 @@ namespace Task_App.views
                             Email = email1
                         };
 
-                        if (tcpClientDAO.CreateTepTinDinhKem(tepDinhKem))
+                        var resCreateTepDinhKem = await apiClientDAO.CreateTepDinhKem(tepDinhKem);
+                        if (resCreateTepDinhKem.Success)
                         {
                             Console.WriteLine("Tạo TDK Thành Công!");
                         }
@@ -601,7 +621,8 @@ namespace Task_App.views
                 chiTietCongViec.SoNgayHoanThanh = soNgayHoanThanh;
                 chiTietCongViec.MucDoUuTien = mucDo;
 
-                int maChiTietMoi = tcpClientDAO.CreateChiTietCongViec(chiTietCongViec);
+                var resCreateChiTiet = await apiClientDAO.CreateChiTietCongViec(chiTietCongViec);
+                int maChiTietMoi = resCreateChiTiet.Data;
                 if (maChiTietMoi > 0)
                 {
                     chiTietCongViec.MaChiTietCV = maChiTietMoi;
@@ -612,9 +633,9 @@ namespace Task_App.views
                     Console.WriteLine("Tạo Task_Detail Thất Bại");
                 }
 
-
                 //TO
-                List<NguoiDung> lstNguoiNhan_to = tcpClientDAO.getDanhSachNguoiDungByEmails(selectedEmail_to);
+                var resGetUser_to_byEmail = await apiClientDAO.getNguoiDungByEmails(selectedEmail_to);
+                List<NguoiDung> lstNguoiNhan_to = resGetUser_to_byEmail.Data;
                 foreach (NguoiDung nd in lstNguoiNhan_to)
                 {
                     NguoiLienQuanCongViec nlqcv = new NguoiLienQuanCongViec();
@@ -623,7 +644,9 @@ namespace Task_App.views
                     nlqcv.VaiTro = "to";
                     nlqcv.CongViec = congViec;
                     nlqcv.NguoiDung = nd;
-                    if (tcpClientDAO.CreateNguoiLienQuan(nlqcv))
+
+                    var resCreateNLQ_to = await apiClientDAO.CreateNguoiLienQuanCongViec(nlqcv);
+                    if (resCreateNLQ_to.Success)
                     {
                         Console.WriteLine("Tạo NLQCV_to Thành Công!");
                     }
@@ -631,10 +654,12 @@ namespace Task_App.views
                     {
                         Console.WriteLine("Tạo NLQCV_to Thất Bại");
                     }
+
                 }
 
                 //CC
-                List<NguoiDung> lstNguoiNhan_cc = tcpClientDAO.getDanhSachNguoiDungByEmails(selectedEmail_cc);
+                var resGetUser_cc_byEmail = await apiClientDAO.getNguoiDungByEmails(selectedEmail_cc);
+                List<NguoiDung> lstNguoiNhan_cc = resGetUser_cc_byEmail.Data;
                 foreach (NguoiDung nd in lstNguoiNhan_cc)
                 {
                     NguoiLienQuanCongViec nlqcv = new NguoiLienQuanCongViec();
@@ -643,7 +668,9 @@ namespace Task_App.views
                     nlqcv.VaiTro = "cc";
                     nlqcv.CongViec = congViec;
                     nlqcv.NguoiDung = nd;
-                    if (tcpClientDAO.CreateNguoiLienQuan(nlqcv))
+
+                    var resCreateNLQ_cc = await apiClientDAO.CreateNguoiLienQuanCongViec(nlqcv);
+                    if (resCreateNLQ_cc.Success)
                     {
                         Console.WriteLine("Tạo NLQCV_cc Thành Công!");
                     }
@@ -651,10 +678,12 @@ namespace Task_App.views
                     {
                         Console.WriteLine("Tạo NLQCV_cc Thất Bại");
                     }
+
                 }
 
                 //BCC
-                List<NguoiDung> lstNguoiNhan_bcc = tcpClientDAO.getDanhSachNguoiDungByEmails(selectedEmail_bcc);
+                var resGetUser_bcc_byEmail = await apiClientDAO.getNguoiDungByEmails(selectedEmail_bcc);
+                List<NguoiDung> lstNguoiNhan_bcc = resGetUser_bcc_byEmail.Data;
                 foreach (NguoiDung nd in lstNguoiNhan_bcc)
                 {
                     NguoiLienQuanCongViec nlqcv = new NguoiLienQuanCongViec();
@@ -663,7 +692,9 @@ namespace Task_App.views
                     nlqcv.VaiTro = "bcc";
                     nlqcv.CongViec = congViec;
                     nlqcv.NguoiDung = nd;
-                    if (tcpClientDAO.CreateNguoiLienQuan(nlqcv))
+
+                    var resCreateNLQ_bcc = await apiClientDAO.CreateNguoiLienQuanCongViec(nlqcv);
+                    if (resGetUser_bcc_byEmail.Success)
                     {
                         Console.WriteLine("Tạo NLQCV_bcc Thành Công!");
                     }
@@ -671,7 +702,9 @@ namespace Task_App.views
                     {
                         Console.WriteLine("Tạo NLQCV_bcc Thất Bại");
                     }
+
                 }
+
 
                 Email email1 = new Email();
                 email1.MaEmail = GenerateMaEmailFromLast(congViec.MaCongViec);
@@ -684,7 +717,8 @@ namespace Task_App.views
                 email1.ChiTietCongViec = chiTietCongViec;
                 email1.NguoiGuiObj = currentUser;
 
-                if (tcpClientDAO.CreateEmail(email1))
+                var resCreateEmail = await apiClientDAO.CreateEmail(email1);
+                if (resCreateEmail.Success)
                 {
                     Console.WriteLine("Tạo Email Thành Công!");
                 }
@@ -703,7 +737,9 @@ namespace Task_App.views
                     nguoiNhanEmail.VaiTro = "to";
                     nguoiNhanEmail.NguoiDung = nd;
                     nguoiNhanEmail.Email = email1;
-                    if (tcpClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail))
+
+                    var resCreateNNE_to = await apiClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail);
+                    if (resCreateNNE_to.Success)
                     {
                         Console.WriteLine("Tạo NNE_to Thành Công!");
                         success = true;
@@ -737,8 +773,11 @@ namespace Task_App.views
                     nguoiNhanEmail.VaiTro = "cc";
                     nguoiNhanEmail.NguoiDung = nd;
                     nguoiNhanEmail.Email = email1;
-                    if (tcpClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail))
+
+                    var resCreateNNE_cc = await apiClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail);
+                    if (resCreateNNE_cc.Success)
                     {
+                    
                         Console.WriteLine("Tạo NNE_cc Thành Công!");
                         success = true;
                     }
@@ -770,7 +809,9 @@ namespace Task_App.views
                     nguoiNhanEmail.VaiTro = "bcc";
                     nguoiNhanEmail.NguoiDung = nd;
                     nguoiNhanEmail.Email = email1;
-                    if (tcpClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail))
+
+                    var resCreateNNE_bcc = await apiClientDAO.CreateNguoiNhanEmail(nguoiNhanEmail);
+                    if (resCreateNNE_bcc.Success)
                     {
                         Console.WriteLine("Tạo NNE_bcc Thành Công!");
                         success = true;
@@ -814,7 +855,8 @@ namespace Task_App.views
                     t.TenTep = newFileName;
                     t.TenTepGoc = fileName;
 
-                    int maTep = tcpClientDAO.CreateTepTin(t);
+                    var resCreateTep = await apiClientDAO.CreateTepTin(t);
+                    int maTep = resCreateTep.Data;
                     if (maTep > 0)
                     {
                         t.MaTep = maTep;
@@ -833,7 +875,8 @@ namespace Task_App.views
                         Email = email1
                     };
 
-                    if (tcpClientDAO.CreateTepTinDinhKem(tepDinhKem))
+                    var resCreateTepDinhKem = await apiClientDAO.CreateTepDinhKem(tepDinhKem);
+                    if (resCreateTepDinhKem.Success)
                     {
                         Console.WriteLine("Tạo TDK Thành Công!");
                     }
@@ -848,8 +891,11 @@ namespace Task_App.views
 
                 if (success)
                 {
-                    bool sendEmail = tcpClientDAO.sendEmail(email1, lstNguoiNhanEmail, lstTepDinhKem, currentUser);
-                    bool updateEmail = tcpClientDAO.UpdateTrangThaiEmail(email1);
+                    var resSendEmail = await apiClientDAO.sendEmail(email1, lstNguoiNhanEmail, lstTepDinhKem, currentUser);
+                    bool sendEmail = resSendEmail.Success;
+
+                    var resUpdateEmail = await apiClientDAO.UpdateTrangThaiEmail(email1);
+                    bool updateEmail = resUpdateEmail.Success;
                     if (sendEmail && updateEmail)
                     {
                         MessageBox.Show("Đã gửi email công việc đến người người được phân công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -889,10 +935,10 @@ namespace Task_App.views
 
         private void createNotifications(ThongBaoNguoiDung tb)
         {
-            tcpClientDAO.CreateThongBao(tb);
+            apiClientDAO.CreateThongBao(tb);
         }
 
-        private void txtEmailInput_TextChanged(object sender, EventArgs e)
+        private async void txtEmailInput_TextChanged(object sender, EventArgs e)
         {
             string fullText = txtEmailInput.Text;
 
@@ -915,7 +961,9 @@ namespace Task_App.views
 
             var emailsToExclude = emailsInTo.Concat(emailsInCc).ToHashSet();
 
-            var matches = emailSuggestions()
+            var suggestions = await emailSuggestions();
+
+            var matches = suggestions
                 .Where(email => email.ToLower().Contains(currentInput) && !emailsToExclude.Contains(email.ToLower()))
                 .Distinct()
                 .ToList();
@@ -1046,7 +1094,7 @@ namespace Task_App.views
             }
         }
 
-        private void txtEmailCC_TextChanged(object sender, EventArgs e)
+        private async void txtEmailCC_TextChanged(object sender, EventArgs e)
         {
             string fullText = txtEmailCC.Text;
 
@@ -1069,8 +1117,10 @@ namespace Task_App.views
 
             var emailsToExclude = emailsInTo.Concat(emailsInCc).ToHashSet();
 
-            var matches = emailSuggestions()
-                .Where(email => email.ToLower().Contains(currentInput) && !emailsToExclude.Contains(email.ToLower()))
+            var suggestions = await emailSuggestions();
+
+            var matches = suggestions
+                        .Where(email => email.ToLower().Contains(currentInput) && !emailsToExclude.Contains(email.ToLower()))
                 .Distinct()
                 .ToList();
 
@@ -1115,7 +1165,7 @@ namespace Task_App.views
             }));
         }
 
-        private void txtEmailBcc_TextChanged(object sender, EventArgs e)
+        private async void txtEmailBcc_TextChanged(object sender, EventArgs e)
         {
             string fullText = txtEmailBcc.Text;
 
@@ -1140,8 +1190,10 @@ namespace Task_App.views
 
             var emailsToExclude = emailsInTo.Concat(emailsInCc).ToHashSet();
 
-            var matches = emailSuggestions()
-                .Where(email => email.ToLower().Contains(currentInput) && !emailsToExclude.Contains(email.ToLower()))
+            var suggestions = await emailSuggestions();
+
+            var matches = suggestions
+                        .Where(email => email.ToLower().Contains(currentInput) && !emailsToExclude.Contains(email.ToLower()))
                 .Distinct()
                 .ToList();
 

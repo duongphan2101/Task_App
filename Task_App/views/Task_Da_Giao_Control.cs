@@ -163,7 +163,7 @@ namespace Task_App.views
             
             buttonCell.Tag = maCongViec;
             Task_Duoc_Giao_Control tdgiao = new Task_Duoc_Giao_Control(loginResponse, DuocGiaoResponse, apiClientDAO);
-            var modal = new Modal_ChiTiet_CongViec(maCongViec, maCTCV, maNguoiDung, true, apiClientDAO, tdgiao);
+            var modal = new Modal_ChiTiet_CongViec(loginResponse ,maCongViec, maCTCV, maNguoiDung, true, apiClientDAO, tdgiao);
             modal.FormClosed += (s, args) => { buttonCell.Tag = null; };
             modal.Show();
         }
@@ -218,7 +218,7 @@ namespace Task_App.views
 
         private void btn_AddTask_Click(object sender, EventArgs e)
         {
-            var modal = new Modal_Create_Task(maNguoiDung, tcpClientDAO, this);
+            var modal = new Modal_Create_Task(loginResponse, apiClientDAO, this);
             modal.ShowDialog();
             modal.FormClosed += (s, args) => LoadData();
         }

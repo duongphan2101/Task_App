@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Task_App.DTO;
+using Task_App.Model;
 
 namespace Task_App.Response
 {
@@ -15,5 +16,12 @@ namespace Task_App.Response
         public bool Success { get; set; }
         public string Message { get; set; }
         public List<NguoiLienQuanDTO> Data { get; set; }
+    }
+
+    public class ChiTietResponse
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public ChiTietCongViec Data { get; set; }
     }
 }

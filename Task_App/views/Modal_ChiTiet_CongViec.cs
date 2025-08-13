@@ -1,4 +1,5 @@
-﻿using Guna.UI2.WinForms;
+﻿using DevExpress.Utils.Animation;
+using Guna.UI2.WinForms;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Task_App.DTO;
 using Task_App.Model;
+using Task_App.Response;
 using Task_App.Services;
 using Task_App.TaskApp_Dao;
 
@@ -42,12 +44,14 @@ namespace Task_App.views
         private int originalPopupWidth;
         private bool isExpanding = false;
         private Task_Duoc_Giao_Control tdg;
+        private ChiTietCongViecFullDto ctcvdto;
 
         private List<PhanHoiCongViec> lstFeedback = new List<PhanHoiCongViec>();
-
-        public Modal_ChiTiet_CongViec(string maCongViec, int maChiTietCV, int maNguoiDung, bool task, ApiClientDAO apiClientDAO, Task_Duoc_Giao_Control tdg)
+        private LoginResponse loginResponse;
+        public Modal_ChiTiet_CongViec(LoginResponse loginResponse ,string maCongViec, int maChiTietCV, int maNguoiDung, bool task, ApiClientDAO apiClientDAO, Task_Duoc_Giao_Control tdg)
         {
             InitializeComponent();
+            this.loginResponse = loginResponse;
             this.maCongViec = maCongViec;
             this.maNguoiDung = maNguoiDung;
             this.maChiTietCV = maChiTietCV;
@@ -74,6 +78,7 @@ namespace Task_App.views
             var chiTietRes = await apiClientDAO.GetChiTietConViecAsync(maChiTietCV);
 
             var ChiTiet = chiTietRes.Data;
+            ctcvdto = ChiTiet;
 
             var nlqRes = await apiClientDAO.GetNguoiLienQuanCongViecAsync(maCongViec);
 
@@ -83,17 +88,17 @@ namespace Task_App.views
             List<NguoiLienQuanDTO> lstBcc = new List<NguoiLienQuanDTO>();
             List<NguoiLienQuanDTO> lstTo = new List<NguoiLienQuanDTO>();
 
-            //lstFeedback = tcpClientDAO.GetFeedbacksByMaCongViec(maCongViec);
+            var resPhanHoiCongViec = await apiClientDAO.GetPhanHoiCongViecAsync(maCongViec);
+            lstFeedback = resPhanHoiCongViec.PhanHoiCongViec;
 
-            //NguoiDung nd = tcpClientDAO.GetNguoiDung(maNguoiDung);
-            //flow_FeedBack.Controls.Clear();
-            //foreach (PhanHoiCongViec fb in lstFeedback)
-            //{
-            //    bool isMe = fb.NguoiDung.HoTen == nd.HoTen;
-            //    AddFeedback(fb, isMe);
-            //}
+            flow_FeedBack.Controls.Clear();
+            foreach (PhanHoiCongViec fb in lstFeedback)
+            {
+                bool isMe = fb.NguoiDung.HoTen == loginResponse.HoTen;
+                AddFeedback(fb, isMe);
+            }
 
-            //HienThiDanhSachFile();
+            HienThiDanhSachFile();
 
             //DaGiao
             if (task)
@@ -209,13 +214,19 @@ namespace Task_App.views
                     btnHoanThanh.FillColor = Color.LightSkyBlue;
                     btnHoanThanh.Enabled = true;
                     btnHoanThanh.Text = "Nhận việc";
-
                     //ctcv = apiClientDAO.GetChiTietConViecAsync(maChiTietCV);
+
                     ctcv.MaChiTietCV = maChiTietCV;
-                    ctcv.MaCongViec = ChiTiet.MaCongViec.ToString();
+                    ctcv.MaCongViec = ChiTiet.MaCongViec;
                     ctcv.TrangThai = 1;
                     ctcv.TienDo = 0;
                     ctcv.NgayHoanThanh = DateTime.Now;
+                    ctcv.NgayNhanCongViec = ChiTiet.NgayNhanCongViec;
+                    ctcv.SoNgayHoanThanh = Convert.ToInt32(ChiTiet.SoNgayHoanThanh);
+                    ctcv.NoiDung = ChiTiet.NoiDung;
+                    ctcv.TieuDe = ChiTiet.TieuDe;
+                    ctcv.MucDoUuTien = Convert.ToInt32(ChiTiet.MucDoUuTien);
+                    
                 }
                 else if (trangThai == 1)
                 {
@@ -224,11 +235,18 @@ namespace Task_App.views
                     btnHoanThanh.Enabled = true;
                     btnHoanThanh.Text = "Hoàn thành";
                     //ctcv = tcpClientDAO.getChiTietCongViecById(maChiTietCV);
+
                     ctcv.MaChiTietCV = maChiTietCV;
-                    ctcv.MaCongViec = ChiTiet.MaCongViec.ToString();
+                    ctcv.MaCongViec = ChiTiet.MaCongViec;
                     ctcv.TrangThai = 2;
                     ctcv.TienDo = 100;
                     ctcv.NgayHoanThanh = DateTime.Now;
+                    ctcv.NgayNhanCongViec = ChiTiet.NgayNhanCongViec;
+                    ctcv.SoNgayHoanThanh = Convert.ToInt32(ChiTiet.SoNgayHoanThanh);
+                    ctcv.NoiDung = ChiTiet.NoiDung;
+                    ctcv.TieuDe = ChiTiet.TieuDe;
+                    ctcv.MucDoUuTien = Convert.ToInt32(ChiTiet.MucDoUuTien);
+                    ctcv.NgayKetThucCongViec = ChiTiet.NgayKetThucCongViec;
                 }
                 else if (trangThai == 2)
                 {
@@ -298,81 +316,84 @@ namespace Task_App.views
             }
         }
 
-        //private void HienThiDanhSachFile()
-        //{
-        //    List<TepDinhKemEmail> lstTep = tcpClientDAO.GetTepDinhKemEmailByMaCongViec(maCongViec);
-        //    flow_Files.Controls.Clear();
+        private async Task HienThiDanhSachFile()
+        {
+            List<TepDinhKemEmail> lstTep = new List<TepDinhKemEmail> ();
+            var res = await apiClientDAO.GetTepDinhKemEmailByMaCongViecAsync(maCongViec);
+            lstTep = res?.Data ?? new List<TepDinhKemEmail>();
+    
+            flow_Files.Controls.Clear();
 
-        //    foreach (TepDinhKemEmail teps in lstTep)
-        //    {
-        //        TepTin tep = teps.TepTin;
-        //        Panel panel = new Panel();
-        //        panel.Width = 60;
-        //        panel.Height = flow_Files.Height;
-        //        panel.Margin = new Padding(5);
-        //        panel.BackColor = Color.Transparent;
+            foreach (TepDinhKemEmail teps in lstTep)
+            {
+                TepTin tep = teps.TepTin;
+                Panel panel = new Panel();
+                panel.Width = 60;
+                panel.Height = flow_Files.Height;
+                panel.Margin = new Padding(5);
+                panel.BackColor = Color.Transparent;
 
-        //        string extension = Path.GetExtension(tep.TenTep).ToLower();
+                string extension = Path.GetExtension(tep.TenTep).ToLower();
 
 
-        //        Image iconImage = Properties.Resources.icons8_document_48;
+                Image iconImage = Properties.Resources.icons8_document_48;
 
-        //        if (extension == ".pdf")
-        //            iconImage = Properties.Resources.pdf_icon;
-        //        else if (extension == ".doc" || extension == ".docx")
-        //            iconImage = Properties.Resources.word_icon;
-        //        else if (extension == ".xls" || extension == ".xlsx")
-        //            iconImage = Properties.Resources.excel_icon;
-        //        else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
-        //            iconImage = Properties.Resources.image_icon;
-        //        else
-        //            iconImage = Properties.Resources.icons8_document_48;
+                if (extension == ".pdf")
+                    iconImage = Properties.Resources.pdf_icon;
+                else if (extension == ".doc" || extension == ".docx")
+                    iconImage = Properties.Resources.word_icon;
+                else if (extension == ".xls" || extension == ".xlsx")
+                    iconImage = Properties.Resources.excel_icon;
+                else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
+                    iconImage = Properties.Resources.image_icon;
+                else
+                    iconImage = Properties.Resources.icons8_document_48;
 
-        //        PictureBox icon = new PictureBox();
-        //        icon.Width = 48;
-        //        icon.Height = 48;
-        //        icon.SizeMode = PictureBoxSizeMode.StretchImage;
-        //        icon.Image = iconImage;
-        //        icon.Location = new Point(0, 0);
-        //        icon.BackColor = Color.Transparent;
+                PictureBox icon = new PictureBox();
+                icon.Width = 48;
+                icon.Height = 48;
+                icon.SizeMode = PictureBoxSizeMode.StretchImage;
+                icon.Image = iconImage;
+                icon.Location = new Point(0, 0);
+                icon.BackColor = Color.Transparent;
 
-        //        icon.Cursor = Cursors.Hand;
+                icon.Cursor = Cursors.Hand;
 
-        //        Label lbl = new Label();
-        //        lbl.Text = ShortenFileName(tep.TenTepGoc, 8);
-        //        lbl.TextAlign = ContentAlignment.TopCenter;
-        //        lbl.Width = panel.Width;
-        //        lbl.Height = 30;
-        //        lbl.Location = new Point(0, icon.Bottom);
-        //        lbl.Font = new Font("Arial", 8);
-        //        lbl.AutoEllipsis = true;
+                Label lbl = new Label();
+                lbl.Text = ShortenFileName(tep.TenTepGoc, 8);
+                lbl.TextAlign = ContentAlignment.TopCenter;
+                lbl.Width = panel.Width;
+                lbl.Height = 30;
+                lbl.Location = new Point(0, icon.Bottom);
+                lbl.Font = new Font("Arial", 8);
+                lbl.AutoEllipsis = true;
 
-        //        panel.Controls.Add(icon);
-        //        panel.Controls.Add(lbl);
-        //        flow_Files.Controls.Add(panel);
+                panel.Controls.Add(icon);
+                panel.Controls.Add(lbl);
+                flow_Files.Controls.Add(panel);
 
-        //        icon.Click += (s, e) =>
-        //        {
-        //            try
-        //            {
-        //                if (File.Exists(tep.DuongDan))
-        //                {
-        //                    System.Diagnostics.Process.Start(tep.DuongDan);
-        //                }
-        //                else
-        //                {
-        //                    MessageBox.Show("Không tìm thấy tệp: " + tep.TenTep);
-        //                }
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show("Không thể mở tệp: " + ex.Message);
-        //            }
-        //        };
+                icon.Click += (s, e) =>
+                {
+                    try
+                    {
+                        if (File.Exists(tep.DuongDan))
+                        {
+                            System.Diagnostics.Process.Start(tep.DuongDan);
+                        }
+                        else
+                        {
+                            MessageBox.Show("Không tìm thấy tệp: " + tep.TenTep);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Không thể mở tệp: " + ex.Message);
+                    }
+                };
 
-        //    }
+            }
 
-        //}
+        }
 
         private string ShortenFileName(string fileName, int maxLength)
         {
@@ -410,7 +431,7 @@ namespace Task_App.views
                 {
                     MessageBox.Show("Bạn đã nhận việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //this.Close();
-                    //loadData();
+                    loadData();
                     tdg.LoadData();
                 }
                 else
@@ -434,12 +455,13 @@ namespace Task_App.views
                     {
                         MessageBox.Show("Công việc đã được đánh dấu là hoàn thành.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         //this.Close();
-                        //loadData();
+                        loadData();
                         tdg.LoadData();
                     }
                     else
                     {
                         MessageBox.Show("Cập nhật thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Console.WriteLine(res.Message);
                     }
                 }
             }
@@ -469,45 +491,46 @@ namespace Task_App.views
             }
         }
 
-        private void progress_Bar_Click(object sender, EventArgs e)
+        private async void progress_Bar_Click(object sender, EventArgs e)
         {
-            //if (tt == "Đang xử lí")
-            //{
-            //    if (tienDoReport == 100)
-            //    {
-            //        DialogResult result = MessageBox.Show(
-            //            "Bạn có chắc chắn tiến độ là 100% không?",
-            //            "Xác nhận hoàn thành",
-            //            MessageBoxButtons.YesNo,
-            //            MessageBoxIcon.Question
-            //        );
+            if (tt == "Đang xử lí")
+            {
+                if (tienDoReport == 100)
+                {
+                    DialogResult result = MessageBox.Show(
+                        "Bạn có chắc chắn tiến độ là 100% không?",
+                        "Xác nhận hoàn thành",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question
+                    );
 
-            //        if (result == DialogResult.Yes)
-            //        {
-            //            if (tcpClientDAO.UpdateTrangThaiCongViec(ctcv))
-            //            {
-            //                MessageBox.Show("Công việc đã được đánh dấu là hoàn thành.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //                //this.Close();
-            //                loadData();
-            //                tdg.LoadData();
-            //            }
-            //            else
-            //            {
-            //                MessageBox.Show("Cập nhật thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        ctcv.TienDo = tienDoReport;
-            //        tcpClientDAO.UpdateTienDoCongViec(ctcv);
-            //        MessageBox.Show("Báo cáo tiến độ công việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            //        //this.Close();
-            //        loadData();
-            //        tdg.LoadData();
-            //    }
-            //}
-                
+                    if (result == DialogResult.Yes)
+                    {
+                        var res = await apiClientDAO.UpdateTrangThaiCongViecAsync(ctcv);
+                        if (res.Success)
+                        {
+                            MessageBox.Show("Công việc đã được đánh dấu là hoàn thành.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            //this.Close();
+                            loadData();
+                            tdg.LoadData();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Cập nhật thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+                else
+                {
+                    ctcv.TienDo = tienDoReport;
+                    var res = await apiClientDAO.UpdateTrangThaiCongViecAsync(ctcv);
+                    MessageBox.Show("Báo cáo tiến độ công việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    //this.Close();
+                    loadData();
+                    tdg.LoadData();
+                }
+            }
+
         }
 
         private void btnOpenClose_Click(object sender, EventArgs e)
@@ -552,153 +575,154 @@ namespace Task_App.views
             }
         }
 
-        //private void AddFeedback(PhanHoiCongViec fb, bool isMe)
-        //{
-        //    Guna2Panel feedbackPanel = new Guna2Panel
-        //    {
-        //        Width = flow_FeedBack.ClientSize.Width - 40,
-        //        Padding = new Padding(5),
-        //        Margin = new Padding(5),
-        //        BorderRadius = 0,
-        //        FillColor = Color.Transparent,
-        //        BorderThickness = 0
-        //    };
+        private async Task AddFeedback(PhanHoiCongViec fb, bool isMe)
+        {
+            Guna2Panel feedbackPanel = new Guna2Panel
+            {
+                Width = flow_FeedBack.ClientSize.Width - 40,
+                Padding = new Padding(5),
+                Margin = new Padding(5),
+                BorderRadius = 0,
+                FillColor = Color.Transparent,
+                BorderThickness = 0
+            };
 
-        //    // Người gửi
-        //    Label lblNguoiGui = new Label
-        //    {
-        //        Text = fb.NguoiDung.HoTen + " - " + fb.ThoiGian,
-        //        Font = new Font("Segoe UI", 8, FontStyle.Italic),
-        //        ForeColor = Color.White,
-        //        AutoSize = true,
-        //        BackColor = Color.Transparent
-        //    };
+            // Người gửi
+            Label lblNguoiGui = new Label
+            {
+                Text = fb.NguoiDung.HoTen + " - " + fb.ThoiGian,
+                Font = new Font("Segoe UI", 8, FontStyle.Italic),
+                ForeColor = Color.White,
+                AutoSize = true,
+                BackColor = Color.Transparent
+            };
 
-        //    // Nội dung
-        //    Control contentControl;
-        //    if (fb.Loai == "Feedback")
-        //    {
-        //        Label lblNoiDung = new Label
-        //        {
-        //            Text = fb.NoiDung,
-        //            Font = new Font("Segoe UI", 10),
-        //            MaximumSize = new Size(feedbackPanel.Width - 60, 0),
-        //            AutoSize = true,
-        //            ForeColor = Color.White,
-        //            Padding = new Padding(8),
-        //            BackColor = Color.Transparent
-        //        };
-        //        contentControl = lblNoiDung;
-        //    }
-        //    else if (fb.Loai == "Attach")
-        //    {
-        //        int maTep = int.Parse(fb.NoiDung);
-        //        TepTin tep = tcpClientDAO.getTepbyId(maTep);
-        //        string extension = Path.GetExtension(tep.TenTepGoc).ToLower();
+            // Nội dung
+            Control contentControl;
+            if (fb.Loai == "Feedback")
+            {
+                Label lblNoiDung = new Label
+                {
+                    Text = fb.NoiDung,
+                    Font = new Font("Segoe UI", 10),
+                    MaximumSize = new Size(feedbackPanel.Width - 60, 0),
+                    AutoSize = true,
+                    ForeColor = Color.White,
+                    Padding = new Padding(8),
+                    BackColor = Color.Transparent
+                };
+                contentControl = lblNoiDung;
+            }
+            else if (fb.Loai == "Attach")
+            {
+                int maTep = int.Parse(fb.NoiDung);
+                var res = await apiClientDAO.GetTepTinByAsync(maTep);
+                TepTin tep = res.TepTin;
+                string extension = Path.GetExtension(tep.TenTepGoc).ToLower();
 
-        //        // Chọn icon tương ứng
-        //        Image iconImage = Properties.Resources.icons8_document_48;
-        //        if (extension == ".pdf")
-        //            iconImage = Properties.Resources.pdf_icon;
-        //        else if (extension == ".doc" || extension == ".docx")
-        //            iconImage = Properties.Resources.word_icon;
-        //        else if (extension == ".xls" || extension == ".xlsx")
-        //            iconImage = Properties.Resources.excel_icon;
-        //        else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
-        //            iconImage = Properties.Resources.image_icon;
+                // Chọn icon tương ứng
+                Image iconImage = Properties.Resources.icons8_document_48;
+                if (extension == ".pdf")
+                    iconImage = Properties.Resources.pdf_icon;
+                else if (extension == ".doc" || extension == ".docx")
+                    iconImage = Properties.Resources.word_icon;
+                else if (extension == ".xls" || extension == ".xlsx")
+                    iconImage = Properties.Resources.excel_icon;
+                else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
+                    iconImage = Properties.Resources.image_icon;
 
-        //        // PictureBox cho icon
-        //        PictureBox icon = new PictureBox
-        //        {
-        //            Image = iconImage,
-        //            SizeMode = PictureBoxSizeMode.StretchImage,
-        //            Size = new Size(48, 48),
-        //            Margin = new Padding(0, 2, 5, 0)
-        //        };
+                // PictureBox cho icon
+                PictureBox icon = new PictureBox
+                {
+                    Image = iconImage,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Size = new Size(48, 48),
+                    Margin = new Padding(0, 2, 5, 0)
+                };
 
-        //        // LinkLabel cho tên tệp
-        //        LinkLabel link = new LinkLabel
-        //        {
-        //            Text = tep.TenTepGoc,
-        //            Tag = tep.DuongDan,
-        //            LinkColor = Color.White,
-        //            AutoSize = true,
-        //            Font = new Font("Segoe UI", 10, FontStyle.Underline),
-        //            Margin = new Padding(0, 5, 0, 0)
-        //        };
+                // LinkLabel cho tên tệp
+                LinkLabel link = new LinkLabel
+                {
+                    Text = tep.TenTepGoc,
+                    Tag = tep.DuongDan,
+                    LinkColor = Color.White,
+                    AutoSize = true,
+                    Font = new Font("Segoe UI", 10, FontStyle.Underline),
+                    Margin = new Padding(0, 5, 0, 0)
+                };
 
-        //        link.Click += (s, e) =>
-        //        {
-        //            try
-        //            {
-        //                System.Diagnostics.Process.Start(tep.DuongDan);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show("Không thể mở tệp: " + ex.Message);
-        //            }
-        //        };
+                link.Click += (s, e) =>
+                {
+                    try
+                    {
+                        System.Diagnostics.Process.Start(tep.DuongDan);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Không thể mở tệp: " + ex.Message);
+                    }
+                };
 
-        //        // Panel xếp ngang icon và link
-        //        FlowLayoutPanel filePanel = new FlowLayoutPanel
-        //        {
-        //            AutoSize = true,
-        //            FlowDirection = FlowDirection.LeftToRight,
-        //            WrapContents = false,
-        //            Margin = new Padding(0),
-        //            Padding = new Padding(0),
-        //            BackColor = Color.Transparent
-        //        };
+                // Panel xếp ngang icon và link
+                FlowLayoutPanel filePanel = new FlowLayoutPanel
+                {
+                    AutoSize = true,
+                    FlowDirection = FlowDirection.LeftToRight,
+                    WrapContents = false,
+                    Margin = new Padding(0),
+                    Padding = new Padding(0),
+                    BackColor = Color.Transparent
+                };
 
-        //        filePanel.Controls.Add(icon);
-        //        filePanel.Controls.Add(link);
+                filePanel.Controls.Add(icon);
+                filePanel.Controls.Add(link);
 
-        //        contentControl = filePanel;
-        //    }
+                contentControl = filePanel;
+            }
 
-        //    else
-        //    {
-        //        // Nếu loại không xác định
-        //        contentControl = new Label
-        //        {
-        //            Text = "[Không xác định loại phản hồi]",
-        //            ForeColor = Color.Gray
-        //        };
-        //    }
+            else
+            {
+                // Nếu loại không xác định
+                contentControl = new Label
+                {
+                    Text = "[Không xác định loại phản hồi]",
+                    ForeColor = Color.Gray
+                };
+            }
 
-        //    // Nội dung panel
-        //    Guna2Panel innerPanel = new Guna2Panel
-        //    {
-        //        AutoSize = true,
-        //        BorderRadius = 10,
-        //        FillColor = isMe ? Color.FromArgb(87, 166, 255) : Color.FromArgb(65, 200, 94),
-        //        BorderThickness = 0,
-        //        Margin = new Padding(0),
-        //        Padding = new Padding(5)
-        //    };
+            // Nội dung panel
+            Guna2Panel innerPanel = new Guna2Panel
+            {
+                AutoSize = true,
+                BorderRadius = 10,
+                FillColor = isMe ? Color.FromArgb(87, 166, 255) : Color.FromArgb(65, 200, 94),
+                BorderThickness = 0,
+                Margin = new Padding(0),
+                Padding = new Padding(5)
+            };
 
-        //    lblNguoiGui.Location = new Point(5, 5);
-        //    contentControl.Location = new Point(5, lblNguoiGui.Bottom + 2);
+            lblNguoiGui.Location = new Point(5, 5);
+            contentControl.Location = new Point(5, lblNguoiGui.Bottom + 2);
 
-        //    innerPanel.Controls.Add(lblNguoiGui);
-        //    innerPanel.Controls.Add(contentControl);
+            innerPanel.Controls.Add(lblNguoiGui);
+            innerPanel.Controls.Add(contentControl);
 
-        //    FlowLayoutPanel container = new FlowLayoutPanel
-        //    {
-        //        Width = feedbackPanel.Width,
-        //        AutoSize = true,
-        //        WrapContents = false,
-        //        Margin = new Padding(0),
-        //        Padding = new Padding(0),
-        //        FlowDirection = isMe ? FlowDirection.RightToLeft : FlowDirection.LeftToRight
-        //    };
+            FlowLayoutPanel container = new FlowLayoutPanel
+            {
+                Width = feedbackPanel.Width,
+                AutoSize = true,
+                WrapContents = false,
+                Margin = new Padding(0),
+                Padding = new Padding(0),
+                FlowDirection = isMe ? FlowDirection.RightToLeft : FlowDirection.LeftToRight
+            };
 
-        //    container.Controls.Add(innerPanel);
-        //    feedbackPanel.Controls.Add(container);
-        //    flow_FeedBack.Controls.Add(feedbackPanel);
+            container.Controls.Add(innerPanel);
+            feedbackPanel.Controls.Add(container);
+            flow_FeedBack.Controls.Add(feedbackPanel);
 
-        //    flow_FeedBack.ScrollControlIntoView(feedbackPanel);
-        //}
+            flow_FeedBack.ScrollControlIntoView(feedbackPanel);
+        }
 
         private void btn_Send_Click(object sender, EventArgs e)
         {

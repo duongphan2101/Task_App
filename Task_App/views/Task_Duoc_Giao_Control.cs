@@ -126,7 +126,7 @@ namespace Task_App.views
                     row.Cells["maChiTietCV"].Value?.ToString());
                 bool task = false;
 
-                Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(maCongViec, maChiTietCV, loginResponse.MaNguoiDung, task, apiClientDAO, this);
+                Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(loginResponse ,maCongViec, maChiTietCV, loginResponse.MaNguoiDung, task, apiClientDAO, this);
                 modal.Show();
                 modal.FormClosed += (s, args) => LoadData();
             }

@@ -11,4 +11,11 @@
         public string vaiTro { get; set; }
     }
 
+    public class NguoiDungDTO
+    {
+        public int MaNguoiDung { get; set; }
+        public string HoTen { get; set; }
+        public string Email { get; set; }
+    }
+
 }
