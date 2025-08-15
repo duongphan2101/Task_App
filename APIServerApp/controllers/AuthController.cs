@@ -50,13 +50,7 @@ public class AuthController : ControllerBase
         return Ok(new LoginReponse
         {
             Token = token,
-            MaNguoiDung = user.MaNguoiDung,
-            HoTen = user.HoTen,
-            Email = user.Email,
-            MaPhongBan = user.PhongBan.TenPhongBan,
-            MaDonVi = user.DonVi.TenDonVi,
-            MaChucVu = user.ChucVu.TenChucVu,
-            LaLanhDao = user.LaLanhDao
+            UserId = user.MaNguoiDung
         });
     }
 

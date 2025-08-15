@@ -32,7 +32,7 @@ namespace Task_App.views
         private readonly Color selectedColor = Color.FromArgb(80, 80, 80);
         private ToolTip toolTip = new ToolTip();
 
-        private LoginResponse response;
+        private NguoiDung nd;
 
         private readonly Dictionary<string, string> buttonTooltips = new Dictionary<string, string>
         {
@@ -45,12 +45,12 @@ namespace Task_App.views
         private Task<ViecDaGiaoResponse> vdg;
         private Task<ViecDuocGiaoResponse> vduocg;
 
-        public Home(LoginResponse response, ApiClientDAO apiClientDAO)
+        public Home(NguoiDung nd, ApiClientDAO apiClientDAO)
         {
             InitializeComponent();
-            
-            this.response = response;
-            SetUserInfo(response);
+
+            this.nd = nd;
+            SetUserInfo(nd);
             this.apiClientDAO = apiClientDAO;
 
             btn_Task_DaGiao.Tag = true;
@@ -58,19 +58,19 @@ namespace Task_App.views
 
             //LoadNotifications();
 
-            var DaGiaoResponse = apiClientDAO.GetViecDaGiaoAsync(response.MaNguoiDung, true);
+            var DaGiaoResponse = apiClientDAO.GetViecDaGiaoAsync(nd.MaNguoiDung, true);
             vdg = DaGiaoResponse;
-            var DuocGiaoResponse = apiClientDAO.GetViecDuocGiaoAsync(response.MaNguoiDung, true);
+            var DuocGiaoResponse = apiClientDAO.GetViecDuocGiaoAsync(nd.MaNguoiDung, true);
             vduocg = DuocGiaoResponse;
-            LoadContent(new Create_Task_Control(response, DaGiaoResponse, DuocGiaoResponse, apiClientDAO));
+            LoadContent(new Create_Task_Control(nd, DaGiaoResponse, DuocGiaoResponse, apiClientDAO));
         }
 
-        private void SetUserInfo(LoginResponse response)
+        private void SetUserInfo(NguoiDung nd)
         {
-            lblName.Text = response.HoTen;
-            lblPhongBan.Text = response.MaPhongBan ?? "Chưa có";
-            lblChucVu.Text = response.MaChucVu ?? "Chưa có";
-            lblDonVi.Text = response.MaDonVi ?? "Chưa có";
+            lblName.Text = nd.HoTen;
+            lblPhongBan.Text = nd.PhongBan.TenPhongBan ?? "Chưa có";
+            lblChucVu.Text = nd.ChucVu.TenChucVu ?? "Chưa có";
+            lblDonVi.Text = nd.DonVi.TenDonVi ?? "Chưa có";
         }
 
         private void LoadContent(UserControl control)
@@ -128,10 +128,10 @@ namespace Task_App.views
                 LoadContent(new Dashboard(tcpClientDAO, maNguoiDung));
 
             if (clickedBtn.Name == btn_Task_DaGiao.Name)
-                LoadContent(new Create_Task_Control(response, vdg, vduocg, apiClientDAO));
+                LoadContent(new Create_Task_Control(nd, vdg, vduocg, apiClientDAO));
 
             if (clickedBtn.Name == btn_Task_DuocGiao.Name)
-                LoadContent(new Task_Duoc_Giao_Control(response, vduocg,apiClientDAO));
+                LoadContent(new Task_Duoc_Giao_Control(nd, vduocg,apiClientDAO));
 
             ResumeLayout();
         }
@@ -239,8 +239,8 @@ namespace Task_App.views
             }
             var isGiaoViec = tcpClientDAO.getIsGiaoViec(maNguoiDung, maChiTietCV);
             string maCongViec = tcpClientDAO.getMaCongViec(maChiTietCV);
-            Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(response, vduocg, apiClientDAO);
-            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(response, maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, apiClientDAO, tdg);
+            Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(nd, vduocg, apiClientDAO);
+            Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(nd, maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, apiClientDAO, tdg);
             modal.ShowDialog();
 
         }

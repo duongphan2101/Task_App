@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Task_App.Model;
 using Task_App.Response;
 using Task_App.Services;
 using Task_App.TaskApp_Dao;
@@ -14,7 +15,7 @@ namespace Task_App.views
     {
         private readonly TcpClientDAO tcpClientDAO;
         private readonly CongViecService CongViecService;
-        private LoginResponse loginResponse;
+        private NguoiDung nd;
 
         private readonly int maNguoiDung;
         private bool locTheoNgay = true;
@@ -22,12 +23,12 @@ namespace Task_App.views
         private Task<ViecDaGiaoResponse> DaGiaoResponse;
         private Task<ViecDuocGiaoResponse> DuocGiaoResponse;
 
-        public Create_Task_Control(LoginResponse loginResponse, Task<ViecDaGiaoResponse> daGiaoResponse, Task<ViecDuocGiaoResponse> duocGiaoResponse, ApiClientDAO apiClientDAO)
+        public Create_Task_Control(NguoiDung nd, Task<ViecDaGiaoResponse> daGiaoResponse, Task<ViecDuocGiaoResponse> duocGiaoResponse, ApiClientDAO apiClientDAO)
         {
-            this.loginResponse = loginResponse;
+            this.nd = nd;
             this.DaGiaoResponse = daGiaoResponse;
             this.DuocGiaoResponse = duocGiaoResponse;
-            maNguoiDung = loginResponse.MaNguoiDung;
+            maNguoiDung =  nd.MaNguoiDung;
 
             //CongViecService = new CongViecService(tcpClientDAO);
             this.apiClientDAO = apiClientDAO;
@@ -44,11 +45,11 @@ namespace Task_App.views
         {
             var response = await DaGiaoResponse;
 
-            if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
-            {
-                MessageBox.Show("Không có dữ liệu.");
-                return;
-            }
+            //if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
+            //{
+            //    MessageBox.Show("Không có dữ liệu.");
+            //    return;
+            //}
 
             // Flatten dữ liệu: mỗi chi tiết công việc thành 1 dòng, lấy thông tin người nhận ở cấp công việc
             var displayData = response.Data
@@ -162,8 +163,8 @@ namespace Task_App.views
             var maCTCV = (row.Cells["maChiTietCV"].Value as int?) ?? -1;
             
             buttonCell.Tag = maCongViec;
-            Task_Duoc_Giao_Control tdgiao = new Task_Duoc_Giao_Control(loginResponse, DuocGiaoResponse, apiClientDAO);
-            var modal = new Modal_ChiTiet_CongViec(loginResponse ,maCongViec, maCTCV, maNguoiDung, true, apiClientDAO, tdgiao);
+            Task_Duoc_Giao_Control tdgiao = new Task_Duoc_Giao_Control(nd, DuocGiaoResponse, apiClientDAO);
+            var modal = new Modal_ChiTiet_CongViec(nd ,maCongViec, maCTCV, maNguoiDung, true, apiClientDAO, tdgiao);
             modal.FormClosed += (s, args) => { buttonCell.Tag = null; };
             modal.Show();
         }
@@ -218,7 +219,7 @@ namespace Task_App.views
 
         private void btn_AddTask_Click(object sender, EventArgs e)
         {
-            var modal = new Modal_Create_Task(loginResponse, apiClientDAO, this);
+            var modal = new Modal_Create_Task(nd, apiClientDAO, this);
             modal.ShowDialog();
             modal.FormClosed += (s, args) => LoadData();
         }

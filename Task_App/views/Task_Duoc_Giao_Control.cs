@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Task_App.DTO;
+using Task_App.Model;
 using Task_App.Response;
 using Task_App.Services;
 using Task_App.TaskApp_Dao;
@@ -13,7 +14,7 @@ namespace Task_App.views
 {
     public partial class Task_Duoc_Giao_Control : UserControl
     {
-        private LoginResponse loginResponse;
+        private NguoiDung nd;
         private Task_Duoc_Giao_Control duocGiaoControl;
         private bool locTheoNgay = true;
         private CongViecService congViecService;
@@ -23,9 +24,9 @@ namespace Task_App.views
 
         private Task<ViecDuocGiaoResponse> DuocGiaoResponse;
 
-        public Task_Duoc_Giao_Control(LoginResponse loginResponse, Task<ViecDuocGiaoResponse> DuocGiaoResponse, ApiClientDAO apiClientDAO)
+        public Task_Duoc_Giao_Control(NguoiDung nd, Task<ViecDuocGiaoResponse> DuocGiaoResponse, ApiClientDAO apiClientDAO)
         {
-            this.loginResponse = loginResponse;
+            this.nd = nd;
             this.apiClientDAO = apiClientDAO;
             this.DuocGiaoResponse = DuocGiaoResponse;
             InitializeComponent();
@@ -35,11 +36,11 @@ namespace Task_App.views
         {
             var response = await DuocGiaoResponse;
 
-            if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
-            {
-                MessageBox.Show("Không có dữ liệu.");
-                return;
-            }
+            //if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
+            //{
+            //    MessageBox.Show("Không có dữ liệu.");
+            //    return;
+            //}
 
             var displayData = response.Data
                 .SelectMany(cv => cv.ChiTiet.Select(ct => new
@@ -126,7 +127,7 @@ namespace Task_App.views
                     row.Cells["maChiTietCV"].Value?.ToString());
                 bool task = false;
 
-                Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(loginResponse ,maCongViec, maChiTietCV, loginResponse.MaNguoiDung, task, apiClientDAO, this);
+                Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(nd ,maCongViec, maChiTietCV, nd.MaNguoiDung, task, apiClientDAO, this);
                 modal.Show();
                 modal.FormClosed += (s, args) => LoadData();
             }

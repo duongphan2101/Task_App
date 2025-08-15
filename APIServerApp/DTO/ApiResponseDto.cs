@@ -39,4 +39,11 @@ namespace APIServerApp.DTO
         public string? Message { get; set; }
         public List<NguoiDungDTO>? NguoiDungs { get; set; }
     }
+
+    public class Object_Response<T>
+    {
+        public bool Success { get; set; }
+        public string? Message { get; set; }
+        public T? Data { get; set; }
+    }
 }

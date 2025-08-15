@@ -32,7 +32,7 @@
             this.panelControl_main = new DevExpress.XtraEditors.PanelControl();
             this.panel_1 = new System.Windows.Forms.Panel();
             this.panel_2 = new Guna.UI2.WinForms.Guna2Panel();
-            this.txtNoiDung = new DevExpress.XtraRichEdit.RichEditControl();
+            this.txtNoiDung = new System.Windows.Forms.RichTextBox();
             this.panel_Bottom = new Guna.UI2.WinForms.Guna2Panel();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.btn_Create = new Guna.UI2.WinForms.Guna2PictureBox();
@@ -113,14 +113,14 @@
             // 
             // txtNoiDung
             // 
+            this.txtNoiDung.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtNoiDung.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtNoiDung.Location = new System.Drawing.Point(0, 64);
-            this.txtNoiDung.Margin = new System.Windows.Forms.Padding(0);
+            this.txtNoiDung.Margin = new System.Windows.Forms.Padding(10);
             this.txtNoiDung.Name = "txtNoiDung";
-            this.txtNoiDung.Options.DocumentSaveOptions.CurrentFormat = DevExpress.XtraRichEdit.DocumentFormat.PlainText;
             this.txtNoiDung.Size = new System.Drawing.Size(1208, 396);
             this.txtNoiDung.TabIndex = 3;
-            this.txtNoiDung.Text = "Nội dung";
+            this.txtNoiDung.Text = "Nội dung .";
             // 
             // panel_Bottom
             // 
@@ -634,7 +634,6 @@
         private Guna.UI2.WinForms.Guna2RadioButton radio_Thang;
         private Guna.UI2.WinForms.Guna2RadioButton radio_Nam;
         private Guna.UI2.WinForms.Guna2Panel panel_Bottom;
-        private DevExpress.XtraRichEdit.RichEditControl txtNoiDung;
         private Guna.UI2.WinForms.Guna2RadioButton radio_Khong;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
@@ -653,5 +652,6 @@
         private Guna.UI2.WinForms.Guna2TextBox txtHanHoanThanh;
         private System.Windows.Forms.Label lblMucDo;
         private Guna.UI2.WinForms.Guna2ComboBox cbMucDo;
+        private System.Windows.Forms.RichTextBox txtNoiDung;
     }
 }

@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Task_App.DTO;
+using Task_App.Model;
 using Task_App.Response;
 using Task_App.TaskApp_Dao;
 using Task_App.views;
@@ -66,11 +68,15 @@ namespace Task_App
             GlobalSession.Token = response.Token;
 
             txtPass.Text = string.Empty;
-            txtEmail.Focus();   
+            txtEmail.Focus();
 
             Hide();
 
-            var homeForm = new Home(response, apiClientDAO);
+            var resLogin = await apiClientDAO.GetGetNguoiDungByIdAsync(response.UserId);
+            NguoiDung nd = resLogin.Data;
+            tmp.mk = pass;
+
+            var homeForm = new Home(nd, apiClientDAO);
             homeForm.FormClosed += (s, args) => Show();
             homeForm.Show();
         }

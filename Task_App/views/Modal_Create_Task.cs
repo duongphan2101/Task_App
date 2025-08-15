@@ -6,8 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Task_App.Model;
-using Task_App.Response;
-using Task_App.Services;
 using Task_App.TaskApp_Dao;
 using Task_App.DTO;
 using System.Threading.Tasks;
@@ -21,6 +19,7 @@ namespace Task_App.views
         //private readonly CongViecDAO CongViecDAO = new CongViecDAO();
 
         private int maNguoiDung;
+        private string MaCVRes = null;
         private List<string> selectedEmail_to = new List<string>();
         private List<string> selectedEmail_cc = new List<string>();
         private List<string> selectedEmail_bcc = new List<string>();
@@ -28,15 +27,15 @@ namespace Task_App.views
         private List<TepTin> lstTepDaChon = new List<TepTin>();
         private int mucDo = 0; // 0: Bình thường, 1: Quan trọng, 2: Khẩn cấp
 
-        private LoginResponse loginResponse;
+        private NguoiDung nd;
         private ApiClientDAO apiClientDAO;
         private Create_Task_Control tdg;
 
-        public Modal_Create_Task(LoginResponse loginResponse, ApiClientDAO apiClientDAO, Create_Task_Control tdg)
+        public Modal_Create_Task(NguoiDung nd, ApiClientDAO apiClientDAO, Create_Task_Control tdg)
         {
             this.apiClientDAO = apiClientDAO;
-            this.loginResponse = loginResponse;
-            maNguoiDung = loginResponse.MaNguoiDung;
+            this.nd = nd;
+            maNguoiDung = nd.MaNguoiDung;
             this.tdg = tdg;
             InitializeComponent();
             radio_Khong.Checked = true;
@@ -49,17 +48,30 @@ namespace Task_App.views
             cbMucDo.Items.Add("Khẩn Cấp");
             cbMucDo.SelectedIndex = 0;
 
+            GetE();
+
             txtTieuDe.Focus();
+        }
+
+        private async void GetE()
+        {
+            var res = await apiClientDAO.GetUserListByDonViPhongBan(nd.MaDonVi, nd.MaPhongBan, nd.Email);
+            List<NguoiDungDTO> lst = res.Data ?? new List<NguoiDungDTO>();
+            foreach (NguoiDungDTO nd in lst)
+            {
+                Console.WriteLine("Email " + nd.Email);
+            }
         }
 
         private async Task<List<string>> emailSuggestions()
         {
-            List<string> lstStr = new List<string>();;
-            var res = await apiClientDAO.getUserListByDonViPhongBan(loginResponse.MaDonVi, loginResponse.MaPhongBan, loginResponse.Email);
-            List<NguoiDungDTO> lst = res.Data;
-            foreach(NguoiDungDTO nd in lst)
+            List<string> lstStr = new List<string>();
+            var res = await apiClientDAO.GetUserListByDonViPhongBan(nd.MaDonVi, nd.MaPhongBan, nd.Email);
+            List<NguoiDungDTO> lst = res.Data ?? new List<NguoiDungDTO>();
+            foreach (var nd in lst)
             {
                 lstStr.Add(nd.Email);
+                Console.WriteLine("Email " + nd.Email);
             }
             return lstStr;
         }
@@ -203,7 +215,7 @@ namespace Task_App.views
             }
         }
 
-        private async Task btn_Create_Click(object sender, EventArgs e)
+        private async void btn_Create_Click(object sender, EventArgs e)
         {
             string tieuDe = txtTieuDe.Text;
             string noiDung = txtNoiDung.Text;
@@ -229,16 +241,8 @@ namespace Task_App.views
                 return;
             }
 
-            NguoiDung currentUser = new NguoiDung
-            {
-                MaNguoiDung = maNguoiDung,
-                MaChucVu = loginResponse.MaChucVu,
-                MaPhongBan = loginResponse.MaPhongBan,
-
-                HoTen = loginResponse.HoTen,
-                Email = loginResponse.Email,
-                LaLanhDao = loginResponse.LaLanhDao
-            };
+            NguoiDung currentUser = nd;
+            currentUser.MatKhau = tmp.mk;
 
             selectedEmail_to = txtEmailInput.Text
             .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
@@ -285,24 +289,25 @@ namespace Task_App.views
             {
                 tanSuat = "nam";
             }
-
             congViec.TanSuat = tanSuat;
-            var resCV = await apiClientDAO.CreateCongViec(congViec);
+
+            var resCV = await apiClientDAO.CreateCongViec(congViec, currentUser);
             if (resCV.Success)
             {
                 Console.WriteLine("Tạo Task Thành Công!");
+                MaCVRes = resCV.Data;
+                congViec.MaCongViec = MaCVRes;
             }
             else
             {
                 Console.WriteLine("Tạo Task Thất Bại");
+                Console.WriteLine("Lỗi "+resCV.Message);
             }
 
             //
             if (dinhKy)
             {
-                var resCreateListChiTiet = await apiClientDAO.CreateDanhSachChiTietCongViec(congViec, soNgayHoanThanh, mucDo);
-                List<ChiTietCongViec> danhSachChiTiet = resCreateListChiTiet.Data;
-
+                List<ChiTietCongViec> danhSachChiTiet = TaoChiTietCongViecTheoTanSuat(congViec, soNgayHoanThanh, mucDo);
 
                 foreach (ChiTietCongViec ct in danhSachChiTiet)
                 {
@@ -326,6 +331,7 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo Task_Detail Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateCTCV.Message);
                     }
 
                     //TO
@@ -344,6 +350,7 @@ namespace Task_App.views
                             if (resCreateNLQ_to.Success)
                             {
                                 Console.WriteLine("Tạo NLQCV_to Thành Công!");
+                                Console.WriteLine("Lỗi " + resCreateNLQ_to.Message);
                             }
                             else
                             {
@@ -372,6 +379,7 @@ namespace Task_App.views
                             else
                             {
                                 Console.WriteLine("Tạo NLQCV_cc Thất Bại");
+                                Console.WriteLine("Lỗi " + resCreateNLQ_cc.Message);
                             }
                         
                     }
@@ -392,6 +400,7 @@ namespace Task_App.views
                         if (resGetUser_bcc_byEmail.Success)
                             {
                                 Console.WriteLine("Tạo NLQCV_bcc Thành Công!");
+                                Console.WriteLine("Lỗi " + resCreateNLQ_bcc.Message);
                             }
                             else
                             {
@@ -419,6 +428,7 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo Email_DinhKy Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateEmail.Message);
                     }
 
                     List<NguoiNhanEmail> lstNguoiNhanEmail = new List<NguoiNhanEmail>();
@@ -442,6 +452,7 @@ namespace Task_App.views
                             else
                             {
                                 Console.WriteLine("Tạo NNE_to Thất Bại");
+                                Console.WriteLine("Lỗi " + resCreateNguoiNhanEmail.Message);
                                 success = false;
                             }
                             lstNguoiNhanEmail.Add(nguoiNhanEmail);
@@ -479,6 +490,7 @@ namespace Task_App.views
                             else
                             {
                                 Console.WriteLine("Tạo NNE_cc Thất Bại");
+                                Console.WriteLine("Lỗi " + resCreateNNE_cc.Message);
                                 success = false;
                             }
                             lstNguoiNhanEmail.Add(nguoiNhanEmail);
@@ -516,6 +528,7 @@ namespace Task_App.views
                             else
                             {
                                 Console.WriteLine("Tạo NNE_bcc Thất Bại");
+                                Console.WriteLine("Lỗi " + resCreateNNE_bcc.Message);
                                 success = false;
                             }
                             lstNguoiNhanEmail.Add(nguoiNhanEmail);
@@ -563,6 +576,7 @@ namespace Task_App.views
                         else
                         {
                             Console.WriteLine("Tạo Tệp Thất Bại");
+                            Console.WriteLine("Lỗi " + resCreateTep.Message);
                         }
 
                         TepDinhKemEmail tepDinhKem = new TepDinhKemEmail
@@ -581,6 +595,7 @@ namespace Task_App.views
                         else
                         {
                             Console.WriteLine("Tạo TDK Thất Bại");
+                            Console.WriteLine("Lỗi " + resCreateTepDinhKem.Message);
                         }
 
                         lstTepDinhKem.Add(tepDinhKem);
@@ -608,7 +623,7 @@ namespace Task_App.views
             else
             {
                 ChiTietCongViec chiTietCongViec = new ChiTietCongViec();
-                chiTietCongViec.MaCongViec = congViec.MaCongViec;
+                chiTietCongViec.MaCongViec = MaCVRes;
                 chiTietCongViec.TieuDe = tieuDe;
                 chiTietCongViec.NoiDung = noiDung;
                 chiTietCongViec.NgayNhanCongViec = congViec.NgayBatDau;
@@ -631,6 +646,7 @@ namespace Task_App.views
                 else
                 {
                     Console.WriteLine("Tạo Task_Detail Thất Bại");
+                    Console.WriteLine("Lỗi " + resCreateChiTiet.Message);
                 }
 
                 //TO
@@ -653,13 +669,14 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo NLQCV_to Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateNLQ_to.Message);
                     }
 
                 }
 
                 //CC
                 var resGetUser_cc_byEmail = await apiClientDAO.getNguoiDungByEmails(selectedEmail_cc);
-                List<NguoiDung> lstNguoiNhan_cc = resGetUser_cc_byEmail.Data;
+                List<NguoiDung> lstNguoiNhan_cc = resGetUser_cc_byEmail.Data ?? new List<NguoiDung>();
                 foreach (NguoiDung nd in lstNguoiNhan_cc)
                 {
                     NguoiLienQuanCongViec nlqcv = new NguoiLienQuanCongViec();
@@ -677,13 +694,14 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo NLQCV_cc Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateNLQ_cc.Message);
                     }
 
                 }
 
                 //BCC
                 var resGetUser_bcc_byEmail = await apiClientDAO.getNguoiDungByEmails(selectedEmail_bcc);
-                List<NguoiDung> lstNguoiNhan_bcc = resGetUser_bcc_byEmail.Data;
+                List<NguoiDung> lstNguoiNhan_bcc = resGetUser_bcc_byEmail.Data ?? new List<NguoiDung>();
                 foreach (NguoiDung nd in lstNguoiNhan_bcc)
                 {
                     NguoiLienQuanCongViec nlqcv = new NguoiLienQuanCongViec();
@@ -701,13 +719,14 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo NLQCV_bcc Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateNLQ_bcc.Message);
                     }
 
                 }
 
 
                 Email email1 = new Email();
-                email1.MaEmail = GenerateMaEmailFromLast(congViec.MaCongViec);
+                email1.MaEmail = GenerateMaEmailFromLast(MaCVRes);
                 email1.NguoiGui = currentUser.MaNguoiDung;
                 email1.MaChiTietCV = chiTietCongViec.MaChiTietCV;
                 email1.TieuDe = chiTietCongViec.TieuDe;
@@ -725,6 +744,7 @@ namespace Task_App.views
                 else
                 {
                     Console.WriteLine("Tạo Email Thất Bại");
+                    Console.WriteLine("Lỗi " + resCreateEmail.Message);
                 }
 
                 List<NguoiNhanEmail> lstNguoiNhanEmail = new List<NguoiNhanEmail>();
@@ -747,6 +767,7 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo NNE_to Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateNNE_to.Message);
                         success = false;
                     }
                     lstNguoiNhanEmail.Add(nguoiNhanEmail);
@@ -784,6 +805,7 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo NNE_cc Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateNNE_cc.Message);
                         success = false;
                     }
                     lstNguoiNhanEmail.Add(nguoiNhanEmail);
@@ -819,6 +841,7 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo NNE_bcc Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateNNE_bcc.Message);
                         success = false;
                     }
                     lstNguoiNhanEmail.Add(nguoiNhanEmail);
@@ -865,6 +888,7 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo Tệp Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateTep.Message);
                     }
 
                     TepDinhKemEmail tepDinhKem = new TepDinhKemEmail
@@ -883,6 +907,7 @@ namespace Task_App.views
                     else
                     {
                         Console.WriteLine("Tạo TDK Thất Bại");
+                        Console.WriteLine("Lỗi " + resCreateTepDinhKem.Message);
                     }
 
                     lstTepDinhKem.Add(tepDinhKem);
@@ -896,7 +921,7 @@ namespace Task_App.views
 
                     var resUpdateEmail = await apiClientDAO.UpdateTrangThaiEmail(email1);
                     bool updateEmail = resUpdateEmail.Success;
-                    if (sendEmail && updateEmail)
+                    if (sendEmail == true && updateEmail == true)
                     {
                         MessageBox.Show("Đã gửi email công việc đến người người được phân công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         tdg.LoadData();
@@ -906,6 +931,8 @@ namespace Task_App.views
                     else
                     {
                         MessageBox.Show("Gửi email thất bại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        Console.WriteLine("Lỗi "+resSendEmail.Message);
+                        Console.WriteLine("Lỗi "+resUpdateEmail.Message);
                     }
                 }
                 else
@@ -1323,6 +1350,57 @@ namespace Task_App.views
                     mucDo = 0;
                     break;
             }
+        }
+
+        public List<ChiTietCongViec> TaoChiTietCongViecTheoTanSuat(CongViec congViec, int soNgayHoanThanh, int mucDoUuTien)
+        {
+            List<ChiTietCongViec> danhSachChiTiet = new List<ChiTietCongViec>();
+
+            if (congViec.NgayBatDau == null || congViec.NgayKetThuc == null || string.IsNullOrWhiteSpace(congViec.TanSuat))
+                throw new ArgumentException("Thiếu thông tin công việc định kỳ");
+
+            DateTime ngayBatDau = congViec.NgayBatDau.Value;
+            DateTime ngayKetThuc = congViec.NgayKetThuc.Value;
+            DateTime ngayLap = ngayBatDau;
+
+            int lapIndex = 1;
+
+            while (ngayLap <= ngayKetThuc)
+            {
+                DateTime ngayKetThucCongViec = ngayLap.AddDays(soNgayHoanThanh);
+                var chiTiet = new ChiTietCongViec
+                {
+                    NgayNhanCongViec = ngayLap,
+                    NgayKetThucCongViec = ngayKetThucCongViec,
+                    TrangThai = 0, // 0: chưa xử lý
+                    TienDo = 0,
+                    MucDoUuTien = mucDoUuTien,
+                };
+
+                danhSachChiTiet.Add(chiTiet);
+                lapIndex++;
+
+                // Tính lần kế tiếp
+                switch (congViec.TanSuat.Trim().ToLower())
+                {
+                    case "ngay":
+                        ngayLap = ngayLap.AddDays(1);
+                        break;
+                    case "tuan":
+                        ngayLap = ngayLap.AddDays(7);
+                        break;
+                    case "thang":
+                        ngayLap = ngayLap.AddMonths(1);
+                        break;
+                    case "nam":
+                        ngayLap = ngayLap.AddYears(1);
+                        break;
+                    default:
+                        throw new Exception("Tần suất không hợp lệ: " + congViec.TanSuat);
+                }
+            }
+
+            return danhSachChiTiet;
         }
 
     }

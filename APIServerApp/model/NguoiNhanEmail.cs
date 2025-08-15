@@ -8,19 +8,18 @@ namespace APIServerApp.Model
     {
         [Key, Column(Order = 0)]
         [StringLength(50)]
-        public string MaEmail { get; set; }
+        public string? MaEmail { get; set; }
 
         [Key, Column(Order = 1)]
-        public int MaNguoiDung { get; set; }
+        public int? MaNguoiDung { get; set; }
 
-        [Required]
         [StringLength(10)]
         public string? VaiTro { get; set; }
 
         [ForeignKey("MaEmail")]
-        public virtual Email Email { get; set; }
+        public virtual Email? Email { get; set; }
 
         [ForeignKey("MaNguoiDung")]
-        public virtual NguoiDung NguoiDung { get; set; }
+        public virtual NguoiDung? NguoiDung { get; set; }
     }
 }

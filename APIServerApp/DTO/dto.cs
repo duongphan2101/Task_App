@@ -21,6 +21,8 @@ namespace APIServerApp.DTO
         public int MaNguoiDung { get; set; }
         public string? HoTen { get; set; }
         public string? Email { get; set; }
+        public string? MaDonVi { get; set; }
+        public string? MaPhongBan { get; set; }
     }
 
 

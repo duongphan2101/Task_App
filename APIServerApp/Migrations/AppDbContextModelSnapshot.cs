@@ -31,13 +31,12 @@ namespace APIServerApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaChiTietCV"));
 
                     b.Property<string>("MaCongViec")
-                        .IsRequired()
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("MucDoUuTien")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("NgayHoanThanh")
+                    b.Property<DateTime?>("NgayHoanThanh")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("NgayKetThucCongViec")
@@ -226,7 +225,6 @@ namespace APIServerApp.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("MatKhau")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -276,7 +274,6 @@ namespace APIServerApp.Migrations
                         .HasColumnOrder(1);
 
                     b.Property<string>("VaiTro")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
@@ -331,7 +328,6 @@ namespace APIServerApp.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("TenPhongBan")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -424,8 +420,7 @@ namespace APIServerApp.Migrations
                     b.HasOne("APIServerApp.Model.CongViec", "CongViec")
                         .WithMany("ChiTietCongViecs")
                         .HasForeignKey("MaCongViec")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("CongViec");
                 });

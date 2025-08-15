@@ -18,7 +18,7 @@ namespace APIServerApp.Model
         public string? Email { get; set; }
 
         [StringLength(255)]
-        public string MatKhau { get; set; }
+        public string? MatKhau { get; set; }
 
         [StringLength(50)]
         public string? MaPhongBan { get; set; }

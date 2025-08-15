@@ -103,6 +103,23 @@ namespace Task_App.TaskApp_Dao
             return null;
         }
 
+        public async Task<Object_Response<ChiTietCongViec>> GetChiTietConViec(int maChiTietCV)
+        {
+            try
+            {
+                var response = await client.GetAsync($"api/task/chitiet-congviec/{maChiTietCV}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Object_Response<ChiTietCongViec>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy chi tiết công việc: " + ex.Message);
+            }
+            return null;
+        }
         public async Task<NguoiLienQuanCongViecResponse> GetNguoiLienQuanCongViecAsync(string maCongViec)
         {
             try
@@ -217,6 +234,24 @@ namespace Task_App.TaskApp_Dao
             return null;
         }
 
+        public async Task<Object_Response<NguoiDung>> GetGetNguoiDungByIdAsync(int id)
+        {
+            try
+            {
+                var response = await client.GetAsync($"api/task/get-nguoi-dung/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Object_Response<NguoiDung>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy NguoiDung: " + ex.Message);
+            }
+            return null;
+        }
+
         public async Task<TepDinhKemEmailResponse> GetTepDinhKemEmailByMaCongViecAsync(string maCongViec)
         {
             try
@@ -253,12 +288,17 @@ namespace Task_App.TaskApp_Dao
             return null;
         }
 
-        public async Task<ApiResponse> CreateCongViec(CongViec cv)
+        public async Task<Object_Response<string>> CreateCongViec(CongViec cv, NguoiDung nd)
         {
             try
             {
+                var payload = new
+                {
+                    CongViec = cv,
+                    NguoiDung = nd
+                };
                 var jsonContent = new StringContent(
-                    JsonConvert.SerializeObject(cv),
+                    JsonConvert.SerializeObject(payload),
                     Encoding.UTF8,
                     "application/json"
                 );
@@ -271,21 +311,23 @@ namespace Task_App.TaskApp_Dao
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    return JsonConvert.DeserializeObject<Object_Response<string>>(result);
                 }
 
-                return new ApiResponse
+                return new Object_Response<string>
                 {
                     Success = false,
-                    Message = $"Tạo công việc thất bại ({(int)response.StatusCode}): {result}"
+                    Message = $"Tạo công việc thất bại ({(int)response.StatusCode}): {result}",
+                    Data = null
                 };
             }
             catch (Exception ex)
             {
-                return new ApiResponse
+                return new Object_Response<string>
                 {
                     Success = false,
-                    Message = "Lỗi khi tạo công việc: " + ex.Message
+                    Message = "Lỗi khi tạo công việc: " + ex.Message,
+                    Data = null
                 };
             }
         }
@@ -325,50 +367,6 @@ namespace Task_App.TaskApp_Dao
                     Success = false,
                     Message = "Lỗi khi tạo chi tiết công việc: " + ex.Message,
                     Data = 0
-                };
-            }
-        }
-
-        public async Task<Object_Response<List<ChiTietCongViec>>> CreateDanhSachChiTietCongViec(CongViec congViec, int soNgayHoanThanh, int mucDo)
-        {
-            try
-            {
-                var payload = new
-                {
-                    CongViec = congViec,
-                    SoNgayHoanThanh = soNgayHoanThanh,
-                    MucDo = mucDo
-                };
-
-                var jsonContent = new StringContent(
-                    JsonConvert.SerializeObject(payload),
-                    Encoding.UTF8,
-                    "application/json"
-                );
-
-                client.DefaultRequestHeaders.Authorization =
-                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
-
-                var response = await client.PostAsync("api/task/tao-chi-tiet-cong-viec", jsonContent);
-                var result = await response.Content.ReadAsStringAsync();
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return JsonConvert.DeserializeObject<Object_Response<List<ChiTietCongViec>>>(result);
-                }
-
-                return new Object_Response<List<ChiTietCongViec>>
-                {
-                    Success = false,
-                    Message = $"Tạo chi tiết công việc thất bại ({(int)response.StatusCode}): {result}"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new Object_Response<List<ChiTietCongViec>>
-                {
-                    Success = false,
-                    Message = "Lỗi khi tạo chi tiết công việc: " + ex.Message
                 };
             }
         }
@@ -634,7 +632,7 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
-        public async Task<Object_Response<List<NguoiDungDTO>>> getUserListByDonViPhongBan(string maDonVi, string maPhongBan, string email)
+        public async Task<Object_Response<List<NguoiDungDTO>>> GetUserListByDonViPhongBan(string maDonVi, string maPhongBan, string email)
         {
             try
             {
@@ -656,15 +654,42 @@ namespace Task_App.TaskApp_Dao
                 if (response.IsSuccessStatusCode)
                 {
                     string result = await response.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<Object_Response<List<NguoiDungDTO>>>(result);
+
+                    var dataObj = JsonConvert.DeserializeObject<Object_Response<List<NguoiDungDTO>>>(result);
+
+                    if (dataObj?.Data != null)
+                    {
+                        foreach (var item in dataObj.Data)
+                        {
+                            Console.WriteLine("Email nhận được: " + (item?.Email ?? "(null)"));
+                        }
+                    }
+
+                    return dataObj ?? new Object_Response<List<NguoiDungDTO>>
+                    {
+                        Data = new List<NguoiDungDTO>(),
+                        Message = "No data",
+                        Success = false
+                    };
+                }
+                else
+                {
+                    Console.WriteLine("API trả về lỗi: " + response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Lỗi khi lấy UserList-DonViPhongBan: " + ex.Message);
             }
-            return null;
+
+            return new Object_Response<List<NguoiDungDTO>>
+            {
+                Data = new List<NguoiDungDTO>(),
+                Message = "Error",
+                Success = false
+            };
         }
+
 
         public async Task<Object_Response<List<NguoiDung>>> getNguoiDungByEmails(List<string> emails)
         {
@@ -700,7 +725,7 @@ namespace Task_App.TaskApp_Dao
                     Email = email,
                     DanhSachNguoiNhanEmail = lstNNE,
                     DanhSachTepDinhKem = lstTDK,
-                    NguoiDung = currentUser
+                    CurrentUser = currentUser
                 };
 
                 var jsonContent = new StringContent(

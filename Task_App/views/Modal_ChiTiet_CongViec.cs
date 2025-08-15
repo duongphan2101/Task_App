@@ -47,11 +47,11 @@ namespace Task_App.views
         private ChiTietCongViecFullDto ctcvdto;
 
         private List<PhanHoiCongViec> lstFeedback = new List<PhanHoiCongViec>();
-        private LoginResponse loginResponse;
-        public Modal_ChiTiet_CongViec(LoginResponse loginResponse ,string maCongViec, int maChiTietCV, int maNguoiDung, bool task, ApiClientDAO apiClientDAO, Task_Duoc_Giao_Control tdg)
+        private NguoiDung nd;
+        public Modal_ChiTiet_CongViec(NguoiDung nd ,string maCongViec, int maChiTietCV, int maNguoiDung, bool task, ApiClientDAO apiClientDAO, Task_Duoc_Giao_Control tdg)
         {
             InitializeComponent();
-            this.loginResponse = loginResponse;
+            this.nd = nd;
             this.maCongViec = maCongViec;
             this.maNguoiDung = maNguoiDung;
             this.maChiTietCV = maChiTietCV;
@@ -76,6 +76,8 @@ namespace Task_App.views
         private async Task loadData()
         {
             var chiTietRes = await apiClientDAO.GetChiTietConViecAsync(maChiTietCV);
+            var chiTietdeRes = await apiClientDAO.GetChiTietConViec(maChiTietCV);
+            ctcv = chiTietdeRes.Data;
 
             var ChiTiet = chiTietRes.Data;
             ctcvdto = ChiTiet;
@@ -94,7 +96,7 @@ namespace Task_App.views
             flow_FeedBack.Controls.Clear();
             foreach (PhanHoiCongViec fb in lstFeedback)
             {
-                bool isMe = fb.NguoiDung.HoTen == loginResponse.HoTen;
+                bool isMe = fb.NguoiDung.HoTen == nd.HoTen;
                 AddFeedback(fb, isMe);
             }
 
@@ -214,8 +216,6 @@ namespace Task_App.views
                     btnHoanThanh.FillColor = Color.LightSkyBlue;
                     btnHoanThanh.Enabled = true;
                     btnHoanThanh.Text = "Nhận việc";
-                    //ctcv = apiClientDAO.GetChiTietConViecAsync(maChiTietCV);
-
                     ctcv.MaChiTietCV = maChiTietCV;
                     ctcv.MaCongViec = ChiTiet.MaCongViec;
                     ctcv.TrangThai = 1;
@@ -437,6 +437,7 @@ namespace Task_App.views
                 else
                 {
                     MessageBox.Show("Cập nhật thất bại!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Console.WriteLine("Loi " + res.Message);
                 }
             }
             else if (tt == "Đang xử lí" || tt == "Trễ")
@@ -523,6 +524,7 @@ namespace Task_App.views
                 else
                 {
                     ctcv.TienDo = tienDoReport;
+                    ctcv.TrangThai = 1;
                     var res = await apiClientDAO.UpdateTrangThaiCongViecAsync(ctcv);
                     MessageBox.Show("Báo cáo tiến độ công việc thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     //this.Close();

@@ -12,7 +12,7 @@ namespace APIServerApp.Model
         public int MaChiTietCV { get; set; }
 
         [ForeignKey("CongViec")]
-        public string MaCongViec { get; set; }
+        public string? MaCongViec { get; set; }
 
         [StringLength(255)]
         public string? TieuDe { get; set; }
@@ -20,9 +20,9 @@ namespace APIServerApp.Model
         [Column(TypeName = "nvarchar(max)")]
         public string? NoiDung { get; set; }
 
-        public DateTime NgayNhanCongViec { get; set; }
-        public DateTime NgayKetThucCongViec { get; set; }
-        public DateTime NgayHoanThanh { get; set; }
+        public DateTime? NgayNhanCongViec { get; set; }
+        public DateTime? NgayKetThucCongViec { get; set; }
+        public DateTime? NgayHoanThanh { get; set; }
         public int SoNgayHoanThanh { get; set; }
 
         public int TrangThai { get; set; }

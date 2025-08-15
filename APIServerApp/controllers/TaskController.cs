@@ -7,6 +7,10 @@ using APIServerApp.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APIServerApp.Model;
+using DotNetEnv;
+using MimeKit;
+using System.Text.RegularExpressions;
+using System.IO.Compression;
 
 namespace APIServerApp.controllers
 {
@@ -75,6 +79,37 @@ namespace APIServerApp.controllers
                 Success = true,
                 Message = "Lấy danh sách công việc đã giao thành công",
                 Data = result
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("get-nguoi-dung/{id}")]
+        public async Task<IActionResult> GetNguoiDungByUserId(int id)
+        {
+            var query = await _context.NguoiDungs
+                .Where(cv => cv.MaNguoiDung == id)
+                .Select(cv => new NguoiDung
+                {
+                    MaNguoiDung = id,
+                    HoTen = cv.HoTen,
+                    Email = cv.Email,
+                    MaChucVu = cv.MaChucVu,
+                    ChucVu = cv.ChucVu,
+                    DonVi = cv.DonVi,
+                    MaDonVi = cv.MaDonVi,
+                    PhongBan = cv.PhongBan,
+                    MaPhongBan = cv.MaPhongBan,
+                    LaLanhDao = cv.LaLanhDao,
+                    MatKhau = ""
+                }).FirstOrDefaultAsync();
+
+
+            var response = new Object_Response<NguoiDung>
+            {
+                Success = true,
+                Message = "Lấy danh sách công việc đã giao thành công",
+                Data = query
             };
 
             return Ok(response);
@@ -186,6 +221,46 @@ namespace APIServerApp.controllers
             });
         }
 
+        [HttpGet("chitiet-congviec/{maChiTietCV}")]
+        public async Task<IActionResult> GetChiTiet(int maChiTietCV)
+        {
+            var query = _context.ChiTietCongViecs
+                .Where(ct => ct.MaChiTietCV == maChiTietCV)
+                .Select(ct => new ChiTietCongViec
+                {
+                    MaChiTietCV = ct.MaChiTietCV,
+                    TienDo = ct.TienDo,
+                    TieuDe = ct.TieuDe,
+                    NoiDung = ct.NoiDung,
+                    NgayHoanThanh = ct.NgayHoanThanh,
+                    NgayNhanCongViec = ct.NgayNhanCongViec,
+                    NgayKetThucCongViec = ct.NgayKetThucCongViec,
+                    SoNgayHoanThanh = ct.SoNgayHoanThanh,
+                    CongViec = ct.CongViec,
+                    MaCongViec = ct.MaCongViec,
+                    MucDoUuTien = ct.MucDoUuTien
+                });
+
+            var result = await query.FirstOrDefaultAsync();
+
+            if (result == null)
+            {
+                return NotFound(new Object_Response<ChiTietCongViec>
+                {
+                    Success = false,
+                    Message = "Không tìm thấy công việc."
+                });
+            }
+
+            return Ok(new Object_Response<ChiTietCongViec>
+            {
+                Success = true,
+                Message = "Lấy chi tiết công việc thành công",
+                Data = result
+            });
+        }
+
+
         [HttpGet("nguoi-lien-quan/{maCongViec}")]
         public async Task<IActionResult> GetNguoiLienQuanCongViec(string maCongViec)
         {
@@ -249,6 +324,32 @@ namespace APIServerApp.controllers
             });
         }
 
+        [HttpPost("update-trang-thai-email")]
+        public async Task<IActionResult> UpdateTrangThaiEmail([FromBody] Email e)
+        {
+            var email = await _context.Emails
+                .FirstOrDefaultAsync(x => x.MaEmail == e.MaEmail);
+
+            if (email == null)
+            {
+                return NotFound(new ApiResponseDto
+                {
+                    Success = false,
+                    Message = "Không tìm thấy Email"
+                });
+            }
+
+            email.TrangThai = e.TrangThai;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponseDto
+            {
+                Success = true,
+                Message = "Cập nhật trạng thái Email thành công"
+            });
+        }
+
         [HttpGet("tep/{maTepTin}")]
         public async Task<IActionResult> GetTepTin(int maTepTin)
         {
@@ -307,147 +408,6 @@ namespace APIServerApp.controllers
             });
         }
 
-        [HttpPost("tao-cong-viec")]
-        public async Task<IActionResult> TaoCongViec(
-            [FromBody] CongViecRequestDto request,
-            [FromQuery] NguoiGiaoRequestDto nguoiGiaoInfo)
-        {
-            await using var transaction = await _context.Database.BeginTransactionAsync();
-            try
-            {
-                // --- Tạo mã công việc ---
-                string prefix = (nguoiGiaoInfo.MaDonVi ?? "") + (nguoiGiaoInfo.MaPhongBan ?? "");
-                var lastMaCV = await _context.CongViecs
-                    .Where(cv => cv.MaCongViec.StartsWith(prefix))
-                    .OrderByDescending(cv => cv.MaCongViec)
-                    .Select(cv => cv.MaCongViec)
-                    .FirstOrDefaultAsync();
-
-                int newStt = 1;
-                if (!string.IsNullOrEmpty(lastMaCV))
-                {
-                    var parts = lastMaCV.Split('_');
-                    if (parts.Length == 2 && int.TryParse(parts[1], out int lastStt))
-                    {
-                        newStt = lastStt + 1;
-                    }
-                }
-                string maCongViec = $"{prefix}_{newStt}";
-
-                // --- Lưu Công Việc ---
-                var cv = new CongViec
-                {
-                    MaCongViec = maCongViec,
-                    NguoiGiao = request.NguoiGiao,
-                    NgayGiao = request.NgayGiao,
-                    LapLai = request.LapLai,
-                    TanSuat = request.TanSuat ?? "NONE",
-                    NgayBatDau = request.NgayBatDau,
-                    NgayKetThuc = request.NgayKetThuc
-                };
-                _context.CongViecs.Add(cv);
-
-                // --- Lưu Chi Tiết Công Việc + liên quan ---
-                if (request.ChiTietCongViecs != null)
-                {
-                    foreach (var ctDto in request.ChiTietCongViecs)
-                    {
-                        var ct = new ChiTietCongViec
-                        {
-                            MaCongViec = maCongViec,
-                            TieuDe = ctDto.TieuDe,
-                            NoiDung = ctDto.NoiDung,
-                            NgayNhanCongViec = ctDto.NgayNhanCongViec,
-                            NgayKetThucCongViec = ctDto.NgayKetThucCongViec,
-                            NgayHoanThanh = ctDto.NgayHoanThanh,
-                            SoNgayHoanThanh = ctDto.SoNgayHoanThanh,
-                            TrangThai = ctDto.TrangThai,
-                            TienDo = ctDto.TienDo,
-                            MucDoUuTien = ctDto.MucDoUuTien
-                        };
-                        _context.ChiTietCongViecs.Add(ct);
-
-                        // NguoiLienQuan
-                        if (ctDto.NguoiLienQuans != null)
-                        {
-                            foreach (var nlq in ctDto.NguoiLienQuans)
-                            {
-                                _context.NguoiLienQuanCongViecs.Add(new NguoiLienQuanCongViec
-                                {
-                                    MaCongViec = maCongViec,
-                                    MaNguoiDung = nlq.MaNguoiDung,
-                                    VaiTro = nlq.VaiTro
-                                });
-                            }
-                        }
-
-                        // Email + NguoiNhan + TepDinhKem
-                        if (ctDto.Emails != null)
-                        {
-                            foreach (var emailDto in ctDto.Emails)
-                            {
-                                var email = new Email
-                                {
-                                    MaEmail = Guid.NewGuid().ToString(),
-                                    NguoiGui = emailDto.NguoiGui,
-                                    MaChiTietCV = ct.MaChiTietCV,
-                                    TieuDe = emailDto.TieuDe,
-                                    NoiDung = emailDto.NoiDung,
-                                    NgayGui = emailDto.NgayGui,
-                                    TrangThai = emailDto.TrangThai
-                                };
-                                _context.Emails.Add(email);
-
-                                if (emailDto.NguoiNhans != null)
-                                {
-                                    foreach (var nn in emailDto.NguoiNhans)
-                                    {
-                                        _context.NguoiNhanEmails.Add(new NguoiNhanEmail
-                                        {
-                                            MaEmail = email.MaEmail,
-                                            MaNguoiDung = nn.MaNguoiDung,
-                                            VaiTro = nn.VaiTro
-                                        });
-                                    }
-                                }
-
-                                if (emailDto.TepDinhKems != null)
-                                {
-                                    foreach (var tep in emailDto.TepDinhKems)
-                                    {
-                                        var tepTin = new TepTin
-                                        {
-                                            TenTep = tep.TenTep,
-                                            TenTepGoc = tep.TenTepGoc,
-                                            DuongDan = tep.DuongDan
-                                        };
-                                        _context.TepTins.Add(tepTin);
-
-                                        _context.TepDinhKemEmails.Add(new TepDinhKemEmail
-                                        {
-                                            MaEmail = email.MaEmail,
-                                            MaTep = tepTin.MaTep
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                // Lưu tất cả cùng lúc
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return Ok(new ApiResponseDto { Success = true, Message = "Tạo công việc thành công" });
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
-            }
-        }
-
         [HttpPost("user-list-donvi-phongban")]
         public async Task<IActionResult> GetNguoiDungCungDonViPhongBanAsync([FromBody] DonViPhongBanRequest request)
         {
@@ -464,14 +424,529 @@ namespace APIServerApp.controllers
                 Email = nd.Email
             }).ToList();
 
+            foreach (var i in rel)
+            {
+                Console.WriteLine("Email lay duoc " + i.Email);
+            }
+
             return Ok(new GetNguoiDungCungDonViPhongBanResponse
             {
                 Success = true,
                 Message = "Lấy danh sách người dùng thành công",
-                NguoiDungs = rel
+                NguoiDungs = rel ?? new List<NguoiDungDTO>()
             });
         }
 
+        [HttpPost("tao-cong-viec")]
+        public async Task<IActionResult> TaoCongViec([FromBody] TaoCongViecRequest request)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var nguoiGiaoInfo = request.NguoiDung;
+                var cvRequest = request.CongViec;
+
+                // --- Tạo mã công việc ---
+                string prefix = (nguoiGiaoInfo.MaDonVi ?? "") + (nguoiGiaoInfo.MaPhongBan ?? "");
+
+                // Lấy danh sách mã bắt đầu bằng prefix, đưa về bộ nhớ, rồi tách số
+                var lastMaCV = await _context.CongViecs
+                    .Where(cv => cv.MaCongViec.StartsWith(prefix))
+                    .Select(cv => cv.MaCongViec)
+                    .ToListAsync();
+
+                int lastStt = lastMaCV
+                    .Select(ma =>
+                    {
+                        if (!string.IsNullOrEmpty(ma) && ma.Contains("_"))
+                        {
+                            var part = ma.Split('_').Last();
+                            return int.TryParse(part, out var num) ? num : 0;
+                        }
+                        return 0;
+                    })
+                    .OrderByDescending(num => num)
+                    .FirstOrDefault();
+
+                int newStt = lastStt + 1;
+                string maCongViec = $"{prefix}_{newStt}";
+
+                // --- Lưu Công Việc ---
+                var cv = new CongViec
+                {
+                    MaCongViec = maCongViec,
+                    NguoiGiao = nguoiGiaoInfo.MaNguoiDung,
+                    NgayGiao = cvRequest.NgayGiao,
+                    LapLai = cvRequest.LapLai,
+                    TanSuat = cvRequest.TanSuat ?? "NONE",
+                    NgayBatDau = cvRequest.NgayBatDau,
+                    NgayKetThuc = cvRequest.NgayKetThuc,
+                };
+                _context.CongViecs.Add(cv);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new Object_Response<string> { Success = true, Message = "Tạo công việc thành công", Data = cv.MaCongViec });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("tao-chi-tiet-cong-viec")]
+        public async Task<IActionResult> TaoChiTietCongViec([FromBody] ChiTietCongViec ct)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                // 1. Kiểm tra MaCongViec có tồn tại không
+                var congViec = await _context.CongViecs
+                    .FirstOrDefaultAsync(c => c.MaCongViec == ct.MaCongViec);
+
+                if (congViec == null)
+                {
+                    return BadRequest(new ApiResponseDto
+                    {
+                        Success = false,
+                        Message = $"Mã công việc {ct.MaCongViec} không tồn tại."
+                    });
+                }
+
+                // 2. Tạo chi tiết công việc
+                var ctcv = new ChiTietCongViec
+                {
+                    MaCongViec = ct.MaCongViec,
+                    NgayNhanCongViec = ct.NgayNhanCongViec,
+                    NgayKetThucCongViec = ct.NgayKetThucCongViec,
+                    NgayHoanThanh = ct.NgayHoanThanh,
+                    SoNgayHoanThanh = ct.SoNgayHoanThanh,
+                    TienDo = ct.TienDo,
+                    MucDoUuTien = ct.MucDoUuTien,
+                    TieuDe = ct.TieuDe,
+                    NoiDung = ct.NoiDung,
+                    TrangThai = ct.TrangThai
+                };
+
+                _context.ChiTietCongViecs.Add(ctcv);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new Object_Response<int>
+                {
+                    Success = true,
+                    Message = "Tạo Chi Tiết công việc thành công",
+                    Data = ctcv.MaChiTietCV
+                });
+            }
+            catch (DbUpdateException dbEx)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto
+                {
+                    Success = false,
+                    Message = $"Lỗi khi lưu dữ liệu: {dbEx.InnerException?.Message ?? dbEx.Message}"
+                });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto
+                {
+                    Success = false,
+                    Message = $"Lỗi hệ thống: {ex.Message}"
+                });
+            }
+        }
+
+        [HttpPost("tao-tep-tin")]
+        public async Task<IActionResult> TaoTepTin([FromBody] TepTin tep)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var tt = new TepTin
+                {
+                    TenTep = tep.TenTep,
+                    DuongDan = tep.DuongDan,
+                    TenTepGoc = tep.TenTepGoc,
+
+                    TepDinhKemEmails = tep.TepDinhKemEmails
+                };
+
+                _context.TepTins.Add(tt);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new Object_Response<int> { Success = true, Message = "Tạo Tep thành công", Data = tt.MaTep });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new Object_Response<int> { Success = false, Message = ex.Message, Data = 0 });
+            }
+        }
+
+        [HttpPost("tao-nguoi-lien-quan-cong-viec")]
+        public async Task<IActionResult> TaoNguoiLienQuanCongViec([FromBody] NguoiLienQuanCongViec nlq)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var n = new NguoiLienQuanCongViec
+                {
+                    MaCongViec = nlq.MaCongViec,
+                    MaNguoiDung = nlq.MaNguoiDung,
+                    VaiTro = nlq.VaiTro,
+                };
+
+                _context.NguoiLienQuanCongViecs.Add(n);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new ApiResponseDto { Success = true, Message = "Tạo NLQCV thành công" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("tao-email")]
+        public async Task<IActionResult> TaoEmail([FromBody] Email e)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var email = new Email
+                {
+                    MaEmail = e.MaEmail,
+                    TieuDe = e.TieuDe,
+                    NoiDung = e.NoiDung,
+                    NgayGui = e.NgayGui,
+                    NguoiGui = e.NguoiGui,
+                    TrangThai = e.TrangThai,
+                    MaChiTietCV = e.MaChiTietCV,
+
+                    TepDinhKemEmails = [],
+                    NguoiNhanEmails = [],
+                };
+
+                _context.Emails.Add(email);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new ApiResponseDto { Success = true, Message = "Tạo Email thành công" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("tao-nguoi-nhan-email")]
+        public async Task<IActionResult> TaoNguoiNhanEmail([FromBody] NguoiNhanEmail nne)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var n = new NguoiNhanEmail
+                {
+                    MaNguoiDung = nne.MaNguoiDung,
+                    MaEmail = nne.MaEmail,
+                    VaiTro = nne.VaiTro,
+                };
+
+                _context.NguoiNhanEmails.Add(n);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new ApiResponseDto { Success = true, Message = "Tạo NNE thành công" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("tao-tep-dinh-kem")]
+        public async Task<IActionResult> TaoTepDinhKem([FromBody] TepDinhKemEmail tdk)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var n = new TepDinhKemEmail
+                {
+                    MaEmail = tdk.MaEmail,
+                    MaTep = tdk.MaTep,
+                };
+
+                _context.TepDinhKemEmails.Add(n);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new ApiResponseDto { Success = true, Message = "Tạo TDK thành công" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("tao-thong-bao")]
+        public async Task<IActionResult> TaoThongBao([FromBody] ThongBaoNguoiDung tb)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var n = new ThongBaoNguoiDung
+                {
+                    NoiDung = tb.NoiDung,
+                    MaChiTietCV = tb.MaChiTietCV,
+                    MaNguoiDung = tb.MaNguoiDung,
+                    TrangThai = tb.TrangThai,
+                    NgayThongBao = tb.NgayThongBao,
+                };
+
+                _context.ThongBaoNguoiDungs.Add(n);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new ApiResponseDto { Success = true, Message = "Tạo ThongBao thành công" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("tao-phan-hoi-cong-viec")]
+        public async Task<IActionResult> TaoPhanHoiCongViec([FromBody] PhanHoiCongViec phcv)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var n = new PhanHoiCongViec
+                {
+                    MaCongViec = phcv.MaCongViec,
+                    MaNguoiDung = phcv.MaNguoiDung,
+                    NoiDung = phcv.NoiDung,
+                    ThoiGian = phcv.ThoiGian,
+                    Loai = phcv.Loai,
+                };
+
+                _context.PhanHoiCongViecs.Add(n);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return Ok(new ApiResponseDto { Success = true, Message = "Tạo PHCV thành công" });
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                return BadRequest(new ApiResponseDto { Success = false, Message = ex.Message });
+            }
+        }
+
+        [HttpPost("get-nguoi-dung-by-email")]
+        public async Task<IActionResult> GetNguoiDungByEmail([FromBody] List<string>? emails)
+        {
+            // if (emails == null || emails.Count == 0)
+            // {
+            //     return BadRequest(new Object_Response<List<NguoiDung>>
+            //     {
+            //         Success = false,
+            //         Message = "Danh sách email trống",
+            //         Data = new List<NguoiDung>()
+            //     });
+            // }
+
+            var nguoiDungs = await _context.NguoiDungs
+                .Where(nd => emails.Contains(nd.Email))
+                .Select(nd => new NguoiDung
+                {
+                    MaNguoiDung = nd.MaNguoiDung,
+                    HoTen = nd.HoTen,
+                    Email = nd.Email,
+                    MaChucVu = nd.MaChucVu,
+                    ChucVu = nd.ChucVu,
+                    PhongBan = nd.PhongBan,
+                    MaPhongBan = nd.MaPhongBan,
+                    DonVi = nd.DonVi,
+                    MaDonVi = nd.MaDonVi,
+                })
+                .ToListAsync();
+
+            return Ok(new Object_Response<List<NguoiDung>>
+            {
+                Success = true,
+                Message = nguoiDungs.Any()
+                    ? "Lấy danh sách người dùng thành công"
+                    : "Không tìm thấy người dùng nào",
+                Data = nguoiDungs
+            });
+        }
+
+        [HttpPost("gui-email")]
+        public async Task<IActionResult> SendEmail([FromBody] SendEmailRequest req)
+        {
+            if (req.Email == null || req.DanhSachNguoiNhanEmail == null || req.CurrentUser == null)
+            {
+                return BadRequest(new ApiResponseDto
+                {
+                    Success = false,
+                    Message = "Thiếu thông tin gửi email"
+                });
+            }
+
+            try
+            {
+                var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+                Env.Load(envPath);
+                // Env.Load("../../.env");
+                string CLIENT = Env.GetString("SMTP_CLIENT");
+                int PORT = Convert.ToInt32(Env.GetString("SMTP_PORT"));
+
+                var message = new MimeMessage();
+
+                // From
+                message.From.Add(new MailboxAddress("", req.CurrentUser.Email));
+                message.Subject = req.Email.TieuDe ?? "";
+
+                // To / Cc / Bcc
+                foreach (var nguoiNhan in req.DanhSachNguoiNhanEmail)
+                {
+                    var email = nguoiNhan.NguoiDung.Email;
+                    switch (nguoiNhan.VaiTro)
+                    {
+                        case "to":
+                            message.To.Add(new MailboxAddress("", email));
+                            break;
+                        case "cc":
+                            message.Cc.Add(new MailboxAddress("", email));
+                            break;
+                        case "bcc":
+                            message.Bcc.Add(new MailboxAddress("", email));
+                            break;
+                    }
+                }
+
+                // Body
+                var builder = new BodyBuilder
+                {
+                    HtmlBody = req.Email.NoiDung ?? "",
+                    TextBody = Regex.Replace(req.Email.NoiDung ?? "", "<.*?>", string.Empty)
+                };
+
+                // File đính kèm
+                if (req.DanhSachTepDinhKem != null && req.DanhSachTepDinhKem.Count > 0)
+                {
+                    foreach (var tep in req.DanhSachTepDinhKem)
+                    {
+                        string path = tep.TepTin?.DuongDan;
+                        string tenTepGoc = tep.TepTin?.TenTepGoc;
+
+                        if (!string.IsNullOrEmpty(path) && System.IO.File.Exists(path))
+                        {
+                            builder.Attachments.Add(new MimePart()
+                            {
+                                Content = new MimeContent(System.IO.File.OpenRead(path)),
+                                ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                                ContentTransferEncoding = ContentEncoding.Base64,
+                                FileName = tenTepGoc
+                            });
+                        }
+                    }
+                }
+
+                message.Body = builder.ToMessageBody();
+
+                Console.WriteLine(req.CurrentUser.Email + " " + req.CurrentUser.MatKhau);
+                // Gửi qua SMTP
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    await client.ConnectAsync(CLIENT, PORT, MailKit.Security.SecureSocketOptions.StartTls);
+                    await client.AuthenticateAsync(req.CurrentUser.Email, req.CurrentUser.MatKhau);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
+
+                // using (var client = new MailKit.Net.Smtp.SmtpClient())
+                // {
+                //     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                //     await client.ConnectAsync(CLIENT, PORT, MailKit.Security.SecureSocketOptions.StartTls);
+                //     await client.AuthenticateAsync("test@intimexhcm.com", "TestInt2025@");
+                //     await client.SendAsync(message);
+                //     await client.DisconnectAsync(true);
+                // }
+
+
+
+                // Export .eml -> .zip
+                string targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
+                if (!Directory.Exists(targetFolder))
+                    Directory.CreateDirectory(targetFolder);
+
+                string tempFolder = Path.Combine(Path.GetTempPath(), $"EmailTemp_{Guid.NewGuid()}");
+                Directory.CreateDirectory(tempFolder);
+
+                string safeSubject = SanitizeFileName(req.Email.TieuDe ?? "email");
+                string emlFileName = $"{safeSubject}_{DateTime.Now:yyyyMMdd_HHmmss}.eml";
+                string emlPath = Path.Combine(tempFolder, emlFileName);
+
+                using (var stream = System.IO.File.Create(emlPath))
+                {
+                    await message.WriteToAsync(stream);
+                }
+
+                string zipPath = Path.Combine(targetFolder, Path.GetFileNameWithoutExtension(emlFileName) + ".zip");
+
+                if (System.IO.File.Exists(zipPath))
+                    System.IO.File.Delete(zipPath);
+
+                ZipFile.CreateFromDirectory(tempFolder, zipPath, CompressionLevel.Optimal, includeBaseDirectory: false);
+
+                Directory.Delete(tempFolder, true);
+
+                return Ok(new ApiResponseDto
+                {
+                    Success = true,
+                    Message = "Gửi Email thành công"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponseDto
+                {
+                    Success = false,
+                    Message = "Lỗi khi gửi email: " + ex.Message
+                });
+            }
+        }
+
+        private string SanitizeFileName(string name)
+        {
+            foreach (char c in Path.GetInvalidFileNameChars())
+            {
+                name = name.Replace(c, '_');
+            }
+            return name;
+        }
 
     }
 }

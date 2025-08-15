@@ -40,7 +40,7 @@ namespace APIServerApp.Migrations
                 columns: table => new
                 {
                     MaPhongBan = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    TenPhongBan = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                    TenPhongBan = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -93,7 +93,7 @@ namespace APIServerApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     HoTen = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    MatKhau = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    MatKhau = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     MaPhongBan = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     MaDonVi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     MaChucVu = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -147,12 +147,12 @@ namespace APIServerApp.Migrations
                 {
                     MaChiTietCV = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MaCongViec = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    MaCongViec = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     TieuDe = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     NoiDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NgayNhanCongViec = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NgayKetThucCongViec = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NgayHoanThanh = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NgayHoanThanh = table.Column<DateTime>(type: "datetime2", nullable: true),
                     SoNgayHoanThanh = table.Column<int>(type: "int", nullable: false),
                     TrangThai = table.Column<int>(type: "int", nullable: false),
                     TienDo = table.Column<int>(type: "int", nullable: false),
@@ -284,7 +284,7 @@ namespace APIServerApp.Migrations
                 {
                     MaEmail = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     MaNguoiDung = table.Column<int>(type: "int", nullable: false),
-                    VaiTro = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                    VaiTro = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true)
                 },
                 constraints: table =>
                 {

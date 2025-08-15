@@ -26,9 +26,9 @@ namespace APIServerApp.Model
         public DateTime? NgayGui { get; set; }
         public int TrangThai { get; set; }
 
-        public virtual ChiTietCongViec ChiTietCongViec { get; set; }
-        public virtual NguoiDung NguoiGuiObj { get; set; }
-        public virtual ICollection<NguoiNhanEmail> NguoiNhanEmails { get; set; }
-        public virtual ICollection<TepDinhKemEmail> TepDinhKemEmails { get; set; }
+        public virtual ChiTietCongViec? ChiTietCongViec { get; set; }
+        public virtual NguoiDung? NguoiGuiObj { get; set; }
+        public virtual ICollection<NguoiNhanEmail>? NguoiNhanEmails { get; set; }
+        public virtual ICollection<TepDinhKemEmail>? TepDinhKemEmails { get; set; }
     }
 }

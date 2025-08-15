@@ -9,13 +9,13 @@ namespace APIServerApp.Model
     {
         [Key]
         [StringLength(50)]
-        public string MaDonVi { get; set; }
+        public string? MaDonVi { get; set; }
 
         [Required]
         [StringLength(100)]
-        public string TenDonVi { get; set; }
+        public string? TenDonVi { get; set; }
 
-        public virtual ICollection<NguoiDung> NguoiDungs { get; set; }
-        public virtual ICollection<MaCongViecSequence> MaCongViecSequences { get; set; }
+        public virtual ICollection<NguoiDung>? NguoiDungs { get; set; }
+        public virtual ICollection<MaCongViecSequence>? MaCongViecSequences { get; set; }
     }
 }
