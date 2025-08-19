@@ -1,4 +1,5 @@
-﻿using Task_App.Model;
+﻿using Newtonsoft.Json;
+using Task_App.Model;
 
 namespace Task_App.DTO
 {
@@ -17,6 +18,8 @@ namespace Task_App.DTO
     {
         public int MaNguoiDung { get; set; }
         public string HoTen { get; set; }
+
+        [JsonProperty("email")]
         public string Email { get; set; }
 
         public string MaDonVi { get; set; }

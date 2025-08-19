@@ -22,19 +22,16 @@ namespace Task_App.views
         private TcpClientDAO tcpClientDAO;
         private ApiClientDAO apiClientDAO;
 
-        private Task<ViecDuocGiaoResponse> DuocGiaoResponse;
-
-        public Task_Duoc_Giao_Control(NguoiDung nd, Task<ViecDuocGiaoResponse> DuocGiaoResponse, ApiClientDAO apiClientDAO)
+        public Task_Duoc_Giao_Control(NguoiDung nd, ApiClientDAO apiClientDAO)
         {
             this.nd = nd;
             this.apiClientDAO = apiClientDAO;
-            this.DuocGiaoResponse = DuocGiaoResponse;
             InitializeComponent();
         }
 
         public async void LoadData()
         {
-            var response = await DuocGiaoResponse;
+            var response = await apiClientDAO.GetViecDuocGiaoAsync(nd.MaNguoiDung, locTheoNgay);
 
             //if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
             //{

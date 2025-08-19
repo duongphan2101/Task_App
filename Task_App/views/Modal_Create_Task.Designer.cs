@@ -32,7 +32,6 @@
             this.panelControl_main = new DevExpress.XtraEditors.PanelControl();
             this.panel_1 = new System.Windows.Forms.Panel();
             this.panel_2 = new Guna.UI2.WinForms.Guna2Panel();
-            this.txtNoiDung = new System.Windows.Forms.RichTextBox();
             this.panel_Bottom = new Guna.UI2.WinForms.Guna2Panel();
             this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
             this.btn_Create = new Guna.UI2.WinForms.Guna2PictureBox();
@@ -61,6 +60,11 @@
             this.panel_TieuDe = new System.Windows.Forms.Panel();
             this.txtTieuDe = new Guna.UI2.WinForms.Guna2TextBox();
             this.emailPopup = new Guna.UI2.WinForms.Guna2ContextMenuStrip();
+            this.panel_txtNoiDung = new Guna.UI2.WinForms.Guna2Panel();
+            this.panel_panel_NoiDung = new Guna.UI2.WinForms.Guna2Panel();
+            this.txtNoiDung = new System.Windows.Forms.RichTextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl_main)).BeginInit();
             this.panelControl_main.SuspendLayout();
             this.panel_1.SuspendLayout();
@@ -73,6 +77,8 @@
             this.flowLayoutPanel3.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.panel_TieuDe.SuspendLayout();
+            this.panel_txtNoiDung.SuspendLayout();
+            this.panel_panel_NoiDung.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelControl_main
@@ -101,7 +107,7 @@
             // 
             // panel_2
             // 
-            this.panel_2.Controls.Add(this.txtNoiDung);
+            this.panel_2.Controls.Add(this.panel_txtNoiDung);
             this.panel_2.Controls.Add(this.panel_Bottom);
             this.panel_2.Controls.Add(this.flowLayoutPanel2);
             this.panel_2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -110,17 +116,6 @@
             this.panel_2.Name = "panel_2";
             this.panel_2.Size = new System.Drawing.Size(1208, 590);
             this.panel_2.TabIndex = 1;
-            // 
-            // txtNoiDung
-            // 
-            this.txtNoiDung.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtNoiDung.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtNoiDung.Location = new System.Drawing.Point(0, 64);
-            this.txtNoiDung.Margin = new System.Windows.Forms.Padding(10);
-            this.txtNoiDung.Name = "txtNoiDung";
-            this.txtNoiDung.Size = new System.Drawing.Size(1208, 396);
-            this.txtNoiDung.TabIndex = 3;
-            this.txtNoiDung.Text = "Nội dung .";
             // 
             // panel_Bottom
             // 
@@ -187,7 +182,9 @@
             // 
             this.flowLayoutPanel2.AutoSize = true;
             this.flowLayoutPanel2.BackColor = System.Drawing.Color.White;
+            this.flowLayoutPanel2.Controls.Add(this.label2);
             this.flowLayoutPanel2.Controls.Add(this.StartDay);
+            this.flowLayoutPanel2.Controls.Add(this.label3);
             this.flowLayoutPanel2.Controls.Add(this.DeadLine);
             this.flowLayoutPanel2.Controls.Add(this.flowLayoutPanel3);
             this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -206,7 +203,7 @@
             this.StartDay.FillColor = System.Drawing.Color.White;
             this.StartDay.Font = new System.Drawing.Font("Bahnschrift", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StartDay.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.StartDay.Location = new System.Drawing.Point(11, 10);
+            this.StartDay.Location = new System.Drawing.Point(41, 10);
             this.StartDay.Margin = new System.Windows.Forms.Padding(4);
             this.StartDay.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.StartDay.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
@@ -223,7 +220,7 @@
             this.DeadLine.FillColor = System.Drawing.Color.White;
             this.DeadLine.Font = new System.Drawing.Font("Bahnschrift", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DeadLine.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.DeadLine.Location = new System.Drawing.Point(286, 10);
+            this.DeadLine.Location = new System.Drawing.Point(346, 10);
             this.DeadLine.Margin = new System.Windows.Forms.Padding(4);
             this.DeadLine.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.DeadLine.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
@@ -239,10 +236,10 @@
             this.flowLayoutPanel3.Controls.Add(this.radio_Thang);
             this.flowLayoutPanel3.Controls.Add(this.radio_Nam);
             this.flowLayoutPanel3.Controls.Add(this.radio_Khong);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(561, 10);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(621, 10);
             this.flowLayoutPanel3.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(634, 44);
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(499, 44);
             this.flowLayoutPanel3.TabIndex = 10;
             // 
             // radio_Ngay
@@ -294,7 +291,7 @@
             this.radio_Thang.CheckedState.InnerColor = System.Drawing.Color.White;
             this.radio_Thang.CheckedState.InnerOffset = -4;
             this.radio_Thang.Font = new System.Drawing.Font("Bahnschrift", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radio_Thang.Location = new System.Drawing.Point(355, 0);
+            this.radio_Thang.Location = new System.Drawing.Point(13, 22);
             this.radio_Thang.Margin = new System.Windows.Forms.Padding(13, 0, 13, 0);
             this.radio_Thang.Name = "radio_Thang";
             this.radio_Thang.Size = new System.Drawing.Size(152, 22);
@@ -314,7 +311,7 @@
             this.radio_Nam.CheckedState.InnerColor = System.Drawing.Color.White;
             this.radio_Nam.CheckedState.InnerOffset = -4;
             this.radio_Nam.Font = new System.Drawing.Font("Bahnschrift", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radio_Nam.Location = new System.Drawing.Point(13, 22);
+            this.radio_Nam.Location = new System.Drawing.Point(191, 22);
             this.radio_Nam.Margin = new System.Windows.Forms.Padding(13, 0, 13, 0);
             this.radio_Nam.Name = "radio_Nam";
             this.radio_Nam.Size = new System.Drawing.Size(144, 22);
@@ -334,7 +331,7 @@
             this.radio_Khong.CheckedState.InnerColor = System.Drawing.Color.White;
             this.radio_Khong.CheckedState.InnerOffset = -4;
             this.radio_Khong.Font = new System.Drawing.Font("Bahnschrift", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radio_Khong.Location = new System.Drawing.Point(183, 22);
+            this.radio_Khong.Location = new System.Drawing.Point(361, 22);
             this.radio_Khong.Margin = new System.Windows.Forms.Padding(13, 0, 13, 0);
             this.radio_Khong.Name = "radio_Khong";
             this.radio_Khong.Size = new System.Drawing.Size(71, 22);
@@ -585,6 +582,64 @@
             this.emailPopup.RenderStyle.TextRenderingHint = System.Drawing.Text.TextRenderingHint.SystemDefault;
             this.emailPopup.Size = new System.Drawing.Size(61, 4);
             // 
+            // panel_txtNoiDung
+            // 
+            this.panel_txtNoiDung.BackColor = System.Drawing.Color.Transparent;
+            this.panel_txtNoiDung.Controls.Add(this.panel_panel_NoiDung);
+            this.panel_txtNoiDung.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_txtNoiDung.FillColor = System.Drawing.Color.WhiteSmoke;
+            this.panel_txtNoiDung.Location = new System.Drawing.Point(0, 64);
+            this.panel_txtNoiDung.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_txtNoiDung.Name = "panel_txtNoiDung";
+            this.panel_txtNoiDung.Padding = new System.Windows.Forms.Padding(10);
+            this.panel_txtNoiDung.Size = new System.Drawing.Size(1208, 396);
+            this.panel_txtNoiDung.TabIndex = 4;
+            // 
+            // panel_panel_NoiDung
+            // 
+            this.panel_panel_NoiDung.BackColor = System.Drawing.Color.Transparent;
+            this.panel_panel_NoiDung.BorderRadius = 20;
+            this.panel_panel_NoiDung.Controls.Add(this.txtNoiDung);
+            this.panel_panel_NoiDung.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_panel_NoiDung.FillColor = System.Drawing.Color.White;
+            this.panel_panel_NoiDung.Location = new System.Drawing.Point(10, 10);
+            this.panel_panel_NoiDung.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_panel_NoiDung.Name = "panel_panel_NoiDung";
+            this.panel_panel_NoiDung.Padding = new System.Windows.Forms.Padding(20);
+            this.panel_panel_NoiDung.Size = new System.Drawing.Size(1188, 376);
+            this.panel_panel_NoiDung.TabIndex = 0;
+            // 
+            // txtNoiDung
+            // 
+            this.txtNoiDung.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtNoiDung.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtNoiDung.Location = new System.Drawing.Point(20, 20);
+            this.txtNoiDung.Margin = new System.Windows.Forms.Padding(0);
+            this.txtNoiDung.Name = "txtNoiDung";
+            this.txtNoiDung.Size = new System.Drawing.Size(1148, 336);
+            this.txtNoiDung.TabIndex = 0;
+            this.txtNoiDung.Text = "";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 11);
+            this.label2.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(30, 16);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "NBD";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(312, 11);
+            this.label3.Margin = new System.Windows.Forms.Padding(0, 5, 0, 5);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(30, 16);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "NKT";
+            // 
             // Modal_Create_Task
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -609,12 +664,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.btn_Create)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_File)).EndInit();
             this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.panel_TieuDe.ResumeLayout(false);
             this.panel_TieuDe.PerformLayout();
+            this.panel_txtNoiDung.ResumeLayout(false);
+            this.panel_panel_NoiDung.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -652,6 +710,10 @@
         private Guna.UI2.WinForms.Guna2TextBox txtHanHoanThanh;
         private System.Windows.Forms.Label lblMucDo;
         private Guna.UI2.WinForms.Guna2ComboBox cbMucDo;
+        private Guna.UI2.WinForms.Guna2Panel panel_txtNoiDung;
+        private Guna.UI2.WinForms.Guna2Panel panel_panel_NoiDung;
         private System.Windows.Forms.RichTextBox txtNoiDung;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
     }
 }

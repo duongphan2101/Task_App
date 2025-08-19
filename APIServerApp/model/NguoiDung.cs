@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace APIServerApp.Model
 {
@@ -40,10 +41,15 @@ namespace APIServerApp.Model
         [ForeignKey("MaChucVu")]
         public virtual ChucVu? ChucVu { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<CongViec>? CongViecs { get; set; }
+        [JsonIgnore]
         public virtual ICollection<NguoiLienQuanCongViec>? NguoiLienQuanCongViecs { get; set; }
+        [JsonIgnore]
         public virtual ICollection<PhanHoiCongViec>? PhanHoiCongViecs { get; set; }
+        [JsonIgnore]
         public virtual ICollection<NguoiNhanEmail>? NguoiNhanEmails { get; set; }
+        [JsonIgnore]
         public virtual ICollection<ThongBaoNguoiDung>? ThongBaoNguoiDungs { get; set; }
     }
 }

@@ -41,28 +41,21 @@ namespace Task_App.views
             { "btn_Task_DuocGiao", "Công việc được giao" },
         };
 
-        private TcpClientDAO tcpClientDAO;
-        private Task<ViecDaGiaoResponse> vdg;
-        private Task<ViecDuocGiaoResponse> vduocg;
-
         public Home(NguoiDung nd, ApiClientDAO apiClientDAO)
         {
             InitializeComponent();
 
             this.nd = nd;
+            maNguoiDung = nd.MaNguoiDung;
             SetUserInfo(nd);
             this.apiClientDAO = apiClientDAO;
 
             btn_Task_DaGiao.Tag = true;
             btn_Task_DaGiao.BackColor = selectedColor;
 
-            //LoadNotifications();
+            LoadNotifications();
 
-            var DaGiaoResponse = apiClientDAO.GetViecDaGiaoAsync(nd.MaNguoiDung, true);
-            vdg = DaGiaoResponse;
-            var DuocGiaoResponse = apiClientDAO.GetViecDuocGiaoAsync(nd.MaNguoiDung, true);
-            vduocg = DuocGiaoResponse;
-            LoadContent(new Create_Task_Control(nd, DaGiaoResponse, DuocGiaoResponse, apiClientDAO));
+            LoadContent(new Create_Task_Control(nd, apiClientDAO));
         }
 
         private void SetUserInfo(NguoiDung nd)
@@ -80,8 +73,6 @@ namespace Task_App.views
             panel_Center_Main.Controls.Add(control);
         }
 
-        // clicking a button will mark it as selected via Button.Tag (nullable) property
-        // when the cursor hover, leave or release a button, we only change its background if said button isn't selected/tagged
         private void OnBtnMouseEnter(object sender, EventArgs e)
         {
             var targetBtn = (Guna2ImageButton)sender;
@@ -125,17 +116,16 @@ namespace Task_App.views
 
             if (clickedBtn.Name == btnDashboard.Name)
                 //LoadContent(new DashboardControlViewer(tcpClientDAO, maNguoiDung));
-                LoadContent(new Dashboard(tcpClientDAO, maNguoiDung));
+                LoadContent(new Dashboard(apiClientDAO, maNguoiDung));
 
             if (clickedBtn.Name == btn_Task_DaGiao.Name)
-                LoadContent(new Create_Task_Control(nd, vdg, vduocg, apiClientDAO));
+                LoadContent(new Create_Task_Control(nd, apiClientDAO));
 
             if (clickedBtn.Name == btn_Task_DuocGiao.Name)
-                LoadContent(new Task_Duoc_Giao_Control(nd, vduocg,apiClientDAO));
+                LoadContent(new Task_Duoc_Giao_Control(nd, apiClientDAO));
 
             ResumeLayout();
         }
-
 
         private void OnExitBtnClick(object sender, EventArgs e)
         {
@@ -168,10 +158,14 @@ namespace Task_App.views
             }
         }
 
-        private void LoadNotifications()
+        private async void LoadNotifications()
         {
-            //List<ThongBaoNguoiDung> lstThongBao = CongViecDAO.GetTop8ThongBaoById(maNguoiDung);
-            List<ThongBaoNguoiDung> lstThongBao = tcpClientDAO.GetTop8ThongBaoById(maNguoiDung);
+            var resTop8ThongBao = await apiClientDAO.GetTop8ThongBaoById(maNguoiDung);
+            List<ThongBaoNguoiDung> lstThongBao = resTop8ThongBao.Data;
+            if(lstThongBao == null || lstThongBao.Count == 0)
+            {
+                Console.WriteLine("Loi: " + resTop8ThongBao.Message);
+            }
             menu_ThongBao.Items.Clear();
 
             int count = 0;
@@ -180,7 +174,6 @@ namespace Task_App.views
             {
                 string noiDungGoc = tb.NoiDung;
                 string noiDungRutGon = noiDungGoc.Length > 35 ? noiDungGoc.Substring(0, 32) + "..." : noiDungGoc;
-
                 ToolStripMenuItem item = new ToolStripMenuItem(noiDungRutGon);
                 item.Tag = tb;
                 item.ToolTipText = noiDungGoc;
@@ -200,7 +193,7 @@ namespace Task_App.views
             xemTatCaItem.Tag = "XemTatCa";
             xemTatCaItem.Font = new Font(xemTatCaItem.Font, FontStyle.Bold);
             xemTatCaItem.ForeColor = Color.DarkBlue;
-            xemTatCaItem.Click += OnNtfySeenAllBtnClicked;
+            xemTatCaItem.Click += OnNtfySeenAllBtnClickedAsync;
             menu_ThongBao.Items.Add(new ToolStripSeparator());
             menu_ThongBao.Items.Add(xemTatCaItem);
 
@@ -215,7 +208,7 @@ namespace Task_App.views
         }
 
         // TODO untested
-        private void OnNtfySeenAllBtnClicked(object sender, EventArgs e)
+        private async void OnNtfySeenAllBtnClickedAsync(object sender, EventArgs e)
         {
             foreach (var ntfyItem in menu_ThongBao.Items.OfType<ToolStripMenuItem>())
             {
@@ -223,23 +216,33 @@ namespace Task_App.views
                     continue;
 
                 //CongViecDAO.UpdateTrangThaiThongBao(tb.MaThongBao); 
-                tcpClientDAO.UpdateTrangThaiThongBao(tb.MaThongBao);
+                var resUpdateTrangThaiThongBao = await apiClientDAO.UpdateTrangThaiThongBao111(tb.MaThongBao);
+                if (!resUpdateTrangThaiThongBao.Success)
+                {
+                    Console.WriteLine("Loi khi update " + resUpdateTrangThaiThongBao.Message);
+                }
+
             }
 
             LoadNotifications();
-
-            
         }
 
-        private void OnNtfySelected(object sender, EventArgs e, int tb, int maChiTietCV)
+        private async Task OnNtfySelected(object sender, EventArgs e, int tb, int maChiTietCV)
         {
-            if (tcpClientDAO.UpdateTrangThaiThongBao(tb))
+            var resUpdateTrangThaiThongBao = await apiClientDAO.UpdateTrangThaiThongBao111(tb);
+            if (resUpdateTrangThaiThongBao.Success)
             {
                 LoadNotifications();
             }
-            var isGiaoViec = tcpClientDAO.getIsGiaoViec(maNguoiDung, maChiTietCV);
-            string maCongViec = tcpClientDAO.getMaCongViec(maChiTietCV);
-            Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(nd, vduocg, apiClientDAO);
+            else
+            {
+                Console.WriteLine("Loi khi update " + resUpdateTrangThaiThongBao.Message);
+            }
+            var resIsGiaoViec = await apiClientDAO.getIsGiaoViec(maNguoiDung, maChiTietCV);
+            var isGiaoViec = resIsGiaoViec.Success;
+            var resChiTietCV = await apiClientDAO.GetChiTietConViecAsync(maChiTietCV);
+            string maCongViec = resChiTietCV.Data.MaCongViec;
+            Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(nd, apiClientDAO);
             Modal_ChiTiet_CongViec modal = new Modal_ChiTiet_CongViec(nd, maCongViec, maChiTietCV, maNguoiDung, isGiaoViec, apiClientDAO, tdg);
             modal.ShowDialog();
 

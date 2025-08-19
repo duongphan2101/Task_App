@@ -63,9 +63,9 @@ INSERT INTO NguoiDung (hoTen, email, matKhau, maPhongBan, maDonVi, maChucVu, laL
 --('E002', 2);
 
 ---- Phản hồi công việc
---INSERT INTO PhanHoiCongViec (maCongViec, maNguoiDung, noiDung, loai) VALUES
---('CV001', 2, N'Công việc đang tiến triển tốt.', N'Feedback'),
---('CV001', 3, N'Yêu cầu thêm thông tin.', N'YeuCau');
+--INSERT INTO PhanHoiCongViec (maCongViec, maNguoiDung, noiDung, loai, ThoiGian) VALUES
+--('DV01PB01_1', 2, N'Công việc đang tiến triển tốt.', N'Feedback', GETDATE()),
+--('DV01PB01_1', 1, N'Yêu cầu thêm thông tin.', N'Feedback', GETDATE());
 
 ---- Quản lý mã công việc
 --INSERT INTO MaCongViecSequence (maDonVi, maPhongBan, stt) VALUES

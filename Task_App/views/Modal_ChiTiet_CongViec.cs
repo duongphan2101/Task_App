@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -94,10 +95,20 @@ namespace Task_App.views
             lstFeedback = resPhanHoiCongViec.PhanHoiCongViec;
 
             flow_FeedBack.Controls.Clear();
-            foreach (PhanHoiCongViec fb in lstFeedback)
+            renderedFeedbackIds.Clear();
+            //foreach (PhanHoiCongViec fb in lstFeedback)
+            //{
+            //    bool isMe = fb.NguoiDung.HoTen == nd.HoTen;
+            //    await AddFeedback(fb, isMe);
+            //    Console.WriteLine($"ID: {fb.MaPhanHoi}, Nội dung: {fb.NoiDung}");
+            //}
+
+            var seen = new HashSet<int>();
+            foreach (var fb in resPhanHoiCongViec.PhanHoiCongViec.OrderBy(f => f.ThoiGian))
             {
+                if (!seen.Add(fb.MaPhanHoi)) continue;
                 bool isMe = fb.NguoiDung.HoTen == nd.HoTen;
-                AddFeedback(fb, isMe);
+                await AddFeedback(fb, isMe);
             }
 
             HienThiDanhSachFile();
@@ -576,9 +587,15 @@ namespace Task_App.views
                 }
             }
         }
-
+        
+        private HashSet<int> renderedFeedbackIds = new HashSet<int>();
         private async Task AddFeedback(PhanHoiCongViec fb, bool isMe)
         {
+            if (flow_FeedBack.Controls.OfType<Guna2Panel>().Any(p => p.Tag != null && p.Tag.ToString() == fb.MaPhanHoi.ToString()))
+                return;
+
+            if (!renderedFeedbackIds.Add(fb.MaPhanHoi)) return;
+
             Guna2Panel feedbackPanel = new Guna2Panel
             {
                 Width = flow_FeedBack.ClientSize.Width - 40,
@@ -586,7 +603,8 @@ namespace Task_App.views
                 Margin = new Padding(5),
                 BorderRadius = 0,
                 FillColor = Color.Transparent,
-                BorderThickness = 0
+                BorderThickness = 0,
+                Tag = fb.MaPhanHoi
             };
 
             // Người gửi
@@ -620,20 +638,19 @@ namespace Task_App.views
                 int maTep = int.Parse(fb.NoiDung);
                 var res = await apiClientDAO.GetTepTinByAsync(maTep);
                 TepTin tep = res.TepTin;
+                if (tep == null)
+                {
+                    Console.WriteLine("Lỗi: " + res.Message);
+                    return;
+                }
+
                 string extension = Path.GetExtension(tep.TenTepGoc).ToLower();
-
-                // Chọn icon tương ứng
                 Image iconImage = Properties.Resources.icons8_document_48;
-                if (extension == ".pdf")
-                    iconImage = Properties.Resources.pdf_icon;
-                else if (extension == ".doc" || extension == ".docx")
-                    iconImage = Properties.Resources.word_icon;
-                else if (extension == ".xls" || extension == ".xlsx")
-                    iconImage = Properties.Resources.excel_icon;
-                else if (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".bmp" || extension == ".gif")
-                    iconImage = Properties.Resources.image_icon;
+                if (extension == ".pdf") iconImage = Properties.Resources.pdf_icon;
+                else if (extension == ".doc" || extension == ".docx") iconImage = Properties.Resources.word_icon;
+                else if (extension == ".xls" || extension == ".xlsx") iconImage = Properties.Resources.excel_icon;
+                else if (".jpg.jpeg.png.bmp.gif".Contains(extension)) iconImage = Properties.Resources.image_icon;
 
-                // PictureBox cho icon
                 PictureBox icon = new PictureBox
                 {
                     Image = iconImage,
@@ -642,7 +659,6 @@ namespace Task_App.views
                     Margin = new Padding(0, 2, 5, 0)
                 };
 
-                // LinkLabel cho tên tệp
                 LinkLabel link = new LinkLabel
                 {
                     Text = tep.TenTepGoc,
@@ -652,20 +668,12 @@ namespace Task_App.views
                     Font = new Font("Segoe UI", 10, FontStyle.Underline),
                     Margin = new Padding(0, 5, 0, 0)
                 };
-
                 link.Click += (s, e) =>
                 {
-                    try
-                    {
-                        System.Diagnostics.Process.Start(tep.DuongDan);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Không thể mở tệp: " + ex.Message);
-                    }
+                    try { System.Diagnostics.Process.Start(tep.DuongDan); }
+                    catch (Exception ex) { MessageBox.Show("Không thể mở tệp: " + ex.Message); }
                 };
 
-                // Panel xếp ngang icon và link
                 FlowLayoutPanel filePanel = new FlowLayoutPanel
                 {
                     AutoSize = true,
@@ -675,16 +683,13 @@ namespace Task_App.views
                     Padding = new Padding(0),
                     BackColor = Color.Transparent
                 };
-
                 filePanel.Controls.Add(icon);
                 filePanel.Controls.Add(link);
 
                 contentControl = filePanel;
             }
-
             else
             {
-                // Nếu loại không xác định
                 contentControl = new Label
                 {
                     Text = "[Không xác định loại phản hồi]",
@@ -692,7 +697,6 @@ namespace Task_App.views
                 };
             }
 
-            // Nội dung panel
             Guna2Panel innerPanel = new Guna2Panel
             {
                 AutoSize = true,
@@ -718,119 +722,101 @@ namespace Task_App.views
                 Padding = new Padding(0),
                 FlowDirection = isMe ? FlowDirection.RightToLeft : FlowDirection.LeftToRight
             };
-
             container.Controls.Add(innerPanel);
             feedbackPanel.Controls.Add(container);
-            flow_FeedBack.Controls.Add(feedbackPanel);
 
+            flow_FeedBack.Controls.Add(feedbackPanel);
             flow_FeedBack.ScrollControlIntoView(feedbackPanel);
         }
 
-        private void btn_Send_Click(object sender, EventArgs e)
+        private async void btn_Send_Click(object sender, EventArgs e)
         {
-            //string mess = txtMessage.Text;
+            string mess = txtMessage.Text;
 
-            //CongViec cv = tcpClientDAO.getCongViecById(maCongViec);
-            //NguoiDung nd = tcpClientDAO.GetNguoiDung(maNguoiDung);
+            var resChiTiet = await apiClientDAO.GetChiTietConViec(maChiTietCV);
+            CongViec cv = resChiTiet.Data.CongViec;
+            NguoiDung ndx = nd;
 
-            //string targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
-            //Directory.CreateDirectory(targetFolder);
+            // Nếu có file đính kèm
+            if (lstTepDaChon.Count > 0)
+            {
+                foreach (TepTin t in lstTepDaChon)
+                {
+                    // Gửi file trực tiếp lên BE
+                    var resUpload = await apiClientDAO.UploadFile(t.DuongDan, maCongViec.ToString());
+                    if (resUpload.Success)
+                    {
+                        TepTin tepDaTao = resUpload.Data;
+                        Console.WriteLine("Upload thành công: " + tepDaTao.TenTep);
 
-            //if (lstTepDaChon.Count > 0)
-            //{
-            //    string zipPath = ZipFiles(lstTepDaChon, maCongViec.ToString());
+                        // Tạo phản hồi gắn kèm file
+                        PhanHoiCongViec phcv = new PhanHoiCongViec
+                        {
+                            MaCongViec = maCongViec,
+                            CongViec = cv,
+                            MaNguoiDung = maNguoiDung,
+                            NguoiDung = nd,
+                            NoiDung = tepDaTao.MaTep.ToString(),
+                            ThoiGian = DateTime.Now,
+                            Loai = "Attach"
+                        };
 
-            //    SendFileToServer(zipPath);
+                        await apiClientDAO.CreatePhanHoiCongViec(phcv);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Upload thất bại: " + resUpload.Message);
+                    }
+                }
+            }
 
-            //    foreach (TepTin t in lstTepDaChon)
-            //    {
-            //        string fileName = Path.GetFileName(t.DuongDan);
-            //        string extension = Path.GetExtension(fileName);
+            // Nếu có text feedback
+            if (!string.IsNullOrWhiteSpace(mess))
+            {
+                PhanHoiCongViec phcv = new PhanHoiCongViec
+                {
+                    MaCongViec = maCongViec,
+                    CongViec = cv,
+                    MaNguoiDung = maNguoiDung,
+                    NguoiDung = nd,
+                    NoiDung = mess,
+                    ThoiGian = DateTime.Now,
+                    Loai = "Feedback"
+                };
 
-            //        // Tạo tên mới duy nhất
-            //        string timePart = DateTime.Now.ToString("yyyyMMddHHmmss");
-            //        string randomPart = Guid.NewGuid().ToString("N").Substring(0, 6);
-            //        string newFileName = $"{maCongViec}_{timePart}_{randomPart}{extension}";
+                await apiClientDAO.CreatePhanHoiCongViec(phcv);
+            }
 
-            //        string destPath = Path.Combine(targetFolder, newFileName);
-            //        File.Copy(t.DuongDan, destPath, true);
+            // Gửi thông báo cho người liên quan
+            var resListNLQ = await apiClientDAO.GetNguoiLienQuanCongViecAsync(maCongViec);
+            var lstLienQuanCongViec = resListNLQ.Data;
+            var nguoiNhanThongBao = new HashSet<int> { cv.NguoiGiao, maNguoiDung };
 
-            //        t.DuongDan = destPath;
-            //        t.TenTep = newFileName;
-            //        t.TenTepGoc = fileName;
+            foreach (var nlq in lstLienQuanCongViec)
+                nguoiNhanThongBao.Add(nlq.maNguoiDung);
 
-            //        int maTep = tcpClientDAO.CreateTepTin(t);
-            //        if (maTep > 0)
-            //        {
-            //            t.MaTep = maTep;
-            //            Console.WriteLine("Tạo Tệp PhanHoi Thành Công!");
-            //        }
-            //        else
-            //        {
-            //            Console.WriteLine("Tạo Tệp PhanHoi Thất Bại");
-            //        }
+            foreach (int maNguoiNhan in nguoiNhanThongBao)
+            {
+                if (maNguoiNhan == maNguoiDung) continue;
 
-            //        PhanHoiCongViec phcv = new PhanHoiCongViec
-            //        {
-            //            MaCongViec = maCongViec,
-            //            CongViec = cv,
-            //            MaNguoiDung = maNguoiDung,
-            //            NguoiDung = nd,
-            //            NoiDung = t.MaTep.ToString(),
-            //            ThoiGian = DateTime.Now,
-            //            Loai = "Attach"
-            //        };
+                ThongBaoNguoiDung tb = new ThongBaoNguoiDung
+                {
+                    MaChiTietCV = maChiTietCV,
+                    MaNguoiDung = maNguoiNhan,
+                    NoiDung = "Có phản hồi công việc: " + ctcv.TieuDe,
+                    TrangThai = 0,
+                    NgayThongBao = DateTime.Now,
+                    ChiTietCongViec = ctcv,
+                    NguoiDung = nd
+                };
 
-            //        tcpClientDAO.createPhanHoiCongViec(phcv);
-            //    }
-            //}
+                await apiClientDAO.CreateThongBao(tb);
+            }
 
-            //if (!string.IsNullOrWhiteSpace(mess))
-            //{
-            //    PhanHoiCongViec phcv = new PhanHoiCongViec
-            //    {
-            //        MaCongViec = maCongViec,
-            //        CongViec = cv,
-            //        MaNguoiDung = maNguoiDung,
-            //        NguoiDung = nd,
-            //        NoiDung = mess,
-            //        ThoiGian = DateTime.Now,
-            //        Loai = "Feedback"
-            //    };
-
-            //    tcpClientDAO.createPhanHoiCongViec(phcv);
-            //}
-
-            //var lstLienQuanCongViec = tcpClientDAO.GetListNguoiLienQuanByIdCongViec(maCongViec);
-            //var nguoiNhanThongBao = new HashSet<int> { cv.NguoiGiao, maNguoiDung };
-
-            //foreach (var nlq in lstLienQuanCongViec)
-            //    nguoiNhanThongBao.Add(nlq.MaNguoiDung);
-
-            //foreach (int maNguoiNhan in nguoiNhanThongBao)
-            //{
-            //    if (maNguoiNhan == maNguoiDung)
-            //        continue;
-
-            //    ThongBaoNguoiDung tb = new ThongBaoNguoiDung
-            //    {
-            //        MaChiTietCV = maChiTietCV,
-            //        MaNguoiDung = maNguoiNhan,
-            //        NoiDung = "Có phản hồi công việc: " + ctcv.TieuDe,
-            //        TrangThai = 0,
-            //        NgayThongBao = DateTime.Now,
-            //        ChiTietCongViec = ctcv,
-            //        NguoiDung = nd
-            //    };
-
-            //    tcpClientDAO.CreateThongBao(tb);
-            //}
-
-            //lstTepDaChon.Clear();
-            //loadData();
-
-            //txtMessage.Text = "";
-
+            lstTepDaChon.Clear();
+            HienThiDanhSachFile2();
+            loadData();
+            txtMessage.Text = "";
         }
 
         private void btnAddFile_Click(object sender, EventArgs e)
@@ -971,62 +957,6 @@ namespace Task_App.views
             return zipPath;
         }
 
-        void SendFileToServer(string zipFilePath)
-        {
-            try
-            {
-                if (!File.Exists(zipFilePath))
-                {
-                    Console.WriteLine("File không tồn tại.");
-                    return;
-                }
-
-                string fileName = Path.GetFileName(zipFilePath);
-                byte[] fileBytes = File.ReadAllBytes(zipFilePath);
-                int fileSize = fileBytes.Length;
-
-                using (TcpClient client = new TcpClient("192.168.1.3", 5000))
-                using (NetworkStream stream = client.GetStream())
-                {
-                    // Tạo gói tin JSON metadata
-                    var metadata = new
-                    {
-                        Command = "uploadfile",
-                        Data = new
-                        {
-                            FileName = fileName,
-                            FileSize = fileSize
-                        }
-                    };
-
-                    string json = JsonConvert.SerializeObject(metadata);
-                    byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
-                    byte[] jsonLength = BitConverter.GetBytes(jsonBytes.Length);
-
-                    // Gửi độ dài + nội dung JSON
-                    stream.Write(jsonLength, 0, 4);
-                    stream.Write(jsonBytes, 0, jsonBytes.Length);
-
-                    // Gửi nội dung file nhị phân
-                    stream.Write(fileBytes, 0, fileBytes.Length);
-
-                    // Nhận phản hồi từ server
-                    byte[] replyLengthBuffer = new byte[4];
-                    stream.Read(replyLengthBuffer, 0, 4);
-                    int replyLength = BitConverter.ToInt32(replyLengthBuffer, 0);
-
-                    byte[] replyBuffer = new byte[replyLength];
-                    stream.Read(replyBuffer, 0, replyLength);
-                    string reply = Encoding.UTF8.GetString(replyBuffer);
-
-                    Console.WriteLine("Phản hồi từ server: " + reply);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Lỗi khi gửi file: " + ex.Message);
-            }
-        }
 
 
 

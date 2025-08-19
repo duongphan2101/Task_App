@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -120,6 +121,7 @@ namespace Task_App.TaskApp_Dao
             }
             return null;
         }
+        
         public async Task<NguoiLienQuanCongViecResponse> GetNguoiLienQuanCongViecAsync(string maCongViec)
         {
             try
@@ -212,6 +214,45 @@ namespace Task_App.TaskApp_Dao
                 {
                     Success = false,
                     Message = "Lỗi khi cập nhật trạng thái email: " + ex.Message
+                };
+            }
+        }
+        
+        public async Task<ApiResponse> UpdateTrangThaiThongBao111(int tb)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(tb),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                    var response = await client.PostAsync("api/task/update-trang-thai-thong-bao-111", jsonContent);
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    }
+
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"Cập nhật trang thai thong bao thất bại ({(int)response.StatusCode}): {result}"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi cập nhật trạng thái thongBao: " + ex.Message
                 };
             }
         }
@@ -632,7 +673,7 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
-        public async Task<Object_Response<List<NguoiDungDTO>>> GetUserListByDonViPhongBan(string maDonVi, string maPhongBan, string email)
+        public async Task<Object_Response<List<string>>> GetUserListByDonViPhongBan(string maDonVi, string maPhongBan, string email)
         {
             try
             {
@@ -655,19 +696,11 @@ namespace Task_App.TaskApp_Dao
                 {
                     string result = await response.Content.ReadAsStringAsync();
 
-                    var dataObj = JsonConvert.DeserializeObject<Object_Response<List<NguoiDungDTO>>>(result);
+                    var dataObj = JsonConvert.DeserializeObject<Object_Response<List<string>>>(result);
 
-                    if (dataObj?.Data != null)
+                    return dataObj ?? new Object_Response<List<string>>
                     {
-                        foreach (var item in dataObj.Data)
-                        {
-                            Console.WriteLine("Email nhận được: " + (item?.Email ?? "(null)"));
-                        }
-                    }
-
-                    return dataObj ?? new Object_Response<List<NguoiDungDTO>>
-                    {
-                        Data = new List<NguoiDungDTO>(),
+                        Data = new List<string>(),
                         Message = "No data",
                         Success = false
                     };
@@ -682,14 +715,13 @@ namespace Task_App.TaskApp_Dao
                 Console.WriteLine("Lỗi khi lấy UserList-DonViPhongBan: " + ex.Message);
             }
 
-            return new Object_Response<List<NguoiDungDTO>>
+            return new Object_Response<List<string>>
             {
-                Data = new List<NguoiDungDTO>(),
+                Data = new List<string>(),
                 Message = "Error",
                 Success = false
             };
         }
-
 
         public async Task<Object_Response<List<NguoiDung>>> getNguoiDungByEmails(List<string> emails)
         {
@@ -762,6 +794,107 @@ namespace Task_App.TaskApp_Dao
                 };
             }
         }
+
+        public async Task<ApiResponse> getIsGiaoViec(int maNguoiDung, int maChiTietCV)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    MaChiTietCV = maChiTietCV
+                };
+
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                    var response = await client.PostAsync("api/task/get-is-giao-viec", jsonContent);
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    }
+
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"getIsGiaoViec thất bại ({(int)response.StatusCode}): {result}"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Loi khi getIsGiaoViec: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<ThongBaoNguoiDung>>> GetTop8ThongBaoById(int id)
+        {
+            try
+            {
+                var response = await client.GetAsync($"api/task/get-top-8-thong-bao/{id}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Object_Response<List<ThongBaoNguoiDung>>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy Top8ThongBao: " + ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<Object_Response<TepTin>> UploadFile(string filePath, string maCongViec)
+        {
+            try
+            {
+                using (var content = new MultipartFormDataContent())
+                {
+                    // gửi thêm text field
+                    content.Add(new StringContent(maCongViec), "maCongViec");
+
+                    // mở file stream
+                    using (var fileStream = File.OpenRead(filePath))
+                    {
+                        var streamContent = new StreamContent(fileStream);
+                        streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+
+                        content.Add(streamContent, "file", Path.GetFileName(filePath));
+
+                        var response = await client.PostAsync("api/task/upload-file", content);
+
+                        string result = await response.Content.ReadAsStringAsync();
+                        Console.WriteLine("Server response: " + result);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            return JsonConvert.DeserializeObject<Object_Response<TepTin>>(result);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi upload file: " + ex.Message);
+            }
+
+            return null;
+        }
+
 
     }
 }

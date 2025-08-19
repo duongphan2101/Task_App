@@ -154,8 +154,8 @@ namespace APIServerApp.controllers
 
             // Sort theo bool
             query = sortByDate
-                ? query.OrderByDescending(cv => cv.ChiTiet.FirstOrDefault().TrangThai)
-                : query.OrderByDescending(cv => cv.NgayGiao);
+                ? query.OrderByDescending(cv => cv.NgayGiao)
+                : query.OrderByDescending(cv => cv.ChiTiet.FirstOrDefault().TrangThai);
 
             var result = await query.ToListAsync();
 
@@ -260,7 +260,6 @@ namespace APIServerApp.controllers
             });
         }
 
-
         [HttpGet("nguoi-lien-quan/{maCongViec}")]
         public async Task<IActionResult> GetNguoiLienQuanCongViec(string maCongViec)
         {
@@ -350,6 +349,32 @@ namespace APIServerApp.controllers
             });
         }
 
+        [HttpPost("update-trang-thai-thong-bao-111")]
+        public async Task<IActionResult> UpdateTrangThaiThongBao111([FromBody] int tb)
+        {
+            var thongBao = await _context.ThongBaoNguoiDungs
+                .FirstOrDefaultAsync(x => x.MaThongBao == tb);
+
+            if (thongBao == null)
+            {
+                return NotFound(new ApiResponseDto
+                {
+                    Success = false,
+                    Message = "Không tìm thấy ThongBao"
+                });
+            }
+
+            thongBao.TrangThai = 1;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponseDto
+            {
+                Success = true,
+                Message = "Cập nhật trạng thái ThongBao thành công"
+            });
+        }
+
         [HttpGet("tep/{maTepTin}")]
         public async Task<IActionResult> GetTepTin(int maTepTin)
         {
@@ -398,7 +423,16 @@ namespace APIServerApp.controllers
             var phanHoiList = await _context.PhanHoiCongViecs
                 .Where(p => p.MaCongViec == maCongViec)
                 .Include(p => p.NguoiDung)
+                .AsNoTracking()
                 .ToListAsync();
+
+            // Loại bỏ duplicate do EF join
+            phanHoiList = phanHoiList
+                .GroupBy(p => p.MaPhanHoi)
+                .Select(g => g.First())
+                .OrderBy(f => f.ThoiGian)
+                .ToList();
+
 
             return Ok(new FeedBackResponse
             {
@@ -412,28 +446,17 @@ namespace APIServerApp.controllers
         public async Task<IActionResult> GetNguoiDungCungDonViPhongBanAsync([FromBody] DonViPhongBanRequest request)
         {
             var nguoiDungs = await _context.NguoiDungs
-                .Where(nd => nd.MaDonVi == request.MaDonVi
-                          && nd.MaPhongBan == request.MaPhongBan
-                          && nd.Email != request.Email)
-                .ToListAsync();
+            .Where(nd => nd.MaDonVi == request.MaDonVi
+                    && nd.MaPhongBan == request.MaPhongBan
+                    && nd.Email != request.Email)
+            .Select(nd => nd.Email) // chỉ lấy email
+            .ToListAsync();
 
-            var rel = nguoiDungs.Select(nd => new NguoiDungDTO
-            {
-                MaNguoiDung = nd.MaNguoiDung,
-                HoTen = nd.HoTen,
-                Email = nd.Email
-            }).ToList();
-
-            foreach (var i in rel)
-            {
-                Console.WriteLine("Email lay duoc " + i.Email);
-            }
-
-            return Ok(new GetNguoiDungCungDonViPhongBanResponse
+            return Ok(new Object_Response<List<string>>
             {
                 Success = true,
-                Message = "Lấy danh sách người dùng thành công",
-                NguoiDungs = rel ?? new List<NguoiDungDTO>()
+                Message = "Lấy danh sách email thành công",
+                Data = nguoiDungs
             });
         }
 
@@ -947,6 +970,84 @@ namespace APIServerApp.controllers
             }
             return name;
         }
+
+        [HttpGet("get-top-8-thong-bao/{id}")]
+        public async Task<IActionResult> GetTop8ThongBaoUserId(int id)
+        {
+            Console.WriteLine("Id nguoiDung " + id);
+            var query = await _context.ThongBaoNguoiDungs
+                .Where(cv => cv.MaNguoiDung == id)
+                .OrderByDescending(cv => cv.NgayThongBao)
+                .Take(8)
+                .ToListAsync();
+
+            var response = new Object_Response<List<ThongBaoNguoiDung>>
+            {
+                Success = query.Any(),
+                Message = query.Any()
+                    ? "Lấy danh sách top 8 thông báo thành công"
+                    : "Không tìm thấy thông báo nào",
+                Data = query
+            };
+            return Ok(response);
+        }
+
+
+        [HttpPost("get-is-giao-viec")]
+        public async Task<IActionResult> GetIsGiaoViec([FromBody] IsGiaoViecRequest t)
+        {
+            var isGiaoViec = await _context.ChiTietCongViecs
+                .AnyAsync(x => x.MaChiTietCV == t.MaChiTietCV
+                               && x.CongViec.NguoiGiao == t.MaNguoiDung);
+
+            return Ok(new ApiResponseDto
+            {
+                Success = isGiaoViec,
+                Message = isGiaoViec
+                    ? "Người dùng là người giao việc"
+                    : "Người dùng không phải là người giao việc"
+            });
+        }
+
+        [HttpPost("upload-file")]
+        public async Task<IActionResult> UploadFile([FromForm] string maCongViec, [FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest(new { success = false, message = "File rỗng" });
+
+            string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
+            Directory.CreateDirectory(folder);
+
+            // Đổi tên file (theo maCongViec + timestamp + random GUID)
+            string extension = Path.GetExtension(file.FileName);
+            string newFileName = $"{maCongViec}_{DateTime.Now:yyyyMMddHHmmss}_{Guid.NewGuid().ToString("N").Substring(0, 6)}{extension}";
+            string savePath = Path.Combine(folder, newFileName);
+
+            using (var stream = new FileStream(savePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Tạo entity TepTin
+            var tep = new TepTin
+            {
+                TenTep = newFileName,
+                TenTepGoc = file.FileName,
+                DuongDan = savePath
+            };
+
+            _context.TepTins.Add(tep);
+            await _context.SaveChangesAsync();
+
+            return Ok(new Object_Response<TepTin>
+            {
+                Success = true,
+                Message = "Upload và lưu thành công",
+                Data = tep
+            });
+        }
+
+
 
     }
 }

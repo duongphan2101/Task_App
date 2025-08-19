@@ -10,13 +10,14 @@ namespace Task_App.views
     public partial class Dashboard : UserControl
     {
         private TcpClientDAO TcpClientDAO;
+        private ApiClientDAO apiClientDAO;
         private int maNguoiDung;
         private DateTime start;
         private DateTime end;
-        public Dashboard(TcpClientDAO tcpClientDAO, int maNguoiDung)
+        public Dashboard(ApiClientDAO apiClientDAO, int maNguoiDung)
         {
             InitializeComponent();
-            this.TcpClientDAO = tcpClientDAO;
+            this.apiClientDAO = apiClientDAO;
             this.maNguoiDung = maNguoiDung;
 
             start = DateTime.Now.AddDays(-30);

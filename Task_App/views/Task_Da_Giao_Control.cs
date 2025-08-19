@@ -20,14 +20,10 @@ namespace Task_App.views
         private readonly int maNguoiDung;
         private bool locTheoNgay = true;
         private ApiClientDAO apiClientDAO;
-        private Task<ViecDaGiaoResponse> DaGiaoResponse;
-        private Task<ViecDuocGiaoResponse> DuocGiaoResponse;
 
-        public Create_Task_Control(NguoiDung nd, Task<ViecDaGiaoResponse> daGiaoResponse, Task<ViecDuocGiaoResponse> duocGiaoResponse, ApiClientDAO apiClientDAO)
+        public Create_Task_Control(NguoiDung nd, ApiClientDAO apiClientDAO)
         {
             this.nd = nd;
-            this.DaGiaoResponse = daGiaoResponse;
-            this.DuocGiaoResponse = duocGiaoResponse;
             maNguoiDung =  nd.MaNguoiDung;
 
             //CongViecService = new CongViecService(tcpClientDAO);
@@ -43,7 +39,7 @@ namespace Task_App.views
 
         public async Task LoadData()
         {
-            var response = await DaGiaoResponse;
+            var response = await apiClientDAO.GetViecDaGiaoAsync(nd.MaNguoiDung, locTheoNgay);
 
             //if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
             //{
@@ -163,7 +159,7 @@ namespace Task_App.views
             var maCTCV = (row.Cells["maChiTietCV"].Value as int?) ?? -1;
             
             buttonCell.Tag = maCongViec;
-            Task_Duoc_Giao_Control tdgiao = new Task_Duoc_Giao_Control(nd, DuocGiaoResponse, apiClientDAO);
+            Task_Duoc_Giao_Control tdgiao = new Task_Duoc_Giao_Control(nd, apiClientDAO);
             var modal = new Modal_ChiTiet_CongViec(nd ,maCongViec, maCTCV, maNguoiDung, true, apiClientDAO, tdgiao);
             modal.FormClosed += (s, args) => { buttonCell.Tag = null; };
             modal.Show();

@@ -11,7 +11,6 @@ namespace Task_App
         /// The main entry point for the application.
         /// </summary>
         public static TcpClientDAO TcpDao;
-        [STAThread]
         //static void Main()
         //{
 
@@ -30,16 +29,16 @@ namespace Task_App
         //    Application.Run(new FormLogin(TcpDao));
         //}
 
-        static async Task Main()
+        [STAThread]
+        static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
             var apiDao = new ApiClientDAO();
-
-            // Không cần kết nối TCP nữa
             Application.Run(new FormLogin(apiDao));
         }
+
 
 
     }

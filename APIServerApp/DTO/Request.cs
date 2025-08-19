@@ -25,7 +25,14 @@ namespace APIServerApp.DTO
         public List<NguoiNhanEmail>? DanhSachNguoiNhanEmail { get; set; }
         public List<TepDinhKemEmail>? DanhSachTepDinhKem { get; set; }
         public NguoiDung? CurrentUser { get; set; }
-        
+
+    }
+
+    public class IsGiaoViecRequest
+    {
+        public int? MaNguoiDung { get; set; }
+        public int? MaChiTietCV { get; set; }
+
     }
 
 

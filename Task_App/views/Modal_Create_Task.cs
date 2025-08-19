@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using Task_App.DTO;
 using Task_App.Model;
 using Task_App.TaskApp_Dao;
-using Task_App.DTO;
-using System.Threading.Tasks;
 
 namespace Task_App.views
 {
@@ -48,31 +49,16 @@ namespace Task_App.views
             cbMucDo.Items.Add("Khẩn Cấp");
             cbMucDo.SelectedIndex = 0;
 
-            GetE();
-
             txtTieuDe.Focus();
-        }
-
-        private async void GetE()
-        {
-            var res = await apiClientDAO.GetUserListByDonViPhongBan(nd.MaDonVi, nd.MaPhongBan, nd.Email);
-            List<NguoiDungDTO> lst = res.Data ?? new List<NguoiDungDTO>();
-            foreach (NguoiDungDTO nd in lst)
-            {
-                Console.WriteLine("Email " + nd.Email);
-            }
         }
 
         private async Task<List<string>> emailSuggestions()
         {
             List<string> lstStr = new List<string>();
             var res = await apiClientDAO.GetUserListByDonViPhongBan(nd.MaDonVi, nd.MaPhongBan, nd.Email);
-            List<NguoiDungDTO> lst = res.Data ?? new List<NguoiDungDTO>();
-            foreach (var nd in lst)
-            {
-                lstStr.Add(nd.Email);
-                Console.WriteLine("Email " + nd.Email);
-            }
+            lstStr = res.Data;
+            Console.WriteLine("Raw JSON: " + JsonConvert.SerializeObject(res));
+
             return lstStr;
         }
 
