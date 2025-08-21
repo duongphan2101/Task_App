@@ -20,11 +20,11 @@ namespace Task_App.views
             AutoReset = true
         };
 
-
         private readonly NguoiDung currentUser;
         private readonly int maNguoiDung;
 
         private ApiClientDAO apiClientDAO;
+        private Dashboard_data dashboard_data;
 
         private readonly Color defaultColor = Color.FromArgb(0, 0, 0, 0);
         private readonly Color hoverColor = Color.FromArgb(64, 64, 64);
@@ -49,13 +49,57 @@ namespace Task_App.views
             maNguoiDung = nd.MaNguoiDung;
             SetUserInfo(nd);
             this.apiClientDAO = apiClientDAO;
-
-            btn_Task_DaGiao.Tag = true;
-            btn_Task_DaGiao.BackColor = selectedColor;
+            btnDashboard.Tag = true;
+            btnDashboard.BackColor = selectedColor;
 
             LoadNotifications();
 
-            LoadContent(new Create_Task_Control(nd, apiClientDAO));
+            LoadContent(new Dashboard(apiClientDAO, maNguoiDung));
+        }
+
+        private async Task SetDataDashboard()
+        {
+            var resTaskTrongTuan = await apiClientDAO.SoTaskTrongTuan(nd.MaNguoiDung);
+            var resTaskTrongThang = await apiClientDAO.SoTaskTrongThang(nd.MaNguoiDung);
+            var resTaskTrongNam = await apiClientDAO.SoTaskTrongNam(nd.MaNguoiDung);
+
+            var resTaskDaGiaoTrongTuan = await apiClientDAO.SoTaskDaGiaoTrongTuan(nd.MaNguoiDung);
+            var resTaskDaGiaoTrongThang = await apiClientDAO.SoTaskDaGiaoTrongThang(nd.MaNguoiDung);
+            var resTaskDaGiaoTrongNam = await apiClientDAO.SoTaskDaGiaoTrongNam(nd.MaNguoiDung);
+
+            DateTime start = DateTime.Now.AddDays(30);
+            DateTime end = DateTime.Now;
+
+            var resTaskChuaXuLi = await apiClientDAO.SoTaskChuaXuLiByFilter(nd.MaNguoiDung, start, end);
+            var resTaskDangXuLi = await apiClientDAO.SoTaskDangXuLiByFilter(nd.MaNguoiDung, start, end);
+            var resTaskHoanThanh = await apiClientDAO.SoTaskHoanThanhByFilter(nd.MaNguoiDung, start, end);
+            var resTaskTre = await apiClientDAO.SoTaskTreByFilter(nd.MaNguoiDung, start, end);
+
+            var resTaskDaGiaoChuaXuLi = await apiClientDAO.SoTaskDaGiaoChuaXuLiByFilter(nd.MaNguoiDung, start, end);
+            var resTaskDaGiaoDangXuLi = await apiClientDAO.SoTaskDaGiaoDangXuLiByFilter(nd.MaNguoiDung, start, end);
+            var resTaskDaGiaoHoanThanh = await apiClientDAO.SoTaskDaGiaoHoanThanhByFilter(nd.MaNguoiDung, start, end);
+            var resTaskDaGiaoTre = await apiClientDAO.SoTaskDaGiaoTreByFilter(nd.MaNguoiDung, start, end);
+
+            dashboard_data = new Dashboard_data
+            {
+                SoTaskTrongTuan = resTaskTrongTuan.Data,
+                SoTaskTrongThang = resTaskTrongThang.Data,
+                SoTaskTrongNam = resTaskTrongNam.Data,
+                SoTaskDaGiaoTrongTuan = resTaskDaGiaoTrongTuan.Data,
+                SoTaskDaGiaoTrongThang = resTaskDaGiaoTrongThang.Data,
+                SoTaskDaGiaoTrongNam = resTaskDaGiaoTrongNam.Data,
+
+                SoTaskChuaXuLiFillter = resTaskChuaXuLi.Data,
+                SoTaskDangXuLiFillter = resTaskDangXuLi.Data,
+                SoTaskHoanThanhFillter = resTaskHoanThanh.Data,
+                SoTaskTreFillter = resTaskTre.Data,
+
+                SoTaskDaGiaoChuaXuLiFillter = resTaskDaGiaoChuaXuLi.Data,
+                SoTaskDaGiaoDangXuLiFillter = resTaskDaGiaoDangXuLi.Data,
+                SoTaskDaGiaoHoanThanhFillter = resTaskDaGiaoHoanThanh.Data,
+                SoTaskDaGiaoTreFillter = resTaskDaGiaoTre.Data,
+            };
+
         }
 
         private void SetUserInfo(NguoiDung nd)
@@ -117,7 +161,6 @@ namespace Task_App.views
             if (clickedBtn.Name == btnDashboard.Name)
                 //LoadContent(new DashboardControlViewer(tcpClientDAO, maNguoiDung));
                 LoadContent(new Dashboard(apiClientDAO, maNguoiDung));
-
             if (clickedBtn.Name == btn_Task_DaGiao.Name)
                 LoadContent(new Create_Task_Control(nd, apiClientDAO));
 

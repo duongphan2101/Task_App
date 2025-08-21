@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Task_App.TaskApp_Dao;
+using Task_App.views;
 
 namespace Task_App
 {
@@ -37,6 +38,27 @@ namespace Task_App
 
             var apiDao = new ApiClientDAO();
             Application.Run(new FormLogin(apiDao));
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+
+            //var form = new Form { Width = 800, Height = 600 };
+
+            //// Thêm một Panel để hỗ trợ scroll
+            //var panel = new Panel
+            //{
+            //    Dock = DockStyle.Fill,
+            //    AutoScroll = true
+            //};
+
+            //var timeline = new TimelineControl
+            //{
+            //    Dock = DockStyle.Fill,
+            //};
+            //panel.Controls.Add(timeline);
+            //form.Controls.Add(panel);
+
+            //Application.Run(form);
+
         }
 
 

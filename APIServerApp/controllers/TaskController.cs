@@ -992,7 +992,6 @@ namespace APIServerApp.controllers
             return Ok(response);
         }
 
-
         [HttpPost("get-is-giao-viec")]
         public async Task<IActionResult> GetIsGiaoViec([FromBody] IsGiaoViecRequest t)
         {
@@ -1047,7 +1046,300 @@ namespace APIServerApp.controllers
             });
         }
 
+        [HttpGet("so-task-trong-tuan/{manguoidung}")]
+        public async Task<IActionResult> SoTaskTrongTuan(int manguoidung)
+        {
+            var today = DateTime.Now;
+            var thirtyDaysAgo = today.AddDays(-7);
 
+            var taskCount = await _context.CongViecs
+                .Where(ctcv =>
+                    ctcv.NgayGiao >= thirtyDaysAgo
+                    && ctcv.NgayGiao <= today
+                    && ctcv.NguoiLienQuanCongViecs.Any(nlq => nlq.VaiTro == "to" && nlq.MaNguoiDung == manguoidung))
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào trong tuần qua",
+                Data = taskCount
+            });
+        }
+
+        [HttpGet("so-task-trong-thang/{manguoidung}")]
+        public async Task<IActionResult> SoTaskTrongThang(int manguoidung)
+        {
+            var today = DateTime.Now;
+            var thirtyDaysAgo = today.AddMonths(-1);
+
+            var taskCount = await _context.CongViecs
+                .Where(ctcv =>
+                    ctcv.NgayGiao >= thirtyDaysAgo
+                    && ctcv.NgayGiao <= today
+                    && ctcv.NguoiLienQuanCongViecs.Any(nlq => nlq.VaiTro == "to" && nlq.MaNguoiDung == manguoidung))
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào trong 30 ngày qua",
+                Data = taskCount
+            });
+        }
+
+        [HttpGet("so-task-trong-nam/{manguoidung}")]
+        public async Task<IActionResult> SoTaskTrongNam(int manguoidung)
+        {
+            var today = DateTime.Now;
+            var thirtyDaysAgo = today.AddYears(-1);
+
+            var taskCount = await _context.CongViecs
+                .Where(ctcv =>
+                    ctcv.NgayGiao >= thirtyDaysAgo
+                    && ctcv.NgayGiao <= today
+                    && ctcv.NguoiLienQuanCongViecs.Any(nlq => nlq.VaiTro == "to" && nlq.MaNguoiDung == manguoidung))
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào trong năm qua",
+                Data = taskCount
+            });
+        }
+
+        [HttpGet("so-task-da-giao-trong-tuan/{manguoidung}")]
+        public async Task<IActionResult> SoTaskDaGiaoTrongTuan(int manguoidung)
+        {
+            var today = DateTime.Now;
+            var thirtyDaysAgo = today.AddDays(-7);
+
+            var taskCount = await _context.CongViecs
+                .Where(ctcv => ctcv.NguoiGiao == manguoidung
+                    && ctcv.NgayGiao >= thirtyDaysAgo
+                    && ctcv.NgayGiao <= today)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào trong tuần qua",
+                Data = taskCount
+            });
+        }
+
+        [HttpGet("so-task-da-giao-trong-thang/{manguoidung}")]
+        public async Task<IActionResult> SoTaskDaGiaoTrongThang(int manguoidung)
+        {
+            var today = DateTime.Now;
+            var thirtyDaysAgo = today.AddMonths(-1);
+
+            var taskCount = await _context.CongViecs
+                .Where(ctcv => ctcv.NguoiGiao == manguoidung
+                    && ctcv.NgayGiao >= thirtyDaysAgo
+                    && ctcv.NgayGiao <= today)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào trong 30 ngày qua",
+                Data = taskCount
+            });
+        }
+
+        [HttpGet("so-task-da-giao-trong-nam/{manguoidung}")]
+        public async Task<IActionResult> SoTaskDaGiaoTrongNam(int manguoidung)
+        {
+            var today = DateTime.Now;
+            var thirtyDaysAgo = today.AddYears(-1);
+
+            var taskCount = await _context.CongViecs
+                .Where(ctcv => ctcv.NguoiGiao == manguoidung
+                    && ctcv.NgayGiao >= thirtyDaysAgo
+                    && ctcv.NgayGiao <= today)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào trong 30 ngày qua",
+                Data = taskCount
+            });
+        }
+
+        [HttpPost("so-task-chua-xu-li-fillter")]
+        public async Task<IActionResult> SoTaskChuaXuLiFillter([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var taskCount = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiLienQuanCongViecs.Any(nlq => nlq.VaiTro == "to"
+                    && nlq.MaNguoiDung == request.MaNguoiDung)
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end
+                    && ctcv.TrangThai == 0)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào",
+                Data = taskCount
+            });
+        }
+
+        [HttpPost("so-task-dang-xu-li-fillter")]
+        public async Task<IActionResult> SoTaskDangXuLiFillter([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var taskCount = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiLienQuanCongViecs.Any(nlq => nlq.VaiTro == "to"
+                    && nlq.MaNguoiDung == request.MaNguoiDung)
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end
+                    && ctcv.TrangThai == 1)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào",
+                Data = taskCount
+            });
+        }
+
+        [HttpPost("so-task-hoan-thanh-fillter")]
+        public async Task<IActionResult> SoTaskHoanThanhFillter([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var taskCount = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiLienQuanCongViecs.Any(nlq => nlq.VaiTro == "to"
+                    && nlq.MaNguoiDung == request.MaNguoiDung)
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end
+                    && ctcv.TrangThai == 2)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào",
+                Data = taskCount
+            });
+        }
+
+        [HttpPost("so-task-tre-fillter")]
+        public async Task<IActionResult> SoTaskTreFillter([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var taskCount = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiLienQuanCongViecs.Any(nlq => nlq.VaiTro == "to"
+                    && nlq.MaNguoiDung == request.MaNguoiDung)
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end
+                    && ctcv.TrangThai == 3)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào",
+                Data = taskCount
+            });
+        }
+
+        [HttpPost("so-task-da-giao-chua-xu-li-fillter")]
+        public async Task<IActionResult> SoTaskDaGiaoChuaXuLiFillter([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var taskCount = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiGiao == request.MaNguoiDung
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end
+                    && ctcv.TrangThai == 0)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào",
+                Data = taskCount
+            });
+        }
+
+        [HttpPost("so-task-da-giao-dang-xu-li-fillter")]
+        public async Task<IActionResult> SoTaskDaGiaoDangXuLiFillter([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var taskCount = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiGiao == request.MaNguoiDung
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end
+                    && ctcv.TrangThai == 1)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào",
+                Data = taskCount
+            });
+        }
+
+        [HttpPost("so-task-da-giao-hoan-thanh-fillter")]
+        public async Task<IActionResult> SoTaskDaGiaoHoanThanhFillter([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var taskCount = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiGiao == request.MaNguoiDung
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end
+                    && ctcv.TrangThai == 2)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào",
+                Data = taskCount
+            });
+        }
+
+        [HttpPost("so-task-da-giao-tre-fillter")]
+        public async Task<IActionResult> SoTaskDaGiaoTreFillter([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var taskCount = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiGiao == request.MaNguoiDung
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end
+                    && ctcv.TrangThai == 3)
+                .CountAsync();
+
+            return Ok(new Object_Response<int>
+            {
+                Success = true,
+                Message = taskCount > 0 ? "Lấy số lượng task thành công" : "Không có task nào",
+                Data = taskCount
+            });
+        }
 
     }
 }

@@ -35,6 +35,14 @@ namespace APIServerApp.DTO
 
     }
 
+    public class DashboardRequest
+    {
+        public int? MaNguoiDung { get; set; }
+        public DateTime NgayBatDau { get; set; }
+        public DateTime NgayKetThuc { get; set; }
+
+    }
+
 
 
 }

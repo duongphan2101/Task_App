@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Task_App.Response;
 using Task_App.TaskApp_Dao;
 
 namespace Task_App.views
 {
     public partial class Dashboard : UserControl
     {
-        private TcpClientDAO TcpClientDAO;
         private ApiClientDAO apiClientDAO;
         private int maNguoiDung;
         private DateTime start;
         private DateTime end;
+        private Dashboard_data data;
+
         public Dashboard(ApiClientDAO apiClientDAO, int maNguoiDung)
         {
             InitializeComponent();
@@ -28,6 +32,8 @@ namespace Task_App.views
 
             startDate_dagiao.Value = start;
             endDate_dagiao.Value = end;
+
+            SetDataDashboard();
         }
 
         private void Dashboard_Load(object sender, EventArgs e)
@@ -35,30 +41,91 @@ namespace Task_App.views
             loadData();
         }
 
-        private void loadData()
+        private async Task SetDataDashboard()
         {
-            int soTaskTrongTuan = TcpClientDAO.SoTaskTrongTuan(maNguoiDung);
-            int soTaskTrongThang = TcpClientDAO.SoTaskTrongThang(maNguoiDung);
-            int soTaskTrongNam = TcpClientDAO.SoTaskTrongNam(maNguoiDung);
+            var resTaskTrongTuan = await apiClientDAO.SoTaskTrongTuan(maNguoiDung);
+            var resTaskTrongThang = await apiClientDAO.SoTaskTrongThang(maNguoiDung);
+            var resTaskTrongNam = await apiClientDAO.SoTaskTrongNam(maNguoiDung);
 
-            int soTaskDaGiaoTrongTuan = TcpClientDAO.SoTaskDaGiaoTrongTuan(maNguoiDung);
-            int soTaskDaGiaoTrongThang = TcpClientDAO.SoTaskDaGiaoTrongThang(maNguoiDung);
-            int soTaskDaGiaoTrongNam = TcpClientDAO.SoTaskDaGiaoTrongNam(maNguoiDung);
+            var resTaskDaGiaoTrongTuan = await apiClientDAO.SoTaskDaGiaoTrongTuan(maNguoiDung);
+            var resTaskDaGiaoTrongThang = await apiClientDAO.SoTaskDaGiaoTrongThang(maNguoiDung);
+            var resTaskDaGiaoTrongNam = await apiClientDAO.SoTaskDaGiaoTrongNam(maNguoiDung);
 
-            int soTaskcxl = TcpClientDAO.SoTaskChuaXuLiByFilter(maNguoiDung, start, end);
-            int soTaskdxl = TcpClientDAO.SoTaskDangXuLiByFilter(maNguoiDung, start, end);
-            int soTaskHoanThanh = TcpClientDAO.SoTaskDaHoanThanhByFilter(maNguoiDung, start, end);
-            int soTaskTreHan = TcpClientDAO.SoTaskTreHanByFilter(maNguoiDung, start, end);
+            var resTaskChuaXuLi = await apiClientDAO.SoTaskChuaXuLiByFilter(maNguoiDung, start, end);
+            var resTaskDangXuLi = await apiClientDAO.SoTaskDangXuLiByFilter(maNguoiDung, start, end);
+            var resTaskHoanThanh = await apiClientDAO.SoTaskHoanThanhByFilter(maNguoiDung, start, end);
+            var resTaskTre = await apiClientDAO.SoTaskTreByFilter(maNguoiDung, start, end);
 
-            int soTaskcxl_dagiao = TcpClientDAO.SoTaskDaGiaoChuaXuLiByFilter(maNguoiDung, start, end);
-            int soTaskdxl_dagiao = TcpClientDAO.SoTaskDaGiaoDangXuLiByFilter(maNguoiDung, start, end);
-            int soTaskHoanThanh_dagiao = TcpClientDAO.SoTaskDaGiaoHoanThanhByFilter(maNguoiDung, start, end);
-            int soTaskTreHan_dagiao = TcpClientDAO.SoTaskDaGiaoTreHanByFilter(maNguoiDung, start, end);
+            var resTaskDaGiaoChuaXuLi = await apiClientDAO.SoTaskDaGiaoChuaXuLiByFilter(maNguoiDung, start, end);
+            var resTaskDaGiaoDangXuLi = await apiClientDAO.SoTaskDaGiaoDangXuLiByFilter(maNguoiDung, start, end);
+            var resTaskDaGiaoHoanThanh = await apiClientDAO.SoTaskDaGiaoHoanThanhByFilter(maNguoiDung, start, end);
+            var resTaskDaGiaoTre = await apiClientDAO.SoTaskDaGiaoTreByFilter(maNguoiDung, start, end);
+
+            data = new Dashboard_data
+            {
+                SoTaskTrongTuan = resTaskTrongTuan.Data,
+                SoTaskTrongThang = resTaskTrongThang.Data,
+                SoTaskTrongNam = resTaskTrongNam.Data,
+                SoTaskDaGiaoTrongTuan = resTaskDaGiaoTrongTuan.Data,
+                SoTaskDaGiaoTrongThang = resTaskDaGiaoTrongThang.Data,
+                SoTaskDaGiaoTrongNam = resTaskDaGiaoTrongNam.Data,
+
+                SoTaskChuaXuLiFillter = resTaskChuaXuLi.Data,
+                SoTaskDangXuLiFillter = resTaskDangXuLi.Data,
+                SoTaskHoanThanhFillter = resTaskHoanThanh.Data,
+                SoTaskTreFillter = resTaskTre.Data,
+
+                SoTaskDaGiaoChuaXuLiFillter = resTaskDaGiaoChuaXuLi.Data,
+                SoTaskDaGiaoDangXuLiFillter = resTaskDaGiaoDangXuLi.Data,
+                SoTaskDaGiaoHoanThanhFillter = resTaskDaGiaoHoanThanh.Data,
+                SoTaskDaGiaoTreFillter = resTaskDaGiaoTre.Data,
+            };
+
+        }
+
+        private async void loadData()
+        {
+            var resTaskTrongTuan = await apiClientDAO.SoTaskTrongTuan(maNguoiDung);
+            var resTaskTrongThang = await apiClientDAO.SoTaskTrongThang(maNguoiDung);
+            var resTaskTrongNam = await apiClientDAO.SoTaskTrongNam(maNguoiDung);
+
+            var resTaskDaGiaoTrongTuan = await apiClientDAO.SoTaskDaGiaoTrongTuan(maNguoiDung);
+            var resTaskDaGiaoTrongThang = await apiClientDAO.SoTaskDaGiaoTrongThang(maNguoiDung);
+            var resTaskDaGiaoTrongNam = await apiClientDAO.SoTaskDaGiaoTrongNam(maNguoiDung);
+
+            var resTaskChuaXuLi = await apiClientDAO.SoTaskChuaXuLiByFilter(maNguoiDung, start, end);
+            var resTaskDangXuLi = await apiClientDAO.SoTaskDangXuLiByFilter(maNguoiDung, start, end);
+            var resTaskHoanThanh = await apiClientDAO.SoTaskHoanThanhByFilter(maNguoiDung, start, end);
+            var resTaskTre = await apiClientDAO.SoTaskTreByFilter(maNguoiDung, start, end);
+
+            var resTaskDaGiaoChuaXuLi = await apiClientDAO.SoTaskDaGiaoChuaXuLiByFilter(maNguoiDung, start, end);
+            var resTaskDaGiaoDangXuLi = await apiClientDAO.SoTaskDaGiaoDangXuLiByFilter(maNguoiDung, start, end);
+            var resTaskDaGiaoHoanThanh = await apiClientDAO.SoTaskDaGiaoHoanThanhByFilter(maNguoiDung, start, end);
+            var resTaskDaGiaoTre = await apiClientDAO.SoTaskDaGiaoTreByFilter(maNguoiDung, start, end);
+
+            int soTaskTrongTuan = resTaskTrongTuan.Data;
+            int soTaskTrongThang = resTaskTrongThang.Data;
+            int soTaskTrongNam = resTaskTrongNam.Data;
+
+            int soTaskDaGiaoTrongTuan = resTaskDaGiaoTrongTuan.Data;
+            int soTaskDaGiaoTrongThang = resTaskDaGiaoTrongThang.Data;
+            int soTaskDaGiaoTrongNam = resTaskDaGiaoTrongNam.Data;
+
+            int soTaskcxl = resTaskChuaXuLi.Data;
+            int soTaskdxl = resTaskDangXuLi.Data;
+            int soTaskHoanThanh = resTaskHoanThanh.Data;
+            int soTaskTreHan = resTaskTre.Data;       
+
+            int soTaskcxl_dagiao = resTaskDaGiaoChuaXuLi.Data;
+            int soTaskdxl_dagiao = resTaskDaGiaoDangXuLi.Data;
+            int soTaskHoanThanh_dagiao = resTaskDaGiaoHoanThanh.Data;
+            int soTaskTreHan_dagiao = resTaskDaGiaoTre.Data;
 
             LoadChartData(soTaskcxl, soTaskdxl, soTaskHoanThanh, soTaskTreHan);
             LoadPieChart(soTaskcxl, soTaskdxl, soTaskHoanThanh, soTaskTreHan);
 
-            LoadChartData_dagiao(soTaskcxl_dagiao, soTaskdxl_dagiao, soTaskHoanThanh_dagiao, soTaskTreHan_dagiao);
+            //LoadChartData_dagiao(soTaskcxl_dagiao, soTaskdxl_dagiao, soTaskHoanThanh_dagiao, soTaskTreHan_dagiao);
+            LoadTimeLine();
             LoadPieChart_dagiao(soTaskcxl_dagiao, soTaskdxl_dagiao, soTaskHoanThanh_dagiao, soTaskTreHan_dagiao);
 
             panel_item2_1.Text = "Trong Tuần";
@@ -69,6 +136,15 @@ namespace Task_App.views
             panel_item2_2_dagiao.Text = soTaskDaGiaoTrongTuan.ToString() + " Công việc";
             panel_item3_2_dagiao.Text = soTaskDaGiaoTrongThang.ToString() + " Công việc";
             panel_item4_2_dagiao.Text = soTaskDaGiaoTrongNam.ToString() + " Công việc";
+        }
+
+        private void LoadTimeLine()
+        {
+            TimelineControl timeline = new TimelineControl();
+            timeline.BackColor = Color.White;
+            // Add vào panel
+            main_panel_panel_dagiao.Controls.Add(timeline);
+            main_panel_panel_dagiao.Dock = DockStyle.Fill;
         }
 
         private void LoadChartData(int cxl, int dxl, int ht, int tre)

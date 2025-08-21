@@ -1,4 +1,7 @@
 ﻿using DevExpress.Utils.Extensions;
+using System.Collections.Generic;
+using System.Windows.Forms;
+using static Task_App.views.TimelineControl;
 
 namespace Task_App.views
 {
@@ -30,26 +33,22 @@ namespace Task_App.views
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea25 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend25 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series25 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea26 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend26 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series26 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea27 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend27 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series27 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea28 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend28 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series28 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.dashboard_panel = new Guna.UI2.WinForms.Guna2Panel();
             this.main_panel = new Guna.UI2.WinForms.Guna2Panel();
             this.main_panel_panel = new Guna.UI2.WinForms.Guna2Panel();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.startDate = new Guna.UI2.WinForms.Guna2DateTimePicker();
-            this.endDate = new Guna.UI2.WinForms.Guna2DateTimePicker();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.right_panel = new Guna.UI2.WinForms.Guna2Panel();
             this.right_panel_panel = new Guna.UI2.WinForms.Guna2Panel();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -74,13 +73,13 @@ namespace Task_App.views
             this.panel_item4_2 = new System.Windows.Forms.Label();
             this.panel_item4_1 = new System.Windows.Forms.Label();
             this.lblImage_4 = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.startDate = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.endDate = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dashboard_panel_dagiao = new Guna.UI2.WinForms.Guna2Panel();
             this.main_panel_dagiao = new Guna.UI2.WinForms.Guna2Panel();
             this.main_panel_panel_dagiao = new Guna.UI2.WinForms.Guna2Panel();
-            this.flowLayoutPanel1_dagiao = new System.Windows.Forms.FlowLayoutPanel();
-            this.startDate_dagiao = new Guna.UI2.WinForms.Guna2DateTimePicker();
-            this.endDate_dagiao = new Guna.UI2.WinForms.Guna2DateTimePicker();
-            this.chart1_dagiao = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.right_panel_dagiao = new Guna.UI2.WinForms.Guna2Panel();
             this.right_panel_panel_dagiao = new Guna.UI2.WinForms.Guna2Panel();
             this.chart2_dagiao = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -105,14 +104,15 @@ namespace Task_App.views
             this.panel_item4_2_dagiao = new System.Windows.Forms.Label();
             this.panel_item4_1_dagiao = new System.Windows.Forms.Label();
             this.lblImage_4_dagiao = new System.Windows.Forms.Label();
+            this.flowLayoutPanel1_dagiao = new System.Windows.Forms.FlowLayoutPanel();
+            this.startDate_dagiao = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.endDate_dagiao = new Guna.UI2.WinForms.Guna2DateTimePicker();
+            this.chart1_dagiao = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
             this.dashboard_panel.SuspendLayout();
             this.main_panel.SuspendLayout();
-            this.main_panel_panel.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.right_panel.SuspendLayout();
             this.right_panel_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -127,11 +127,10 @@ namespace Task_App.views
             this.head_panel_4.SuspendLayout();
             this.head_panel_panel_4.SuspendLayout();
             this.head_panel_item4.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.dashboard_panel_dagiao.SuspendLayout();
             this.main_panel_dagiao.SuspendLayout();
-            this.main_panel_panel_dagiao.SuspendLayout();
-            this.flowLayoutPanel1_dagiao.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1_dagiao)).BeginInit();
             this.right_panel_dagiao.SuspendLayout();
             this.right_panel_panel_dagiao.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2_dagiao)).BeginInit();
@@ -146,6 +145,8 @@ namespace Task_App.views
             this.head_panel_4_dagiao.SuspendLayout();
             this.head_panel_panel_4_dagiao.SuspendLayout();
             this.head_panel_item4_dagiao.SuspendLayout();
+            this.flowLayoutPanel1_dagiao.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1_dagiao)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
             this.xtraTabControl1.SuspendLayout();
             this.xtraTabPage2.SuspendLayout();
@@ -179,8 +180,6 @@ namespace Task_App.views
             // 
             // main_panel_panel
             // 
-            this.main_panel_panel.Controls.Add(this.flowLayoutPanel1);
-            this.main_panel_panel.Controls.Add(this.chart1);
             this.main_panel_panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.main_panel_panel.FillColor = System.Drawing.Color.White;
             this.main_panel_panel.Location = new System.Drawing.Point(10, 10);
@@ -189,79 +188,6 @@ namespace Task_App.views
             this.main_panel_panel.Padding = new System.Windows.Forms.Padding(10);
             this.main_panel_panel.Size = new System.Drawing.Size(534, 453);
             this.main_panel_panel.TabIndex = 0;
-            // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.AutoSize = true;
-            this.flowLayoutPanel1.BackColor = System.Drawing.Color.White;
-            this.flowLayoutPanel1.Controls.Add(this.startDate);
-            this.flowLayoutPanel1.Controls.Add(this.endDate);
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 10);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(5);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(514, 50);
-            this.flowLayoutPanel1.TabIndex = 1;
-            // 
-            // startDate
-            // 
-            this.startDate.BackColor = System.Drawing.Color.White;
-            this.startDate.Checked = true;
-            this.startDate.FillColor = System.Drawing.Color.White;
-            this.startDate.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.startDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.startDate.Location = new System.Drawing.Point(5, 5);
-            this.startDate.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.startDate.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
-            this.startDate.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
-            this.startDate.Name = "startDate";
-            this.startDate.Size = new System.Drawing.Size(240, 40);
-            this.startDate.TabIndex = 0;
-            this.startDate.Value = new System.DateTime(2025, 7, 26, 16, 12, 35, 624);
-            this.startDate.ValueChanged += new System.EventHandler(this.startDate_ValueChanged);
-            // 
-            // endDate
-            // 
-            this.endDate.BackColor = System.Drawing.Color.White;
-            this.endDate.Checked = true;
-            this.endDate.FillColor = System.Drawing.Color.White;
-            this.endDate.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.endDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.endDate.Location = new System.Drawing.Point(265, 5);
-            this.endDate.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.endDate.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
-            this.endDate.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
-            this.endDate.Name = "endDate";
-            this.endDate.Size = new System.Drawing.Size(240, 40);
-            this.endDate.TabIndex = 1;
-            this.endDate.Value = new System.DateTime(2025, 7, 26, 16, 12, 37, 911);
-            this.endDate.ValueChanged += new System.EventHandler(this.endDate_ValueChanged);
-            // 
-            // chart1
-            // 
-            this.chart1.BackColor = System.Drawing.Color.Transparent;
-            this.chart1.BorderlineColor = System.Drawing.Color.Transparent;
-            this.chart1.BorderSkin.BackColor = System.Drawing.Color.Transparent;
-            this.chart1.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
-            this.chart1.BorderSkin.BorderWidth = 0;
-            chartArea25.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea25);
-            this.chart1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chart1.Enabled = false;
-            legend25.Name = "Legend1";
-            this.chart1.Legends.Add(legend25);
-            this.chart1.Location = new System.Drawing.Point(10, 10);
-            this.chart1.Margin = new System.Windows.Forms.Padding(0);
-            this.chart1.Name = "chart1";
-            series25.ChartArea = "ChartArea1";
-            series25.Legend = "Legend1";
-            series25.Name = "Series1";
-            this.chart1.Series.Add(series25);
-            this.chart1.Size = new System.Drawing.Size(514, 433);
-            this.chart1.TabIndex = 1;
-            this.chart1.Text = "chart1";
             // 
             // right_panel
             // 
@@ -294,21 +220,21 @@ namespace Task_App.views
             this.chart2.BorderSkin.BackColor = System.Drawing.Color.Transparent;
             this.chart2.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
             this.chart2.BorderSkin.BorderWidth = 0;
-            chartArea26.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea26);
+            chartArea1.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea1);
             this.chart2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chart2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart2.Enabled = false;
-            legend26.Name = "Legend1";
-            this.chart2.Legends.Add(legend26);
+            legend1.Name = "Legend1";
+            this.chart2.Legends.Add(legend1);
             this.chart2.Location = new System.Drawing.Point(10, 10);
             this.chart2.Margin = new System.Windows.Forms.Padding(0);
             this.chart2.Name = "chart2";
             this.chart2.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
-            series26.ChartArea = "ChartArea1";
-            series26.Legend = "Legend1";
-            series26.Name = "Series1";
-            this.chart2.Series.Add(series26);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart2.Series.Add(series1);
             this.chart2.Size = new System.Drawing.Size(360, 433);
             this.chart2.TabIndex = 0;
             this.chart2.Text = "chart2";
@@ -575,6 +501,79 @@ namespace Task_App.views
             this.lblImage_4.TabIndex = 0;
             this.lblImage_4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoSize = true;
+            this.flowLayoutPanel1.BackColor = System.Drawing.Color.White;
+            this.flowLayoutPanel1.Controls.Add(this.startDate);
+            this.flowLayoutPanel1.Controls.Add(this.endDate);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(10, 10);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(5);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(514, 50);
+            this.flowLayoutPanel1.TabIndex = 1;
+            // 
+            // startDate
+            // 
+            this.startDate.BackColor = System.Drawing.Color.White;
+            this.startDate.Checked = true;
+            this.startDate.FillColor = System.Drawing.Color.White;
+            this.startDate.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.startDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.startDate.Location = new System.Drawing.Point(5, 5);
+            this.startDate.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.startDate.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.startDate.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
+            this.startDate.Name = "startDate";
+            this.startDate.Size = new System.Drawing.Size(240, 40);
+            this.startDate.TabIndex = 0;
+            this.startDate.Value = new System.DateTime(2025, 7, 26, 16, 12, 35, 624);
+            this.startDate.ValueChanged += new System.EventHandler(this.startDate_ValueChanged);
+            // 
+            // endDate
+            // 
+            this.endDate.BackColor = System.Drawing.Color.White;
+            this.endDate.Checked = true;
+            this.endDate.FillColor = System.Drawing.Color.White;
+            this.endDate.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.endDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.endDate.Location = new System.Drawing.Point(265, 5);
+            this.endDate.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.endDate.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.endDate.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
+            this.endDate.Name = "endDate";
+            this.endDate.Size = new System.Drawing.Size(240, 40);
+            this.endDate.TabIndex = 1;
+            this.endDate.Value = new System.DateTime(2025, 7, 26, 16, 12, 37, 911);
+            this.endDate.ValueChanged += new System.EventHandler(this.endDate_ValueChanged);
+            // 
+            // chart1
+            // 
+            this.chart1.BackColor = System.Drawing.Color.Transparent;
+            this.chart1.BorderlineColor = System.Drawing.Color.Transparent;
+            this.chart1.BorderSkin.BackColor = System.Drawing.Color.Transparent;
+            this.chart1.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
+            this.chart1.BorderSkin.BorderWidth = 0;
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
+            this.chart1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chart1.Enabled = false;
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
+            this.chart1.Location = new System.Drawing.Point(10, 10);
+            this.chart1.Margin = new System.Windows.Forms.Padding(0);
+            this.chart1.Name = "chart1";
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart1.Series.Add(series2);
+            this.chart1.Size = new System.Drawing.Size(514, 433);
+            this.chart1.TabIndex = 1;
+            this.chart1.Text = "chart1";
+            // 
             // dashboard_panel_dagiao
             // 
             this.dashboard_panel_dagiao.Controls.Add(this.main_panel_dagiao);
@@ -602,89 +601,14 @@ namespace Task_App.views
             // 
             // main_panel_panel_dagiao
             // 
-            this.main_panel_panel_dagiao.Controls.Add(this.flowLayoutPanel1_dagiao);
-            this.main_panel_panel_dagiao.Controls.Add(this.chart1_dagiao);
             this.main_panel_panel_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.main_panel_panel_dagiao.FillColor = System.Drawing.Color.White;
+            this.main_panel_panel_dagiao.FillColor = System.Drawing.Color.Gray;
             this.main_panel_panel_dagiao.Location = new System.Drawing.Point(10, 10);
             this.main_panel_panel_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.main_panel_panel_dagiao.Name = "main_panel_panel_dagiao";
             this.main_panel_panel_dagiao.Padding = new System.Windows.Forms.Padding(10);
             this.main_panel_panel_dagiao.Size = new System.Drawing.Size(534, 453);
             this.main_panel_panel_dagiao.TabIndex = 0;
-            // 
-            // flowLayoutPanel1_dagiao
-            // 
-            this.flowLayoutPanel1_dagiao.AutoSize = true;
-            this.flowLayoutPanel1_dagiao.BackColor = System.Drawing.Color.White;
-            this.flowLayoutPanel1_dagiao.Controls.Add(this.startDate_dagiao);
-            this.flowLayoutPanel1_dagiao.Controls.Add(this.endDate_dagiao);
-            this.flowLayoutPanel1_dagiao.Dock = System.Windows.Forms.DockStyle.Top;
-            this.flowLayoutPanel1_dagiao.Location = new System.Drawing.Point(10, 10);
-            this.flowLayoutPanel1_dagiao.Margin = new System.Windows.Forms.Padding(0);
-            this.flowLayoutPanel1_dagiao.Name = "flowLayoutPanel1_dagiao";
-            this.flowLayoutPanel1_dagiao.Padding = new System.Windows.Forms.Padding(5);
-            this.flowLayoutPanel1_dagiao.Size = new System.Drawing.Size(514, 50);
-            this.flowLayoutPanel1_dagiao.TabIndex = 1;
-            // 
-            // startDate_dagiao
-            // 
-            this.startDate_dagiao.BackColor = System.Drawing.Color.White;
-            this.startDate_dagiao.Checked = true;
-            this.startDate_dagiao.FillColor = System.Drawing.Color.White;
-            this.startDate_dagiao.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.startDate_dagiao.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.startDate_dagiao.Location = new System.Drawing.Point(5, 5);
-            this.startDate_dagiao.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
-            this.startDate_dagiao.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
-            this.startDate_dagiao.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
-            this.startDate_dagiao.Name = "startDate_dagiao";
-            this.startDate_dagiao.Size = new System.Drawing.Size(240, 40);
-            this.startDate_dagiao.TabIndex = 0;
-            this.startDate_dagiao.Value = new System.DateTime(2025, 7, 26, 16, 12, 35, 624);
-            this.startDate_dagiao.ValueChanged += new System.EventHandler(this.startDate_dagiao_ValueChanged);
-            // 
-            // endDate_dagiao
-            // 
-            this.endDate_dagiao.BackColor = System.Drawing.Color.White;
-            this.endDate_dagiao.Checked = true;
-            this.endDate_dagiao.FillColor = System.Drawing.Color.White;
-            this.endDate_dagiao.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.endDate_dagiao.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.endDate_dagiao.Location = new System.Drawing.Point(265, 5);
-            this.endDate_dagiao.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.endDate_dagiao.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
-            this.endDate_dagiao.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
-            this.endDate_dagiao.Name = "endDate_dagiao";
-            this.endDate_dagiao.Size = new System.Drawing.Size(240, 40);
-            this.endDate_dagiao.TabIndex = 1;
-            this.endDate_dagiao.Value = new System.DateTime(2025, 7, 26, 16, 12, 37, 911);
-            this.endDate_dagiao.ValueChanged += new System.EventHandler(this.endDate_dagiao_ValueChanged);
-            // 
-            // chart1_dagiao
-            // 
-            this.chart1_dagiao.BackColor = System.Drawing.Color.Transparent;
-            this.chart1_dagiao.BorderlineColor = System.Drawing.Color.Transparent;
-            this.chart1_dagiao.BorderSkin.BackColor = System.Drawing.Color.Transparent;
-            this.chart1_dagiao.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
-            this.chart1_dagiao.BorderSkin.BorderWidth = 0;
-            chartArea27.Name = "ChartArea1_dagiao";
-            this.chart1_dagiao.ChartAreas.Add(chartArea27);
-            this.chart1_dagiao.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.chart1_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chart1_dagiao.Enabled = false;
-            legend27.Name = "Legend1_dagiao";
-            this.chart1_dagiao.Legends.Add(legend27);
-            this.chart1_dagiao.Location = new System.Drawing.Point(10, 10);
-            this.chart1_dagiao.Margin = new System.Windows.Forms.Padding(0);
-            this.chart1_dagiao.Name = "chart1_dagiao";
-            series27.ChartArea = "ChartArea1_dagiao";
-            series27.Legend = "Legend1_dagiao";
-            series27.Name = "Series1_dagiao";
-            this.chart1_dagiao.Series.Add(series27);
-            this.chart1_dagiao.Size = new System.Drawing.Size(514, 433);
-            this.chart1_dagiao.TabIndex = 1;
-            this.chart1_dagiao.Text = "chart1_dagiao";
             // 
             // right_panel_dagiao
             // 
@@ -717,21 +641,21 @@ namespace Task_App.views
             this.chart2_dagiao.BorderSkin.BackColor = System.Drawing.Color.Transparent;
             this.chart2_dagiao.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
             this.chart2_dagiao.BorderSkin.BorderWidth = 0;
-            chartArea28.Name = "ChartArea1_dagiao";
-            this.chart2_dagiao.ChartAreas.Add(chartArea28);
+            chartArea3.Name = "ChartArea1_dagiao";
+            this.chart2_dagiao.ChartAreas.Add(chartArea3);
             this.chart2_dagiao.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chart2_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart2_dagiao.Enabled = false;
-            legend28.Name = "Legend1_dagiao";
-            this.chart2_dagiao.Legends.Add(legend28);
+            legend3.Name = "Legend1_dagiao";
+            this.chart2_dagiao.Legends.Add(legend3);
             this.chart2_dagiao.Location = new System.Drawing.Point(10, 10);
             this.chart2_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.chart2_dagiao.Name = "chart2_dagiao";
             this.chart2_dagiao.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
-            series28.ChartArea = "ChartArea1_dagiao";
-            series28.Legend = "Legend1_dagiao";
-            series28.Name = "Series1_dagiao";
-            this.chart2_dagiao.Series.Add(series28);
+            series3.ChartArea = "ChartArea1_dagiao";
+            series3.Legend = "Legend1_dagiao";
+            series3.Name = "Series1_dagiao";
+            this.chart2_dagiao.Series.Add(series3);
             this.chart2_dagiao.Size = new System.Drawing.Size(360, 433);
             this.chart2_dagiao.TabIndex = 0;
             this.chart2_dagiao.Text = "chart2_dagiao ";
@@ -998,6 +922,79 @@ namespace Task_App.views
             this.lblImage_4_dagiao.TabIndex = 0;
             this.lblImage_4_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // flowLayoutPanel1_dagiao
+            // 
+            this.flowLayoutPanel1_dagiao.AutoSize = true;
+            this.flowLayoutPanel1_dagiao.BackColor = System.Drawing.Color.White;
+            this.flowLayoutPanel1_dagiao.Controls.Add(this.startDate_dagiao);
+            this.flowLayoutPanel1_dagiao.Controls.Add(this.endDate_dagiao);
+            this.flowLayoutPanel1_dagiao.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel1_dagiao.Location = new System.Drawing.Point(10, 10);
+            this.flowLayoutPanel1_dagiao.Margin = new System.Windows.Forms.Padding(0);
+            this.flowLayoutPanel1_dagiao.Name = "flowLayoutPanel1_dagiao";
+            this.flowLayoutPanel1_dagiao.Padding = new System.Windows.Forms.Padding(5);
+            this.flowLayoutPanel1_dagiao.Size = new System.Drawing.Size(514, 50);
+            this.flowLayoutPanel1_dagiao.TabIndex = 1;
+            // 
+            // startDate_dagiao
+            // 
+            this.startDate_dagiao.BackColor = System.Drawing.Color.White;
+            this.startDate_dagiao.Checked = true;
+            this.startDate_dagiao.FillColor = System.Drawing.Color.White;
+            this.startDate_dagiao.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.startDate_dagiao.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.startDate_dagiao.Location = new System.Drawing.Point(5, 5);
+            this.startDate_dagiao.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.startDate_dagiao.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.startDate_dagiao.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
+            this.startDate_dagiao.Name = "startDate_dagiao";
+            this.startDate_dagiao.Size = new System.Drawing.Size(240, 40);
+            this.startDate_dagiao.TabIndex = 0;
+            this.startDate_dagiao.Value = new System.DateTime(2025, 7, 26, 16, 12, 35, 624);
+            this.startDate_dagiao.ValueChanged += new System.EventHandler(this.startDate_dagiao_ValueChanged);
+            // 
+            // endDate_dagiao
+            // 
+            this.endDate_dagiao.BackColor = System.Drawing.Color.White;
+            this.endDate_dagiao.Checked = true;
+            this.endDate_dagiao.FillColor = System.Drawing.Color.White;
+            this.endDate_dagiao.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.endDate_dagiao.Format = System.Windows.Forms.DateTimePickerFormat.Long;
+            this.endDate_dagiao.Location = new System.Drawing.Point(265, 5);
+            this.endDate_dagiao.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.endDate_dagiao.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
+            this.endDate_dagiao.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
+            this.endDate_dagiao.Name = "endDate_dagiao";
+            this.endDate_dagiao.Size = new System.Drawing.Size(240, 40);
+            this.endDate_dagiao.TabIndex = 1;
+            this.endDate_dagiao.Value = new System.DateTime(2025, 7, 26, 16, 12, 37, 911);
+            this.endDate_dagiao.ValueChanged += new System.EventHandler(this.endDate_dagiao_ValueChanged);
+            // 
+            // chart1_dagiao
+            // 
+            this.chart1_dagiao.BackColor = System.Drawing.Color.Transparent;
+            this.chart1_dagiao.BorderlineColor = System.Drawing.Color.Transparent;
+            this.chart1_dagiao.BorderSkin.BackColor = System.Drawing.Color.Transparent;
+            this.chart1_dagiao.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
+            this.chart1_dagiao.BorderSkin.BorderWidth = 0;
+            chartArea4.Name = "ChartArea1_dagiao";
+            this.chart1_dagiao.ChartAreas.Add(chartArea4);
+            this.chart1_dagiao.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.chart1_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chart1_dagiao.Enabled = false;
+            legend4.Name = "Legend1_dagiao";
+            this.chart1_dagiao.Legends.Add(legend4);
+            this.chart1_dagiao.Location = new System.Drawing.Point(10, 10);
+            this.chart1_dagiao.Margin = new System.Windows.Forms.Padding(0);
+            this.chart1_dagiao.Name = "chart1_dagiao";
+            series4.ChartArea = "ChartArea1_dagiao";
+            series4.Legend = "Legend1_dagiao";
+            series4.Name = "Series1_dagiao";
+            this.chart1_dagiao.Series.Add(series4);
+            this.chart1_dagiao.Size = new System.Drawing.Size(514, 433);
+            this.chart1_dagiao.TabIndex = 1;
+            this.chart1_dagiao.Text = "chart1_dagiao";
+            // 
             // xtraTabControl1
             // 
             this.xtraTabControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
@@ -1045,10 +1042,6 @@ namespace Task_App.views
             this.dashboard_panel.ResumeLayout(false);
             this.dashboard_panel.PerformLayout();
             this.main_panel.ResumeLayout(false);
-            this.main_panel_panel.ResumeLayout(false);
-            this.main_panel_panel.PerformLayout();
-            this.flowLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.right_panel.ResumeLayout(false);
             this.right_panel_panel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
@@ -1063,13 +1056,11 @@ namespace Task_App.views
             this.head_panel_4.ResumeLayout(false);
             this.head_panel_panel_4.ResumeLayout(false);
             this.head_panel_item4.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.dashboard_panel_dagiao.ResumeLayout(false);
             this.dashboard_panel_dagiao.PerformLayout();
             this.main_panel_dagiao.ResumeLayout(false);
-            this.main_panel_panel_dagiao.ResumeLayout(false);
-            this.main_panel_panel_dagiao.PerformLayout();
-            this.flowLayoutPanel1_dagiao.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.chart1_dagiao)).EndInit();
             this.right_panel_dagiao.ResumeLayout(false);
             this.right_panel_panel_dagiao.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart2_dagiao)).EndInit();
@@ -1084,6 +1075,8 @@ namespace Task_App.views
             this.head_panel_4_dagiao.ResumeLayout(false);
             this.head_panel_panel_4_dagiao.ResumeLayout(false);
             this.head_panel_item4_dagiao.ResumeLayout(false);
+            this.flowLayoutPanel1_dagiao.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.chart1_dagiao)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).EndInit();
             this.xtraTabControl1.ResumeLayout(false);
             this.xtraTabPage2.ResumeLayout(false);

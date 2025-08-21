@@ -520,6 +520,12 @@
     <Compile Include="views\Task_Duoc_Giao_Control.Designer.cs">
       <DependentUpon>Task_Duoc_Giao_Control.cs</DependentUpon>
     </Compile>
+    <Compile Include="views\TimelineControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="views\TimelineControl.Designer.cs">
+      <DependentUpon>TimelineControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="views\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
@@ -559,6 +565,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="views\Task_Duoc_Giao_Control.resx">
       <DependentUpon>Task_Duoc_Giao_Control.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\TimelineControl.resx">
+      <DependentUpon>TimelineControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>

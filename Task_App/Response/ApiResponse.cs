@@ -38,4 +38,23 @@ namespace Task_App.Response
         public string Message { get; set; }
         public T Data { get; set; }
     }
+
+    public class Dashboard_data
+    {
+        public int SoTaskTrongTuan { get; set; }
+        public int SoTaskTrongThang { get; set; }
+        public int SoTaskTrongNam { get; set; }
+        public int SoTaskDaGiaoTrongTuan { get; set; }
+        public int SoTaskDaGiaoTrongThang { get; set; }
+        public int SoTaskDaGiaoTrongNam { get; set; }
+        public int SoTaskChuaXuLiFillter { get; set; }
+        public int SoTaskDangXuLiFillter { get; set; }
+        public int SoTaskHoanThanhFillter { get; set; }
+        public int SoTaskTreFillter { get; set; }
+        public int SoTaskDaGiaoChuaXuLiFillter { get; set; }
+        public int SoTaskDaGiaoDangXuLiFillter { get; set; }
+        public int SoTaskDaGiaoHoanThanhFillter { get; set; }
+        public int SoTaskDaGiaoTreFillter { get; set; }
+    }
+
 }

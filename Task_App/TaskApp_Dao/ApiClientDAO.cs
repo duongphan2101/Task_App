@@ -895,6 +895,565 @@ namespace Task_App.TaskApp_Dao
             return null;
         }
 
+        public async Task<Object_Response<int>> SoTaskTrongTuan(int maNguoiDung)
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/so-task-trong-tuan/{maNguoiDung}");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"SoTaskTrongTuan thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Loi khi SoTaskTrongTuan: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskTrongThang(int maNguoiDung)
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/so-task-trong-thang/{maNguoiDung}");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"SoTaskTrongThang thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Loi khi SoTaskTrongThang: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskTrongNam(int maNguoiDung)
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/so-task-trong-nam/{maNguoiDung}");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"SoTaskTrongNam thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Loi khi SoTaskTrongNam: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskDaGiaoTrongTuan(int maNguoiDung)
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/so-task-da-giao-trong-tuan/{maNguoiDung}");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"SoTaskDaGiaoTrongTuan thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Loi khi SoTaskDaGiaoTrongTuan: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskDaGiaoTrongThang(int maNguoiDung)
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/so-task-da-giao-trong-thang/{maNguoiDung}");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"SoTaskDaGiaoTrongThang thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Loi khi SoTaskDaGiaoTrongThang: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskDaGiaoTrongNam(int maNguoiDung)
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/so-task-da-giao-trong-nam/{maNguoiDung}");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"SoTaskDaGiaoTrongNam thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Loi khi SoTaskDaGiaoTrongNam: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskChuaXuLiByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/so-task-chua-xu-li-fillter", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"get task chua xu li fillter thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task chua xu li fillter: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskDangXuLiByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/so-task-dang-xu-li-fillter", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"get task dang xu li fillter thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task dang xu li fillter: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskHoanThanhByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/so-task-hoan-thanh-fillter", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"get task hoan thanh fillter thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task hoan thanh fillter: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskTreByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/so-task-tre-fillter", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"get task tre fillter thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task tre fillter: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskDaGiaoChuaXuLiByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/so-task-da-giao-chua-xu-li-fillter", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"get task da giao chua xu li fillter thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task chua xu li fillter: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskDaGiaoDangXuLiByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/so-task-da-giao-dang-xu-li-fillter", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"get task da giao dang xu li fillter thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task da giao dang xu li fillter: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskDaGiaoHoanThanhByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/so-task-da-giao-hoan-thanh-fillter", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"get task da giao hoan thanh fillter thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task da giao hoan thanh fillter: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+        public async Task<Object_Response<int>> SoTaskDaGiaoTreByFilter(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/so-task-da-giao-tre-fillter", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<int>>(result);
+                }
+
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = $"get task da giao tre fillter thất bại ({(int)response.StatusCode}): {result}",
+                    Data = 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<int>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task da giao tre fillter: " + ex.Message,
+                    Data = 0
+                };
+            }
+        }
+
+
 
     }
 }
