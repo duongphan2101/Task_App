@@ -436,6 +436,7 @@
     <Compile Include="DTO\CongViecDaGiaoDTO.cs" />
     <Compile Include="DTO\CongViecDuocGiaoDTO.cs" />
     <Compile Include="DTO\DateRange.cs" />
+    <Compile Include="DTO\dto.cs" />
     <Compile Include="DTO\NguoiGiaoDTO.cs" />
     <Compile Include="DTO\NguoiLienQuanDTO.cs" />
     <Compile Include="DTO\PieChartModel.cs" />

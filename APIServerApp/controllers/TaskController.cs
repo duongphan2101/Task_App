@@ -1341,5 +1341,86 @@ namespace APIServerApp.controllers
             });
         }
 
+        [HttpPost("task-da-giao")]
+        public async Task<IActionResult> TaskDaGiao([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var tasks = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiGiao == request.MaNguoiDung
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end)
+                .Select(ctcv => new TaskDto
+                {
+                    MaChiTietCV = ctcv.MaChiTietCV,
+                    MaCongViec = ctcv.MaCongViec,
+                    TieuDe = ctcv.TieuDe,
+                    NoiDung = ctcv.NoiDung,
+                    NgayNhanCongViec = ctcv.NgayNhanCongViec,
+                    NgayKetThucCongViec = ctcv.NgayKetThucCongViec,
+                    NgayHoanThanh = ctcv.NgayHoanThanh,
+                    SoNgayHoanThanh = ctcv.SoNgayHoanThanh,
+                    TrangThai = ctcv.TrangThai,
+                    TienDo = ctcv.TienDo,
+                    MucDoUuTien = ctcv.MucDoUuTien,
+                    CongViec = new CongViecDto
+                    {
+                        MaCongViec = ctcv.CongViec.MaCongViec,
+                        NgayBatDau = ctcv.CongViec.NgayBatDau,
+                        NgayGiao = ctcv.CongViec.NgayGiao,
+                        NgayKetThuc = ctcv.CongViec.NgayKetThuc
+                    }
+                }).ToListAsync();
+
+            return Ok(new Object_Response<List<TaskDto>>
+            {
+                Success = true,
+                Message = "Lấy task đã giao thành công",
+                Data = tasks
+            });
+        }
+
+        [HttpPost("task-duoc-giao")]
+        public async Task<IActionResult> TaskDuocGiao([FromBody] DashboardRequest request)
+        {
+            var start = request.NgayBatDau;
+            var end = request.NgayKetThuc;
+
+            var tasks = await _context.ChiTietCongViecs
+                .Where(ctcv => ctcv.CongViec.NguoiLienQuanCongViecs.Any(nlq => nlq.VaiTro == "to"
+                    && nlq.MaNguoiDung == request.MaNguoiDung)
+                    && ctcv.CongViec.NgayGiao >= start
+                    && ctcv.CongViec.NgayGiao <= end)
+                .Select(ctcv => new TaskDto
+                {
+                    MaChiTietCV = ctcv.MaChiTietCV,
+                    MaCongViec = ctcv.MaCongViec,
+                    TieuDe = ctcv.TieuDe,
+                    NoiDung = ctcv.NoiDung,
+                    NgayNhanCongViec = ctcv.NgayNhanCongViec,
+                    NgayKetThucCongViec = ctcv.NgayKetThucCongViec,
+                    NgayHoanThanh = ctcv.NgayHoanThanh,
+                    SoNgayHoanThanh = ctcv.SoNgayHoanThanh,
+                    TrangThai = ctcv.TrangThai,
+                    TienDo = ctcv.TienDo,
+                    MucDoUuTien = ctcv.MucDoUuTien,
+                    CongViec = new CongViecDto
+                    {
+                        MaCongViec = ctcv.CongViec.MaCongViec,
+                        NgayBatDau = ctcv.CongViec.NgayBatDau,
+                        NgayGiao = ctcv.CongViec.NgayGiao,
+                        NgayKetThuc = ctcv.CongViec.NgayKetThuc
+                    }
+                }).ToListAsync();
+
+            return Ok(new Object_Response<List<TaskDto>>
+            {
+                Success = true,
+                Message = "Lấy task được giao thành công",
+                Data = tasks
+            });
+        }
+
     }
 }

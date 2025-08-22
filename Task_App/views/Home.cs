@@ -54,7 +54,7 @@ namespace Task_App.views
 
             LoadNotifications();
 
-            LoadContent(new Dashboard(apiClientDAO, maNguoiDung));
+            LoadContent(new Dashboard(apiClientDAO, maNguoiDung, nd));
         }
 
         private async Task SetDataDashboard()
@@ -160,7 +160,7 @@ namespace Task_App.views
 
             if (clickedBtn.Name == btnDashboard.Name)
                 //LoadContent(new DashboardControlViewer(tcpClientDAO, maNguoiDung));
-                LoadContent(new Dashboard(apiClientDAO, maNguoiDung));
+                LoadContent(new Dashboard(apiClientDAO, maNguoiDung, nd));
             if (clickedBtn.Name == btn_Task_DaGiao.Name)
                 LoadContent(new Create_Task_Control(nd, apiClientDAO));
 

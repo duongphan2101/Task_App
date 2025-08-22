@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+using Task_App.Model;
 using Task_App.Response;
 using Task_App.TaskApp_Dao;
 
@@ -17,12 +19,17 @@ namespace Task_App.views
         private DateTime start;
         private DateTime end;
         private Dashboard_data data;
+        private Label lbl_data_timeLine = new Label();
+        private NguoiDung nd;
+        List<ChiTietCongViec> tasks_duocGiao;
+        List<ChiTietCongViec> tasks_daGiao;
 
-        public Dashboard(ApiClientDAO apiClientDAO, int maNguoiDung)
+        public Dashboard(ApiClientDAO apiClientDAO, int maNguoiDung, NguoiDung nd)
         {
             InitializeComponent();
             this.apiClientDAO = apiClientDAO;
             this.maNguoiDung = maNguoiDung;
+            this.nd = nd;
 
             start = DateTime.Now.AddDays(-30);
             end = DateTime.Now;
@@ -121,11 +128,12 @@ namespace Task_App.views
             int soTaskHoanThanh_dagiao = resTaskDaGiaoHoanThanh.Data;
             int soTaskTreHan_dagiao = resTaskDaGiaoTre.Data;
 
-            LoadChartData(soTaskcxl, soTaskdxl, soTaskHoanThanh, soTaskTreHan);
+            //LoadChartData(soTaskcxl, soTaskdxl, soTaskHoanThanh, soTaskTreHan);
             LoadPieChart(soTaskcxl, soTaskdxl, soTaskHoanThanh, soTaskTreHan);
 
             //LoadChartData_dagiao(soTaskcxl_dagiao, soTaskdxl_dagiao, soTaskHoanThanh_dagiao, soTaskTreHan_dagiao);
             LoadTimeLine();
+            LoadTimeLineDuocGiao();
             LoadPieChart_dagiao(soTaskcxl_dagiao, soTaskdxl_dagiao, soTaskHoanThanh_dagiao, soTaskTreHan_dagiao);
 
             panel_item2_1.Text = "Trong Tuần";
@@ -138,13 +146,123 @@ namespace Task_App.views
             panel_item4_2_dagiao.Text = soTaskDaGiaoTrongNam.ToString() + " Công việc";
         }
 
-        private void LoadTimeLine()
+        private async Task LoadTimeLine()
         {
-            TimelineControl timeline = new TimelineControl();
-            timeline.BackColor = Color.White;
-            // Add vào panel
-            main_panel_panel_dagiao.Controls.Add(timeline);
-            main_panel_panel_dagiao.Dock = DockStyle.Fill;
+            var resTasks = await apiClientDAO.TaskDaGiao(maNguoiDung, start, end);
+
+            var taskDtoList = resTasks.Data;
+
+            if (taskDtoList == null)
+            {
+                Console.WriteLine(resTasks.Message);
+                panel_timeLine_DaGiao.Controls.Clear();
+                lbl_data_timeLine.Text = "Không có dữ liệu";
+                panel_timeLine_DaGiao.Controls.Add(lbl_data_timeLine);
+                lbl_data_timeLine.Dock = DockStyle.Fill;
+            }
+            else
+            {
+
+
+                // Convert DTO -> Entity
+                List<ChiTietCongViec> tasks = taskDtoList.Select(dto => new ChiTietCongViec
+                {
+                    MaChiTietCV = dto.MaChiTietCV,
+                    MaCongViec = dto.MaCongViec.ToString(),
+                    TieuDe = dto.TieuDe,
+                    NoiDung = dto.NoiDung,
+                    NgayNhanCongViec = dto.NgayNhanCongViec,
+                    NgayKetThucCongViec = dto.NgayKetThucCongViec,
+                    NgayHoanThanh = dto.NgayHoanThanh,
+                    SoNgayHoanThanh = dto.SoNgayHoanThanh ?? 0,
+                    TrangThai = int.TryParse(dto.TrangThai, out int trangThaiVal) ? trangThaiVal : 0,
+                    TienDo = int.TryParse(dto.TienDo, out int tienDoVal) ? tienDoVal : 0,
+                    MucDoUuTien = int.TryParse(dto.MucDoUuTien, out int mucDoVal) ? mucDoVal : 0,
+
+                    CongViec = dto.CongViec != null ? new CongViec
+                    {
+                        MaCongViec = dto.CongViec.MaCongViec.ToString(),
+                        NgayBatDau = dto.CongViec.NgayBatDau,
+                        NgayGiao = dto.CongViec.NgayGiao,
+                        NgayKetThuc = dto.CongViec.NgayKetThuc
+                    } : null
+                }).ToList();
+                tasks_daGiao = tasks;
+                TimelineControl timeline = new TimelineControl(tasks);
+                timeline.TaskClicked += (s, e) =>
+                {
+                    bool flag = true;
+                    Timeline_TaskClicked(e.Task, flag);
+                };
+
+
+                timeline.BackColor = Color.White;
+
+                panel_timeLine_DaGiao.Controls.Clear();
+                panel_timeLine_DaGiao.Controls.Add(timeline);
+                timeline.Dock = DockStyle.Fill;
+
+            }
+        }
+
+        private void Timeline_TaskClicked(ChiTietCongViec e, bool task)
+        {
+            Task_Duoc_Giao_Control tdg = new Task_Duoc_Giao_Control(nd, apiClientDAO);
+            Modal_ChiTiet_CongViec model = new Modal_ChiTiet_CongViec(nd, e.CongViec.MaCongViec, e.MaChiTietCV, nd.MaNguoiDung, task, apiClientDAO, tdg);
+            model.ShowDialog();
+        }
+
+
+        private async Task LoadTimeLineDuocGiao()
+        {
+            var resTasks = await apiClientDAO.TaskDuocGiao(maNguoiDung, start, end);
+            var taskDtoList = resTasks.Data;
+
+            if (taskDtoList == null)
+            {
+                Console.WriteLine(resTasks.Message);
+                lbl_data_timeLine.Text = "Không có dữ liệu";
+                panel_timeLine.Controls.Add(lbl_data_timeLine);
+                lbl_data_timeLine.Dock = DockStyle.Fill;
+            }
+            else
+            {
+                // Convert DTO -> Entity
+                List<ChiTietCongViec> tasks = taskDtoList.Select(dto => new ChiTietCongViec
+                {
+                    MaChiTietCV = dto.MaChiTietCV,
+                    MaCongViec = dto.MaCongViec.ToString(),
+                    TieuDe = dto.TieuDe,
+                    NoiDung = dto.NoiDung,
+                    NgayNhanCongViec = dto.NgayNhanCongViec,
+                    NgayKetThucCongViec = dto.NgayKetThucCongViec,
+                    NgayHoanThanh = dto.NgayHoanThanh,
+                    SoNgayHoanThanh = dto.SoNgayHoanThanh ?? 0,
+                    TrangThai = int.TryParse(dto.TrangThai, out int trangThaiVal) ? trangThaiVal : 0,
+                    TienDo = int.TryParse(dto.TienDo, out int tienDoVal) ? tienDoVal : 0,
+                    MucDoUuTien = int.TryParse(dto.MucDoUuTien, out int mucDoVal) ? mucDoVal : 0,
+
+                    CongViec = dto.CongViec != null ? new CongViec
+                    {
+                        MaCongViec = dto.CongViec.MaCongViec.ToString(),
+                        NgayBatDau = dto.CongViec.NgayBatDau,
+                        NgayGiao = dto.CongViec.NgayGiao,
+                        NgayKetThuc = dto.CongViec.NgayKetThuc
+                    } : null
+                }).ToList();
+                tasks_duocGiao = tasks;
+                // Đưa vào timeline
+                TimelineControl timeline = new TimelineControl(tasks);
+                timeline.BackColor = Color.White;
+                timeline.TaskClicked += (s, e) =>
+                {
+                    bool flag = false;
+                    Timeline_TaskClicked(e.Task, flag);
+                };
+                panel_timeLine.Controls.Clear();
+                panel_timeLine.Controls.Add(timeline);
+                timeline.Dock = DockStyle.Fill;
+            }
         }
 
         private void LoadChartData(int cxl, int dxl, int ht, int tre)
@@ -433,5 +551,6 @@ namespace Task_App.views
             head_panel_3.Height = panelHeight;
             head_panel_4.Height = panelHeight;
         }
+
     }
 }

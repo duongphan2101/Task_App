@@ -1453,6 +1453,92 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
+        public async Task<Object_Response<List<TaskDto>>> TaskDaGiao(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/task-da-giao", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<TaskDto>>>(result);
+                }
+
+                return new Object_Response<List<TaskDto>>
+                {
+                    Success = false,
+                    Message = $"get task da giao thất bại ({(int)response.StatusCode}): {result}",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<TaskDto>>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task da giao: " + ex.Message,
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<TaskDto>>> TaskDuocGiao(int maNguoiDung, DateTime start, DateTime end)
+        {
+            try
+            {
+                var payload = new
+                {
+                    MaNguoiDung = maNguoiDung,
+                    NgayBatDau = start,
+                    NgayKetThuc = end
+                };
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(payload),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/task-duoc-giao", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<TaskDto>>>(result);
+                }
+
+                return new Object_Response<List<TaskDto>>
+                {
+                    Success = false,
+                    Message = $"get task duoc giao thất bại ({(int)response.StatusCode}): {result}",
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<TaskDto>>
+                {
+                    Success = false,
+                    Message = "Lỗi khi get task duoc giao: " + ex.Message,
+                };
+            }
+        }
+
 
 
     }

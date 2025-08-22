@@ -4,42 +4,105 @@ using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Task_App.Model;
+using Task_App.Response;
+using Task_App.TaskApp_Dao;
 
 namespace Task_App.views
 {
     public partial class TimelineControl : UserControl
     {
-        private List<TaskItem> tasks;
+        private List<ChiTietCongViec> tasks;
         private ToolTip toolTip;
         private int? hoveredTaskIndex = null;
-        public TimelineControl()
+        public class TaskClickedEventArgs : EventArgs
+        {
+            public ChiTietCongViec Task { get; set; }
+        }
+        public event EventHandler<TaskClickedEventArgs> TaskClicked;
+
+        public TimelineControl(List<ChiTietCongViec> tasks)
         {
             InitializeComponent();
-            tasks = new List<TaskItem>();
+            this.tasks = tasks;
             DoubleBuffered = true;
-            LoadMockData();
-        }
-
-        private void LoadMockData()
-        {
-            DateTime testStart = new DateTime(2023, 5, 1); // 1/5/2023
-            DateTime testEnd = new DateTime(2023, 5, 31);  // 31/5/2023
-
-            AddTask("Design", testStart.AddDays(2), testStart.AddDays(5), "InProgress");
-            AddTask("Unit Testing", testStart.AddDays(10), testStart.AddDays(15), "InProgress");
-            AddTask("Integration Testing", testStart.AddDays(20), testEnd.AddDays(-5), "Pending");
-        }
-
-        public void AddTask(string name, DateTime start, DateTime end, string status)
-        {
-            tasks.Add(new TaskItem { Name = name, Start = start, End = end, Status = status });
-            Invalidate();
+            toolTip = new ToolTip();
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
-            Invalidate(); // Gọi lại vẽ khi kích thước thay đổi
+            Invalidate();
+        }
+
+        protected override void OnMouseLeave(EventArgs e)
+        {
+            base.OnMouseLeave(e);
+            hoveredTaskIndex = null;
+            toolTip.Hide(this);
+            Invalidate();
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+
+            if (tasks == null) return;
+
+            int? newHover = null;
+
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                var task = tasks[i];
+                if (!task.NgayNhanCongViec.HasValue || !task.NgayKetThucCongViec.HasValue)
+                    continue;
+
+                DateTime minDate = tasks.Where(t => t.NgayNhanCongViec.HasValue)
+                                        .Min(t => t.NgayNhanCongViec.Value);
+                DateTime maxDate = tasks.Where(t => t.NgayKetThucCongViec.HasValue)
+                                        .Max(t => t.NgayKetThucCongViec.Value);
+
+                float totalDays = (float)(maxDate - minDate).TotalDays;
+                if (totalDays <= 0) totalDays = 1;
+
+                float width = this.ClientSize.Width;
+                float height = this.ClientSize.Height;
+                float yStep = height / (tasks.Count + 1);
+
+                DateTime start = task.NgayNhanCongViec.Value;
+                DateTime end = task.NgayKetThucCongViec.Value;
+
+                float xStart = (float)((start - minDate).TotalDays / totalDays * width);
+                float xEnd = (float)((end - minDate).TotalDays / totalDays * width);
+                float y = (i + 1) * yStep;
+
+                float rectWidth = (xEnd - xStart <= 0) ? 4 : (xEnd - xStart);
+                RectangleF rect = new RectangleF(xStart, y - 8, rectWidth, 16);
+
+                if (rect.Contains(e.Location))
+                {
+                    newHover = i;
+                    toolTip.Show($"{task.TieuDe}\n{start:dd/MM} - {end:dd/MM}", this, e.Location.X + 15, e.Location.Y + 15);
+                    break;
+                }
+            }
+
+            if (newHover != hoveredTaskIndex)
+            {
+                hoveredTaskIndex = newHover;
+                Invalidate();
+            }
+        }
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+
+            if (hoveredTaskIndex.HasValue && hoveredTaskIndex.Value >= 0 && hoveredTaskIndex.Value < tasks.Count)
+            {
+                var clickedTask = tasks[hoveredTaskIndex.Value];
+                TaskClicked?.Invoke(this, new TaskClickedEventArgs { Task = clickedTask });
+            }
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -54,94 +117,76 @@ namespace Task_App.views
             float width = this.ClientSize.Width;
             float height = this.ClientSize.Height;
 
-            // Xác định ngày bắt đầu và ngày kết thúc dựa trên các task
-            DateTime minDate = tasks.Min(t => t.Start);
-            DateTime maxDate = tasks.Max(t => t.End);
-
-            if (minDate == DateTime.MaxValue || maxDate == DateTime.MinValue)
-                return;
+            // Xác định ngày min/max (bỏ qua task null ngày)
+            DateTime minDate = tasks.Where(t => t.NgayNhanCongViec.HasValue)
+                                    .Min(t => t.NgayNhanCongViec.Value);
+            DateTime maxDate = tasks.Where(t => t.NgayKetThucCongViec.HasValue)
+                                    .Max(t => t.NgayKetThucCongViec.Value);
 
             float totalDays = (float)(maxDate - minDate).TotalDays;
-            if (totalDays <= 0) totalDays = 1; // Tránh chia cho 0
+            if (totalDays <= 0) totalDays = 1;
 
             float yStep = height / (tasks.Count + 1);
 
             using (Pen timelinePen = new Pen(Color.Gray, 1))
             using (Pen taskPen = new Pen(Color.Black, 1))
-            using (Font font = new Font(this.Font.FontFamily, 8)) // Sử dụng font cố định
+            using (Font font = new Font(this.Font.FontFamily, 8))
             {
-                // Vẽ trục ngày, vẽ tất cả các ngày
+                // Vẽ trục ngày
                 DateTime cursor = minDate;
                 while (cursor <= maxDate)
                 {
-                    float x = Math.Min(width - 10, Math.Max(0, (float)((cursor - minDate).TotalDays / totalDays * width)));
+                    float x = Math.Min(width - 10,
+                        Math.Max(0, (float)((cursor - minDate).TotalDays / totalDays * width)));
+
                     g.DrawLine(Pens.LightGray, x, 0, x, height);
                     g.DrawString(cursor.ToString("dd/MM"), font, Brushes.Black, x + 2, 0);
-                    cursor = cursor.AddDays(1); // Vẽ từng ngày
+
+                    cursor = cursor.AddDays(1);
                 }
 
-                // Vẽ các task
+                // Vẽ task
                 for (int i = 0; i < tasks.Count; i++)
                 {
                     var task = tasks[i];
-                    float daysDiff = (float)(task.End - task.Start).TotalDays;
-                    float xStart = Math.Min(width - 10, Math.Max(0, (float)((task.Start - minDate).TotalDays / totalDays * width)));
-                    float xEnd = Math.Min(width - 10, Math.Max(xStart, xStart + (daysDiff / totalDays * width)));
-                    float y = Math.Min(height - 10, (i + 1) * yStep);
+                    if (!task.NgayNhanCongViec.HasValue || !task.NgayKetThucCongViec.HasValue)
+                        continue; // bỏ qua task thiếu ngày
 
-                    Brush brush;
-                    switch (task.Status.ToLower())
+                    DateTime start = task.NgayNhanCongViec.Value;
+                    DateTime end = task.NgayKetThucCongViec.Value;
+
+                    float daysDiff = (float)(end - start).TotalDays;
+                    float xStart = Math.Min(width - 10,
+                        Math.Max(0, (float)((start - minDate).TotalDays / totalDays * width)));
+                    float xEnd = Math.Min(width - 10,
+                        Math.Max(xStart, (float)((end - minDate).TotalDays / totalDays * width)));
+                    float margin = 8; // khoảng cách top/bottom giữa các task
+                    float y = Math.Min(height - 10, (i + 1) * yStep + i * margin);
+
+
+                    // màu trạng thái
+                    Brush brush = Brushes.Gray;
+                    switch (task.TrangThai)
                     {
-                        case "completed":
-                            brush = Brushes.Green;
-                            break;
-                        case "inprogress":
-                            brush = Brushes.Yellow;
-                            break;
-                        case "pending":
-                            brush = Brushes.Red;
-                            break;
-                        default:
-                            brush = Brushes.Gray;
-                            break;
+                        case 0: brush = Brushes.LightGray; break;
+                        case 1: brush = Brushes.LightBlue; break;
+                        case 2: brush = Brushes.LightGreen; break;
+                        case 3: brush = Brushes.Red; break;
                     }
 
-                    // Vẽ thanh task
-                    if (xEnd > xStart)
-                    {
-                        g.FillRectangle(brush, xStart, y - 8, xEnd - xStart, 16);
-                        g.DrawRectangle(taskPen, xStart, y - 8, xEnd - xStart, 16);
-                    }
+                    // Nếu task chỉ có 1 ngày -> rectangle mỏng (>= 4px)
+                    float rectWidth = (daysDiff <= 0) ? 4 : (xEnd - xStart);
+                    g.FillRectangle(brush, xStart, y - 8, rectWidth, 16);
+                    g.DrawRectangle(taskPen, xStart, y - 8, rectWidth, 16);
 
-                    // Vẽ tên task và khoảng thời gian
-                    string label = $"{task.Name} ({task.Start:dd/MM} - {task.End:dd/MM})";
+                    // Vẽ tên task
+                    string label = $"{task.TieuDe} Tiến độ: {task.TienDo}%";
                     SizeF textSize = g.MeasureString(label, font);
                     g.DrawString(label, font, Brushes.Black, xStart + 2, y - 8 - textSize.Height);
-
-                    // Nếu là milestone (ví dụ duration = 0), vẽ hình thoi
-                    if (daysDiff == 0 && xStart >= 0 && xStart < width)
-                    {
-                        PointF[] diamond = new PointF[]
-                        {
-                            new PointF(xStart, y),
-                            new PointF(Math.Max(0, xStart - 5), Math.Max(0, y - 5)),
-                            new PointF(xStart, Math.Max(0, y - 10)),
-                            new PointF(Math.Min(width, xStart + 5), Math.Max(0, y - 5))
-                        };
-                        g.FillPolygon(brush, diamond);
-                        g.DrawPolygon(taskPen, diamond);
-                    }
                 }
             }
         }
 
 
-        private class TaskItem
-        {
-            public string Name { get; set; }
-            public DateTime Start { get; set; }
-            public DateTime End { get; set; }
-            public string Status { get; set; }
-        }
     }
 }
