@@ -13,8 +13,6 @@ namespace Task_App.views
 {
     public partial class Create_Task_Control : UserControl
     {
-        private readonly TcpClientDAO tcpClientDAO;
-        private readonly CongViecService CongViecService;
         private NguoiDung nd;
 
         private readonly int maNguoiDung;
@@ -39,7 +37,7 @@ namespace Task_App.views
 
         public async Task LoadData()
         {
-            var response = await apiClientDAO.GetViecDaGiaoAsync(nd.MaNguoiDung, locTheoNgay);
+            var response = await apiClientDAO.GetViecDaGiaoAsync(nd.MaNguoiDung, !locTheoNgay);
 
             //if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
             //{

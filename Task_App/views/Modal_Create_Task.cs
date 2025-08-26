@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using Task_App.DTO;
 using Task_App.Model;
 using Task_App.TaskApp_Dao;
+using Microsoft.VisualBasic;
+
 
 namespace Task_App.views
 {
@@ -203,6 +205,16 @@ namespace Task_App.views
 
         private async void btn_Create_Click(object sender, EventArgs e)
         {
+
+            string pwd = TmpPass.Pwd;
+            if (string.IsNullOrEmpty(pwd))
+            {
+                MessageBox.Show("Vui lòng nhập mật khẩu tạm thời!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                RealPass rp = new RealPass();
+                rp.ShowDialog();
+                return;
+            }
+
             string tieuDe = txtTieuDe.Text;
             string noiDung = txtNoiDung.Text;
             bool dinhKy = false;
@@ -902,7 +914,8 @@ namespace Task_App.views
 
                 if (success)
                 {
-                    var resSendEmail = await apiClientDAO.sendEmail(email1, lstNguoiNhanEmail, lstTepDinhKem, currentUser);
+
+                    var resSendEmail = await apiClientDAO.sendEmail(email1, lstNguoiNhanEmail, lstTepDinhKem, currentUser, pwd);
                     bool sendEmail = resSendEmail.Success;
 
                     var resUpdateEmail = await apiClientDAO.UpdateTrangThaiEmail(email1);
@@ -917,9 +930,10 @@ namespace Task_App.views
                     else
                     {
                         MessageBox.Show("Gửi email thất bại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        Console.WriteLine("Lỗi "+resSendEmail.Message);
-                        Console.WriteLine("Lỗi "+resUpdateEmail.Message);
+                        Console.WriteLine("Lỗi " + resSendEmail.Message);
+                        Console.WriteLine("Lỗi " + resUpdateEmail.Message);
                     }
+
                 }
                 else
                 {

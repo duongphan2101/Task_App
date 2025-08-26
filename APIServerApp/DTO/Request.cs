@@ -26,6 +26,8 @@ namespace APIServerApp.DTO
         public List<TepDinhKemEmail>? DanhSachTepDinhKem { get; set; }
         public NguoiDung? CurrentUser { get; set; }
 
+        public string? MK { get; set; }
+
     }
 
     public class IsGiaoViecRequest

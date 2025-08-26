@@ -898,27 +898,16 @@ namespace APIServerApp.controllers
 
                 message.Body = builder.ToMessageBody();
 
-                Console.WriteLine(req.CurrentUser.Email + " " + req.CurrentUser.MatKhau);
+                Console.WriteLine(req.CurrentUser.Email + " " + req.MK);
                 // Gửi qua SMTP
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     await client.ConnectAsync(CLIENT, PORT, MailKit.Security.SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync(req.CurrentUser.Email, req.CurrentUser.MatKhau);
+                    await client.AuthenticateAsync(req.CurrentUser.Email, req.MK);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }
-
-                // using (var client = new MailKit.Net.Smtp.SmtpClient())
-                // {
-                //     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-                //     await client.ConnectAsync(CLIENT, PORT, MailKit.Security.SecureSocketOptions.StartTls);
-                //     await client.AuthenticateAsync("test@intimexhcm.com", "TestInt2025@");
-                //     await client.SendAsync(message);
-                //     await client.DisconnectAsync(true);
-                // }
-
-
 
                 // Export .eml -> .zip
                 string targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");

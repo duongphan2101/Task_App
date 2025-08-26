@@ -527,6 +527,12 @@
     <Compile Include="views\TimelineControl.Designer.cs">
       <DependentUpon>TimelineControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="views\RealPass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\RealPass.Designer.cs">
+      <DependentUpon>RealPass.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="views\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
@@ -569,6 +575,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="views\TimelineControl.resx">
       <DependentUpon>TimelineControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\RealPass.resx">
+      <DependentUpon>RealPass.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>

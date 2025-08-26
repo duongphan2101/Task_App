@@ -10,4 +10,9 @@ namespace Task_App.DTO
     {
         public static string mk {  get; set; }
     }
+
+    public static class TmpPass
+    {
+        public static string Pwd { get; set; }
+    }
 }

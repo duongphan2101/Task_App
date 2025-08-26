@@ -748,7 +748,7 @@ namespace Task_App.TaskApp_Dao
             return null;
         }
 
-        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser)
+        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser, string mk)
         {
             try
             {
@@ -757,7 +757,8 @@ namespace Task_App.TaskApp_Dao
                     Email = email,
                     DanhSachNguoiNhanEmail = lstNNE,
                     DanhSachTepDinhKem = lstTDK,
-                    CurrentUser = currentUser
+                    CurrentUser = currentUser,
+                    MK = mk
                 };
 
                 var jsonContent = new StringContent(
