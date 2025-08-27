@@ -51,10 +51,13 @@ namespace Task_App
                 return;
             }
 
-            if (emailChecker.IsValid(email) == false)
+            if (email != "admin")
             {
-                MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if (emailChecker.IsValid(email) == false)
+                {
+                    MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
             }
 
             var loginResult = await apiClientDAO.CheckLoginAsync(email, pass);
@@ -76,9 +79,25 @@ namespace Task_App
             NguoiDung nd = resLogin.Data;
             tmp.mk = pass;
 
-            var homeForm = new Home(nd, apiClientDAO);
-            homeForm.FormClosed += (s, args) => Show();
-            homeForm.Show();
+            if (nd.IsAdmin == 0)
+            {
+                var homeForm = new Home(nd, apiClientDAO);
+                homeForm.FormClosed += (s, args) => Show();
+                homeForm.Show();
+            }
+            else
+            {
+                var adminForm = new AdminForm();
+                adminForm.FormClosed += (s, args) => Show();
+                adminForm.Show();
+            }
+        }
+
+        private void btn_DangKy_Click(object sender, EventArgs e)
+        {
+            var registerForm = new Register(apiClientDAO);
+            registerForm.FormClosed += (s, args) => Show();
+            registerForm.Show();
         }
     }
 }

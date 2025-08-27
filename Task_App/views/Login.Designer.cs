@@ -42,6 +42,7 @@
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.panelControl1item = new DevExpress.XtraLayout.LayoutControlItem();
             this.panelControl2item = new DevExpress.XtraLayout.LayoutControlItem();
+            this.btn_DangKy = new Guna.UI2.WinForms.Guna2Button();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -60,10 +61,10 @@
             this.lblEmail.AutoSize = true;
             this.lblEmail.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblEmail.ForeColor = System.Drawing.Color.Black;
-            this.lblEmail.Location = new System.Drawing.Point(25, 156);
-            this.lblEmail.Margin = new System.Windows.Forms.Padding(0, 0, 0, 8);
+            this.lblEmail.Location = new System.Drawing.Point(33, 192);
+            this.lblEmail.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
             this.lblEmail.Name = "lblEmail";
-            this.lblEmail.Size = new System.Drawing.Size(51, 19);
+            this.lblEmail.Size = new System.Drawing.Size(61, 24);
             this.lblEmail.TabIndex = 0;
             this.lblEmail.Text = "Email";
             this.lblEmail.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -73,10 +74,10 @@
             this.lblPass.AutoSize = true;
             this.lblPass.Font = new System.Drawing.Font("Bahnschrift SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPass.ForeColor = System.Drawing.Color.Black;
-            this.lblPass.Location = new System.Drawing.Point(25, 225);
-            this.lblPass.Margin = new System.Windows.Forms.Padding(0, 0, 0, 8);
+            this.lblPass.Location = new System.Drawing.Point(33, 277);
+            this.lblPass.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
             this.lblPass.Name = "lblPass";
-            this.lblPass.Size = new System.Drawing.Size(74, 19);
+            this.lblPass.Size = new System.Drawing.Size(93, 24);
             this.lblPass.TabIndex = 0;
             this.lblPass.Text = "Mật khẩu";
             // 
@@ -92,10 +93,10 @@
             this.btnLogin.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
             this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.btnLogin.ForeColor = System.Drawing.Color.White;
-            this.btnLogin.Location = new System.Drawing.Point(29, 299);
+            this.btnLogin.Location = new System.Drawing.Point(39, 379);
             this.btnLogin.Margin = new System.Windows.Forms.Padding(0);
             this.btnLogin.Name = "btnLogin";
-            this.btnLogin.Size = new System.Drawing.Size(188, 42);
+            this.btnLogin.Size = new System.Drawing.Size(251, 52);
             this.btnLogin.TabIndex = 3;
             this.btnLogin.Text = "Đăng Nhập";
             this.btnLogin.Click += new System.EventHandler(this.OnLoginBtnPressed);
@@ -114,12 +115,12 @@
             this.txtEmail.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtEmail.ForeColor = System.Drawing.Color.DimGray;
             this.txtEmail.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtEmail.Location = new System.Drawing.Point(29, 183);
-            this.txtEmail.Margin = new System.Windows.Forms.Padding(0, 0, 0, 8);
+            this.txtEmail.Location = new System.Drawing.Point(39, 225);
+            this.txtEmail.Margin = new System.Windows.Forms.Padding(0, 0, 0, 10);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.PlaceholderText = "Nhập địa chỉ email";
             this.txtEmail.SelectedText = "";
-            this.txtEmail.Size = new System.Drawing.Size(188, 34);
+            this.txtEmail.Size = new System.Drawing.Size(251, 42);
             this.txtEmail.TabIndex = 1;
             this.txtEmail.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnKeyPressed);
             // 
@@ -137,14 +138,14 @@
             this.txtPass.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtPass.ForeColor = System.Drawing.Color.DimGray;
             this.txtPass.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.txtPass.Location = new System.Drawing.Point(29, 252);
+            this.txtPass.Location = new System.Drawing.Point(39, 310);
             this.txtPass.Margin = new System.Windows.Forms.Padding(0);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '@';
             this.txtPass.PlaceholderText = "Nhập mật khẩu";
             this.txtPass.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtPass.SelectedText = "";
-            this.txtPass.Size = new System.Drawing.Size(188, 34);
+            this.txtPass.Size = new System.Drawing.Size(251, 42);
             this.txtPass.TabIndex = 2;
             this.txtPass.UseSystemPasswordChar = true;
             this.txtPass.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnKeyPressed);
@@ -156,9 +157,9 @@
             this.panelControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.panelControl1.Controls.Add(this.panel1);
             this.panelControl1.Location = new System.Drawing.Point(0, 0);
-            this.panelControl1.Margin = new System.Windows.Forms.Padding(2);
+            this.panelControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelControl1.Name = "panelControl1";
-            this.panelControl1.Size = new System.Drawing.Size(354, 488);
+            this.panelControl1.Size = new System.Drawing.Size(472, 601);
             this.panelControl1.TabIndex = 0;
             // 
             // panel1
@@ -167,9 +168,9 @@
             this.panel1.Controls.Add(this.lblLogin);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(354, 488);
+            this.panel1.Size = new System.Drawing.Size(472, 601);
             this.panel1.TabIndex = 0;
             // 
             // lblLogin
@@ -182,10 +183,10 @@
             this.lblLogin.Appearance.Options.UseFont = true;
             this.lblLogin.Appearance.Options.UseForeColor = true;
             this.lblLogin.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.Horizontal;
-            this.lblLogin.Location = new System.Drawing.Point(32, 223);
-            this.lblLogin.Margin = new System.Windows.Forms.Padding(2);
+            this.lblLogin.Location = new System.Drawing.Point(43, 274);
+            this.lblLogin.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.lblLogin.Name = "lblLogin";
-            this.lblLogin.Size = new System.Drawing.Size(268, 58);
+            this.lblLogin.Size = new System.Drawing.Size(334, 72);
             this.lblLogin.TabIndex = 0;
             this.lblLogin.Text = "Đăng Nhập";
             // 
@@ -195,16 +196,17 @@
             this.panelControl2.Appearance.Options.UseBackColor = true;
             this.panelControl2.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.panelControl2.Controls.Add(this.panel2);
-            this.panelControl2.Location = new System.Drawing.Point(354, 0);
-            this.panelControl2.Margin = new System.Windows.Forms.Padding(2);
+            this.panelControl2.Location = new System.Drawing.Point(472, 0);
+            this.panelControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelControl2.Name = "panelControl2";
-            this.panelControl2.Size = new System.Drawing.Size(246, 488);
+            this.panelControl2.Size = new System.Drawing.Size(328, 601);
             this.panelControl2.TabIndex = 0;
             // 
             // panel2
             // 
             this.panel2.AutoSize = true;
             this.panel2.BackColor = System.Drawing.Color.White;
+            this.panel2.Controls.Add(this.btn_DangKy);
             this.panel2.Controls.Add(this.txtPass);
             this.panel2.Controls.Add(this.txtEmail);
             this.panel2.Controls.Add(this.lblEmail);
@@ -212,9 +214,9 @@
             this.panel2.Controls.Add(this.lblPass);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2);
+            this.panel2.Margin = new System.Windows.Forms.Padding(0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(246, 488);
+            this.panel2.Size = new System.Drawing.Size(328, 601);
             this.panel2.TabIndex = 0;
             // 
             // loginlayoutControl1ConvertedLayout
@@ -223,10 +225,11 @@
             this.loginlayoutControl1ConvertedLayout.Controls.Add(this.panelControl2);
             this.loginlayoutControl1ConvertedLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.loginlayoutControl1ConvertedLayout.Location = new System.Drawing.Point(0, 0);
+            this.loginlayoutControl1ConvertedLayout.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.loginlayoutControl1ConvertedLayout.Name = "loginlayoutControl1ConvertedLayout";
             this.loginlayoutControl1ConvertedLayout.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(906, 372, 650, 400);
             this.loginlayoutControl1ConvertedLayout.Root = this.layoutControlGroup1;
-            this.loginlayoutControl1ConvertedLayout.Size = new System.Drawing.Size(600, 488);
+            this.loginlayoutControl1ConvertedLayout.Size = new System.Drawing.Size(800, 601);
             this.loginlayoutControl1ConvertedLayout.TabIndex = 0;
             // 
             // layoutControlGroup1
@@ -238,7 +241,7 @@
             this.panelControl2item});
             this.layoutControlGroup1.Name = "Root";
             this.layoutControlGroup1.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-            this.layoutControlGroup1.Size = new System.Drawing.Size(600, 488);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(800, 601);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // panelControl1item
@@ -247,27 +250,47 @@
             this.panelControl1item.Location = new System.Drawing.Point(0, 0);
             this.panelControl1item.Name = "panelControl1item";
             this.panelControl1item.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-            this.panelControl1item.Size = new System.Drawing.Size(354, 488);
+            this.panelControl1item.Size = new System.Drawing.Size(472, 601);
             this.panelControl1item.TextVisible = false;
             // 
             // panelControl2item
             // 
             this.panelControl2item.Control = this.panelControl2;
-            this.panelControl2item.Location = new System.Drawing.Point(354, 0);
+            this.panelControl2item.Location = new System.Drawing.Point(472, 0);
             this.panelControl2item.Name = "panelControl2item";
             this.panelControl2item.OptionsTableLayoutItem.ColumnIndex = 1;
             this.panelControl2item.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-            this.panelControl2item.Size = new System.Drawing.Size(246, 488);
+            this.panelControl2item.Size = new System.Drawing.Size(328, 601);
             this.panelControl2item.TextVisible = false;
+            // 
+            // btn_DangKy
+            // 
+            this.btn_DangKy.BorderColor = System.Drawing.Color.Transparent;
+            this.btn_DangKy.BorderRadius = 10;
+            this.btn_DangKy.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_DangKy.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btn_DangKy.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btn_DangKy.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btn_DangKy.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btn_DangKy.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.btn_DangKy.Font = new System.Drawing.Font("Segoe UI", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_DangKy.ForeColor = System.Drawing.Color.Black;
+            this.btn_DangKy.Location = new System.Drawing.Point(39, 540);
+            this.btn_DangKy.Margin = new System.Windows.Forms.Padding(0);
+            this.btn_DangKy.Name = "btn_DangKy";
+            this.btn_DangKy.Size = new System.Drawing.Size(251, 52);
+            this.btn_DangKy.TabIndex = 4;
+            this.btn_DangKy.Text = "Đăng Ký";
+            this.btn_DangKy.Click += new System.EventHandler(this.btn_DangKy_Click);
             // 
             // FormLogin
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.DarkSlateBlue;
-            this.ClientSize = new System.Drawing.Size(600, 488);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(800, 601);
             this.Controls.Add(this.loginlayoutControl1ConvertedLayout);
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "FormLogin";
             this.ShowIcon = false;
@@ -307,6 +330,7 @@
         private DevExpress.XtraLayout.LayoutControlGroup layoutControlGroup1;
         private DevExpress.XtraLayout.LayoutControlItem panelControl1item;
         private DevExpress.XtraLayout.LayoutControlItem panelControl2item;
+        private Guna.UI2.WinForms.Guna2Button btn_DangKy;
     }
 }
 

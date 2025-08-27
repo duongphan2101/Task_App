@@ -101,7 +101,9 @@ namespace APIServerApp.controllers
                     PhongBan = cv.PhongBan,
                     MaPhongBan = cv.MaPhongBan,
                     LaLanhDao = cv.LaLanhDao,
-                    MatKhau = ""
+                    MatKhau = "",
+                    IsAdmin = cv.IsAdmin,
+                    TrangThai = cv.TrangThai
                 }).FirstOrDefaultAsync();
 
 
@@ -1410,6 +1412,49 @@ namespace APIServerApp.controllers
                 Data = tasks
             });
         }
+
+        [HttpGet("get-don-vi")]
+        public async Task<IActionResult> GetDonVi()
+        {
+            var dv = await _context.DonVis.ToArrayAsync();
+
+
+            return Ok(new Object_Response<List<DonVi>>
+            {
+                Success = true,
+                Message = dv.Length > 0 ? "Lấy danh sách đơn vị thành công" : "Không có đơn vị nào",
+                Data = dv.ToList()
+            });
+        }
+
+        [HttpGet("get-phong-ban")]
+        public async Task<IActionResult> GetPhongBan()
+        {
+            var dv = await _context.PhongBans.ToArrayAsync();
+
+
+            return Ok(new Object_Response<List<PhongBan>>
+            {
+                Success = true,
+                Message = dv.Length > 0 ? "Lấy danh sách phong ban thành công" : "Không có phong ban nào",
+                Data = dv.ToList()
+            });
+        }
+
+        [HttpGet("get-chuc-vu")]
+        public async Task<IActionResult> GetChucVu()
+        {
+            var dv = await _context.ChucVus.ToArrayAsync();
+
+
+            return Ok(new Object_Response<List<ChucVu>>
+            {
+                Success = true,
+                Message = dv.Length > 0 ? "Lấy danh sách chuc vu thành công" : "Không có chuc vu nào",
+                Data = dv.ToList()
+            });
+        }
+
 
     }
 }

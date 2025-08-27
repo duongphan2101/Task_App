@@ -55,6 +55,27 @@ public class AuthController : ControllerBase
     }
 
 
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] NguoiDung request)
+    {
+
+        if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.MatKhau))
+            return BadRequest("Email và mật khẩu không được để trống.");
+
+        var existingUser = await _context.NguoiDungs.FirstOrDefaultAsync(u => u.Email == request.Email);
+        if (existingUser != null)
+            return BadRequest("Email đã được sử dụng.");
+
+        // Mã hóa mật khẩu
+        request.MatKhau = PasswordHasher.Hash(request.MatKhau);
+
+        _context.NguoiDungs.Add(request);
+        await _context.SaveChangesAsync();
+
+        return Ok(new ApiResponseDto { Message = "Đăng ký thành công!", Success = true });
+    }
+
+
     private string GenerateJwtToken(NguoiDung user)
     {
         var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]!);

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250815032915_InitialCreate")]
+    [Migration("20250827022950_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,10 +42,10 @@ namespace APIServerApp.Migrations
                     b.Property<DateTime?>("NgayHoanThanh")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NgayKetThucCongViec")
+                    b.Property<DateTime?>("NgayKetThucCongViec")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NgayNhanCongViec")
+                    b.Property<DateTime?>("NgayNhanCongViec")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NoiDung")
@@ -212,6 +212,9 @@ namespace APIServerApp.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("IsAdmin")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("LaLanhDao")
                         .HasColumnType("bit");
 
@@ -230,6 +233,9 @@ namespace APIServerApp.Migrations
                     b.Property<string>("MatKhau")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("TrangThai")
+                        .HasColumnType("int");
 
                     b.HasKey("MaNguoiDung");
 

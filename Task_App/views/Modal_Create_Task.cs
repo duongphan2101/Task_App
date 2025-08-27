@@ -1,16 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.VisualBasic;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Task_App.DTO;
 using Task_App.Model;
 using Task_App.TaskApp_Dao;
-using Microsoft.VisualBasic;
 
 
 namespace Task_App.views
@@ -59,7 +60,6 @@ namespace Task_App.views
             List<string> lstStr = new List<string>();
             var res = await apiClientDAO.GetUserListByDonViPhongBan(nd.MaDonVi, nd.MaPhongBan, nd.Email);
             lstStr = res.Data;
-            Console.WriteLine("Raw JSON: " + JsonConvert.SerializeObject(res));
 
             return lstStr;
         }
@@ -205,12 +205,37 @@ namespace Task_App.views
 
         private async void btn_Create_Click(object sender, EventArgs e)
         {
+            string path = Path.Combine(Application.StartupPath, "tmpCredential.dll");
+            int savedUserId = 0;
 
-            string pwd = TmpPass.Pwd;
+            if (File.Exists(path))
+            {
+                byte[] readData = File.ReadAllBytes(path);
+                using (var ms = new MemoryStream(readData))
+                {
+                    var bf = new BinaryFormatter();
+                    var loaded = (UserCredential)bf.Deserialize(ms);
+
+                    DTO.TmpPass.Pwd = loaded.GetPassword();
+                    savedUserId = loaded.UserId;
+                }
+            }
+
+            int currentUserId = nd.MaNguoiDung;
+            if (savedUserId != currentUserId)
+            {
+                MessageBox.Show("Không có mật khẩu của người dùng hiện tại!, vui lòng nhập mật khẩu email!", "Cảnh báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                RealPass rp = new RealPass(currentUserId);
+                rp.ShowDialog();
+                return;
+            }
+
+            string pwd = DTO.TmpPass.Pwd;
             if (string.IsNullOrEmpty(pwd))
             {
-                MessageBox.Show("Vui lòng nhập mật khẩu tạm thời!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                RealPass rp = new RealPass();
+                MessageBox.Show("Vui lòng nhập mật khẩu của email!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                RealPass rp = new RealPass(currentUserId);
                 rp.ShowDialog();
                 return;
             }

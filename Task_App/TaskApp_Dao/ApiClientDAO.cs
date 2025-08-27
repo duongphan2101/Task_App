@@ -49,7 +49,46 @@ namespace Task_App.TaskApp_Dao
 
             return null;
         }
-    
+
+        public async Task<ApiResponse> Register(NguoiDung nd)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(nd),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                var response = await client.PostAsync("api/auth/register", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResp = JsonConvert.DeserializeObject<ApiResponse>(result);
+                    return apiResp ?? new ApiResponse
+                    {
+                        Success = false,
+                        Message = "Server trả về dữ liệu rỗng."
+                    };
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Đăng ký thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi kết nối đến server API: " + ex.Message
+                };
+            }
+        }
+
         public async Task<ViecDaGiaoResponse> GetViecDaGiaoAsync(int maNguoiDung, bool locTheoNgay)
         {
             try
@@ -1536,6 +1575,105 @@ namespace Task_App.TaskApp_Dao
                 {
                     Success = false,
                     Message = "Lỗi khi get task duoc giao: " + ex.Message,
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<DonVi>>> GetDonVi()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/get-don-vi");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<DonVi>>>(result);
+                }
+
+                return new Object_Response<List<DonVi>>
+                {
+                    Success = false,
+                    Message = $"GETDONVI thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<DonVi>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<DonVi>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETDONVI: " + ex.Message,
+                    Data = new List<DonVi>()
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<PhongBan>>> GetPhongBan()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/get-phong-ban");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<PhongBan>>>(result);
+                }
+
+                return new Object_Response<List<PhongBan>>
+                {
+                    Success = false,
+                    Message = $"GETPHONGBAN thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<PhongBan>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<PhongBan>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETPHONGBAN: " + ex.Message,
+                    Data = new List<PhongBan>()
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<ChucVu>>> GetChucVu()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/get-chuc-vu");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<ChucVu>>>(result);
+                }
+
+                return new Object_Response<List<ChucVu>>
+                {
+                    Success = false,
+                    Message = $"GETCHUCVU thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<ChucVu>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<ChucVu>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETCHUCVU: " + ex.Message,
+                    Data = new List<ChucVu>()
                 };
             }
         }
