@@ -24,6 +24,7 @@ namespace Task_App.Model
         public DonVi DonVi { get; set; }
         public PhongBan PhongBan { get; set; }
         public ChucVu ChucVu { get; set; }
+
     }
 
 }

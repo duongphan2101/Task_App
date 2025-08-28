@@ -87,7 +87,7 @@ namespace Task_App
             }
             else
             {
-                var adminForm = new AdminForm();
+                var adminForm = new AdminForm(nd, apiClientDAO);
                 adminForm.FormClosed += (s, args) => Show();
                 adminForm.Show();
             }

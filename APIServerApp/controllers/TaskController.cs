@@ -1446,12 +1446,36 @@ namespace APIServerApp.controllers
         {
             var dv = await _context.ChucVus.ToArrayAsync();
 
-
             return Ok(new Object_Response<List<ChucVu>>
             {
                 Success = true,
                 Message = dv.Length > 0 ? "Lấy danh sách chuc vu thành công" : "Không có chuc vu nào",
                 Data = dv.ToList()
+            });
+        }
+
+        [HttpPost("update-nguoi-dung")]
+        public async Task<IActionResult> UpdateNguoiDung([FromBody] NguoiDung nd)
+        {
+            var nguoiDung = await _context.NguoiDungs
+                .FirstOrDefaultAsync(x => x.MaNguoiDung == nd.MaNguoiDung);
+
+            nguoiDung.TrangThai = nd.TrangThai;
+            nguoiDung.DonVi = nd.DonVi;
+            nguoiDung.PhongBan = nd.PhongBan;
+            nguoiDung.ChucVu = nd.ChucVu;
+
+            nguoiDung.MaDonVi = nd.MaDonVi;
+            nguoiDung.MaChucVu = nd.MaChucVu;
+            nguoiDung.MaPhongBan = nd.MaPhongBan;
+
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponseDto
+            {
+                Success = true,
+                Message = "Cập nhật thành công"
             });
         }
 

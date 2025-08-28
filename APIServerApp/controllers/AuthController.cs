@@ -54,7 +54,6 @@ public class AuthController : ControllerBase
         });
     }
 
-
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] NguoiDung request)
     {
@@ -74,6 +73,48 @@ public class AuthController : ControllerBase
 
         return Ok(new ApiResponseDto { Message = "Đăng ký thành công!", Success = true });
     }
+
+    [HttpGet("get-account-inactive")]
+    public async Task<IActionResult> GetAccountInactive()
+    {
+        var accs = await _context.NguoiDungs
+            .Where(u => u.TrangThai == 0)
+            .Select(u => new
+            {
+                u.MaNguoiDung,
+                u.HoTen,
+                u.Email,
+                DonVi = new
+                {
+                    MaDonVi = u.MaDonVi,
+                    TenDonVi = u.DonVi.TenDonVi
+                },
+                PhongBan = new
+                {
+                    MaPhongBan = u.MaPhongBan,
+                    TenPhongBan = u.PhongBan.TenPhongBan
+                },
+                ChucVu = new
+                {
+                    MaChucVu = u.MaChucVu,
+                    TenChucVu = u.ChucVu.TenChucVu
+                },
+
+                MaChucVu = u.MaChucVu,
+                MaDonVi = u.MaDonVi,
+                MaPhongBan = u.MaPhongBan
+
+            })
+            .ToListAsync();
+
+        return Ok(new
+        {
+            Success = true,
+            Message = accs.Count > 0 ? "Lấy danh sách người dùng chưa xác nhận" : "Không có người dùng chưa xác nhận",
+            Data = accs
+        });
+    }
+
 
 
     private string GenerateJwtToken(NguoiDung user)

@@ -1678,6 +1678,77 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
+        public async Task<Object_Response<List<NguoiDung>>> GetAccountInactive()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/auth/get-account-inactive");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<NguoiDung>>>(result);
+                }
+
+                return new Object_Response<List<NguoiDung>>
+                {
+                    Success = false,
+                    Message = $"GETACCOUNTINACTIVE thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<NguoiDung>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<NguoiDung>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETACCOUNTINACTIVE: " + ex.Message,
+                    Data = new List<NguoiDung>()
+                };
+            }
+        }
+
+        public async Task<ApiResponse> UpdateTrangThaiNguoiDung(NguoiDung nd)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(nd),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                    var response = await client.PostAsync("api/task/update-nguoi-dung", jsonContent);
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    }
+
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"Cập nhật nguoidung thất bại ({(int)response.StatusCode}): {result}"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi cập nhật nguoidung email: " + ex.Message
+                };
+            }
+        }
 
 
     }

@@ -31,6 +31,7 @@
             this.panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.lbl = new System.Windows.Forms.Label();
             this.panel2 = new Guna.UI2.WinForms.Guna2Panel();
+            this.btn_DangKy = new Guna.UI2.WinForms.Guna2Button();
             this.cb_CV = new Guna.UI2.WinForms.Guna2ComboBox();
             this.lbl_CV = new System.Windows.Forms.Label();
             this.cb_PB = new Guna.UI2.WinForms.Guna2ComboBox();
@@ -45,7 +46,6 @@
             this.lblName = new System.Windows.Forms.Label();
             this.txt_Email = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblEmail = new System.Windows.Forms.Label();
-            this.btn_DangKy = new Guna.UI2.WinForms.Guna2Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -98,6 +98,23 @@
             this.panel2.Padding = new System.Windows.Forms.Padding(10);
             this.panel2.Size = new System.Drawing.Size(386, 601);
             this.panel2.TabIndex = 1;
+            // 
+            // btn_DangKy
+            // 
+            this.btn_DangKy.BorderRadius = 10;
+            this.btn_DangKy.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.btn_DangKy.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.btn_DangKy.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.btn_DangKy.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.btn_DangKy.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
+            this.btn_DangKy.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_DangKy.ForeColor = System.Drawing.Color.WhiteSmoke;
+            this.btn_DangKy.Location = new System.Drawing.Point(32, 537);
+            this.btn_DangKy.Name = "btn_DangKy";
+            this.btn_DangKy.Size = new System.Drawing.Size(325, 50);
+            this.btn_DangKy.TabIndex = 20;
+            this.btn_DangKy.Text = "Đăng Ký";
+            this.btn_DangKy.Click += new System.EventHandler(this.btn_DangKy_Click);
             // 
             // cb_CV
             // 
@@ -196,7 +213,7 @@
             this.txt_RePass.Location = new System.Drawing.Point(32, 254);
             this.txt_RePass.Margin = new System.Windows.Forms.Padding(0);
             this.txt_RePass.Name = "txt_RePass";
-            this.txt_RePass.PlaceholderText = "";
+            this.txt_RePass.PlaceholderText = "Xác Nhận Mật Khẩu";
             this.txt_RePass.SelectedText = "";
             this.txt_RePass.Size = new System.Drawing.Size(325, 35);
             this.txt_RePass.TabIndex = 13;
@@ -227,7 +244,7 @@
             this.txt_Pass.Location = new System.Drawing.Point(32, 182);
             this.txt_Pass.Margin = new System.Windows.Forms.Padding(0);
             this.txt_Pass.Name = "txt_Pass";
-            this.txt_Pass.PlaceholderText = "";
+            this.txt_Pass.PlaceholderText = "Nhập Mật Khẩu";
             this.txt_Pass.SelectedText = "";
             this.txt_Pass.Size = new System.Drawing.Size(325, 35);
             this.txt_Pass.TabIndex = 11;
@@ -257,7 +274,7 @@
             this.txt_UserName.Location = new System.Drawing.Point(32, 109);
             this.txt_UserName.Margin = new System.Windows.Forms.Padding(0);
             this.txt_UserName.Name = "txt_UserName";
-            this.txt_UserName.PlaceholderText = "";
+            this.txt_UserName.PlaceholderText = "Nhập Tên Người Dùng";
             this.txt_UserName.SelectedText = "";
             this.txt_UserName.Size = new System.Drawing.Size(325, 35);
             this.txt_UserName.TabIndex = 9;
@@ -287,7 +304,7 @@
             this.txt_Email.Location = new System.Drawing.Point(32, 37);
             this.txt_Email.Margin = new System.Windows.Forms.Padding(0);
             this.txt_Email.Name = "txt_Email";
-            this.txt_Email.PlaceholderText = "";
+            this.txt_Email.PlaceholderText = "Nhập Email";
             this.txt_Email.SelectedText = "";
             this.txt_Email.Size = new System.Drawing.Size(325, 35);
             this.txt_Email.TabIndex = 7;
@@ -302,23 +319,6 @@
             this.lblEmail.TabIndex = 0;
             this.lblEmail.Text = "Email";
             // 
-            // btn_DangKy
-            // 
-            this.btn_DangKy.BorderRadius = 10;
-            this.btn_DangKy.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btn_DangKy.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btn_DangKy.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btn_DangKy.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btn_DangKy.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
-            this.btn_DangKy.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_DangKy.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.btn_DangKy.Location = new System.Drawing.Point(32, 537);
-            this.btn_DangKy.Name = "btn_DangKy";
-            this.btn_DangKy.Size = new System.Drawing.Size(325, 50);
-            this.btn_DangKy.TabIndex = 20;
-            this.btn_DangKy.Text = "Đăng Ký";
-            this.btn_DangKy.Click += new System.EventHandler(this.btn_DangKy_Click);
-            // 
             // Register
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -328,6 +328,8 @@
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(818, 648);
+            this.MinimumSize = new System.Drawing.Size(818, 648);
             this.Name = "Register";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
