@@ -53,7 +53,6 @@ namespace Task_App.views
             this.avt = new Guna.UI2.WinForms.Guna2CirclePictureBox();
             this.panelControlMenu = new DevExpress.XtraEditors.PanelControl();
             this.panel_Menu = new Guna.UI2.WinForms.Guna2Panel();
-            this.btn_setting = new Guna.UI2.WinForms.Guna2ImageButton();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnDashboard = new Guna.UI2.WinForms.Guna2ImageButton();
             this.btn_Task_DaGiao = new Guna.UI2.WinForms.Guna2ImageButton();
@@ -65,6 +64,7 @@ namespace Task_App.views
             this.HomelayoutControl1ConvertedLayout = new DevExpress.XtraLayout.LayoutControl();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.panelControl1item = new DevExpress.XtraLayout.LayoutControlItem();
+            this.guna2ImageButton1 = new Guna.UI2.WinForms.Guna2ImageButton();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             this.panel.SuspendLayout();
@@ -342,7 +342,9 @@ namespace Task_App.views
             // panel_Menu
             // 
             this.panel_Menu.BorderColor = System.Drawing.Color.Transparent;
+            this.panel_Menu.Controls.Add(this.guna2ImageButton1);
             this.panel_Menu.Controls.Add(this.tableLayoutPanel2);
+            this.panel_Menu.Controls.Add(this.btnExit);
             this.panel_Menu.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_Menu.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
             this.panel_Menu.Location = new System.Drawing.Point(0, 0);
@@ -510,6 +512,22 @@ namespace Task_App.views
             this.panelControl1item.Size = new System.Drawing.Size(1421, 884);
             this.panelControl1item.TextVisible = false;
             // 
+            // guna2ImageButton1
+            // 
+            this.guna2ImageButton1.BackColor = System.Drawing.Color.Transparent;
+            this.guna2ImageButton1.CheckedState.ImageSize = new System.Drawing.Size(64, 64);
+            this.guna2ImageButton1.HoverState.ImageSize = new System.Drawing.Size(64, 64);
+            this.guna2ImageButton1.Image = ((System.Drawing.Image)(resources.GetObject("guna2ImageButton1.Image")));
+            this.guna2ImageButton1.ImageOffset = new System.Drawing.Point(0, 0);
+            this.guna2ImageButton1.ImageRotate = 0F;
+            this.guna2ImageButton1.ImageSize = new System.Drawing.Size(24, 24);
+            this.guna2ImageButton1.Location = new System.Drawing.Point(0, 697);
+            this.guna2ImageButton1.Margin = new System.Windows.Forms.Padding(0);
+            this.guna2ImageButton1.Name = "guna2ImageButton1";
+            this.guna2ImageButton1.PressedState.ImageSize = new System.Drawing.Size(64, 64);
+            this.guna2ImageButton1.Size = new System.Drawing.Size(200, 90);
+            this.guna2ImageButton1.TabIndex = 5;
+            // 
             // Home
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -522,7 +540,6 @@ namespace Task_App.views
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Home";
-            //this.Load += new System.EventHandler(this.Home_Load);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panel.ResumeLayout(false);
@@ -583,6 +600,6 @@ namespace Task_App.views
         private DevExpress.XtraLayout.LayoutControlItem panelControl1item;
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
-        private Guna.UI2.WinForms.Guna2ImageButton btn_setting;
+        private Guna.UI2.WinForms.Guna2ImageButton guna2ImageButton1;
     }
 }
