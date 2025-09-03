@@ -57,6 +57,7 @@ namespace Task_App.views
             this.btnDashboard = new Guna.UI2.WinForms.Guna2ImageButton();
             this.btn_Task_DaGiao = new Guna.UI2.WinForms.Guna2ImageButton();
             this.btn_Task_DuocGiao = new Guna.UI2.WinForms.Guna2ImageButton();
+            this.btn_setting = new Guna.UI2.WinForms.Guna2ImageButton();
             this.btnExit = new Guna.UI2.WinForms.Guna2ImageButton();
             this.menu_ThongBao = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cccswxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +65,6 @@ namespace Task_App.views
             this.HomelayoutControl1ConvertedLayout = new DevExpress.XtraLayout.LayoutControl();
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.panelControl1item = new DevExpress.XtraLayout.LayoutControlItem();
-            this.guna2ImageButton1 = new Guna.UI2.WinForms.Guna2ImageButton();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             this.panel.SuspendLayout();
@@ -342,7 +342,6 @@ namespace Task_App.views
             // panel_Menu
             // 
             this.panel_Menu.BorderColor = System.Drawing.Color.Transparent;
-            this.panel_Menu.Controls.Add(this.guna2ImageButton1);
             this.panel_Menu.Controls.Add(this.tableLayoutPanel2);
             this.panel_Menu.Controls.Add(this.btnExit);
             this.panel_Menu.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -362,15 +361,17 @@ namespace Task_App.views
             this.tableLayoutPanel2.Controls.Add(this.btnDashboard, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btn_Task_DaGiao, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.btn_Task_DuocGiao, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.btn_setting, 0, 3);
             this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 278);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 3;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 340);
+            this.tableLayoutPanel2.RowCount = 4;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 400);
             this.tableLayoutPanel2.TabIndex = 4;
             // 
             // btnDashboard
@@ -388,7 +389,7 @@ namespace Task_App.views
             this.btnDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnDashboard.Name = "btnDashboard";
             this.btnDashboard.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.btnDashboard.Size = new System.Drawing.Size(200, 113);
+            this.btnDashboard.Size = new System.Drawing.Size(200, 100);
             this.btnDashboard.TabIndex = 2;
             this.btnDashboard.Click += new System.EventHandler(this.OnBtnMouseClick);
             this.btnDashboard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnBtnMouseDown);
@@ -407,11 +408,11 @@ namespace Task_App.views
             this.btn_Task_DaGiao.ImageOffset = new System.Drawing.Point(0, 0);
             this.btn_Task_DaGiao.ImageRotate = 0F;
             this.btn_Task_DaGiao.ImageSize = new System.Drawing.Size(32, 32);
-            this.btn_Task_DaGiao.Location = new System.Drawing.Point(0, 113);
+            this.btn_Task_DaGiao.Location = new System.Drawing.Point(0, 100);
             this.btn_Task_DaGiao.Margin = new System.Windows.Forms.Padding(0);
             this.btn_Task_DaGiao.Name = "btn_Task_DaGiao";
             this.btn_Task_DaGiao.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.btn_Task_DaGiao.Size = new System.Drawing.Size(200, 113);
+            this.btn_Task_DaGiao.Size = new System.Drawing.Size(200, 100);
             this.btn_Task_DaGiao.TabIndex = 0;
             this.btn_Task_DaGiao.Click += new System.EventHandler(this.OnBtnMouseClick);
             this.btn_Task_DaGiao.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnBtnMouseDown);
@@ -430,17 +431,37 @@ namespace Task_App.views
             this.btn_Task_DuocGiao.ImageOffset = new System.Drawing.Point(0, 0);
             this.btn_Task_DuocGiao.ImageRotate = 0F;
             this.btn_Task_DuocGiao.ImageSize = new System.Drawing.Size(32, 32);
-            this.btn_Task_DuocGiao.Location = new System.Drawing.Point(0, 226);
+            this.btn_Task_DuocGiao.Location = new System.Drawing.Point(0, 200);
             this.btn_Task_DuocGiao.Margin = new System.Windows.Forms.Padding(0);
             this.btn_Task_DuocGiao.Name = "btn_Task_DuocGiao";
             this.btn_Task_DuocGiao.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.btn_Task_DuocGiao.Size = new System.Drawing.Size(200, 114);
+            this.btn_Task_DuocGiao.Size = new System.Drawing.Size(200, 100);
             this.btn_Task_DuocGiao.TabIndex = 1;
             this.btn_Task_DuocGiao.Click += new System.EventHandler(this.OnBtnMouseClick);
             this.btn_Task_DuocGiao.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnBtnMouseDown);
             this.btn_Task_DuocGiao.MouseEnter += new System.EventHandler(this.OnBtnMouseEnter);
             this.btn_Task_DuocGiao.MouseLeave += new System.EventHandler(this.OnBtnMouseLeaveOrUp);
             this.btn_Task_DuocGiao.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnBtnMouseLeaveOrUp);
+            // 
+            // btn_setting
+            // 
+            this.btn_setting.CheckedState.Image = ((System.Drawing.Image)(resources.GetObject("resource.Image")));
+            this.btn_setting.CheckedState.ImageSize = new System.Drawing.Size(32, 32);
+            this.btn_setting.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_setting.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_setting.HoverState.ImageSize = new System.Drawing.Size(32, 32);
+            this.btn_setting.Image = ((System.Drawing.Image)(resources.GetObject("btn_setting.Image")));
+            this.btn_setting.ImageOffset = new System.Drawing.Point(0, 0);
+            this.btn_setting.ImageRotate = 0F;
+            this.btn_setting.ImageSize = new System.Drawing.Size(24, 24);
+            this.btn_setting.Location = new System.Drawing.Point(0, 300);
+            this.btn_setting.Margin = new System.Windows.Forms.Padding(0);
+            this.btn_setting.Name = "btn_setting";
+            this.btn_setting.PressedState.Image = ((System.Drawing.Image)(resources.GetObject("resource.Image1")));
+            this.btn_setting.PressedState.ImageSize = new System.Drawing.Size(32, 32);
+            this.btn_setting.Size = new System.Drawing.Size(200, 100);
+            this.btn_setting.TabIndex = 3;
+            this.btn_setting.Click += new System.EventHandler(this.OnBtnMouseClick);
             // 
             // btnExit
             // 
@@ -511,22 +532,6 @@ namespace Task_App.views
             this.panelControl1item.Name = "panelControl1item";
             this.panelControl1item.Size = new System.Drawing.Size(1421, 884);
             this.panelControl1item.TextVisible = false;
-            // 
-            // guna2ImageButton1
-            // 
-            this.guna2ImageButton1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2ImageButton1.CheckedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.guna2ImageButton1.HoverState.ImageSize = new System.Drawing.Size(64, 64);
-            this.guna2ImageButton1.Image = ((System.Drawing.Image)(resources.GetObject("guna2ImageButton1.Image")));
-            this.guna2ImageButton1.ImageOffset = new System.Drawing.Point(0, 0);
-            this.guna2ImageButton1.ImageRotate = 0F;
-            this.guna2ImageButton1.ImageSize = new System.Drawing.Size(24, 24);
-            this.guna2ImageButton1.Location = new System.Drawing.Point(0, 697);
-            this.guna2ImageButton1.Margin = new System.Windows.Forms.Padding(0);
-            this.guna2ImageButton1.Name = "guna2ImageButton1";
-            this.guna2ImageButton1.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.guna2ImageButton1.Size = new System.Drawing.Size(200, 90);
-            this.guna2ImageButton1.TabIndex = 5;
             // 
             // Home
             // 
@@ -600,6 +605,6 @@ namespace Task_App.views
         private DevExpress.XtraLayout.LayoutControlItem panelControl1item;
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
-        private Guna.UI2.WinForms.Guna2ImageButton guna2ImageButton1;
+        private Guna.UI2.WinForms.Guna2ImageButton btn_setting;
     }
 }

@@ -813,6 +813,9 @@ namespace APIServerApp.controllers
                     MaPhongBan = nd.MaPhongBan,
                     DonVi = nd.DonVi,
                     MaDonVi = nd.MaDonVi,
+                    IsAdmin = nd.IsAdmin,
+                    TrangThai = nd.TrangThai,
+                    LaLanhDao = nd.LaLanhDao
                 })
                 .ToListAsync();
 

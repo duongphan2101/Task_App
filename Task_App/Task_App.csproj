@@ -514,6 +514,12 @@
     <Compile Include="views\Register.Designer.cs">
       <DependentUpon>Register.cs</DependentUpon>
     </Compile>
+    <Compile Include="views\Setting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="views\Setting.Designer.cs">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </Compile>
     <Compile Include="views\Task_Da_Giao_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -570,6 +576,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="views\Register.resx">
       <DependentUpon>Register.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\Setting.resx">
+      <DependentUpon>Setting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="views\Task_Da_Giao_Control.resx">
       <DependentUpon>Task_Da_Giao_Control.cs</DependentUpon>
