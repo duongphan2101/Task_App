@@ -300,5 +300,14 @@ namespace Task_App.views
             }
         }
 
+        private void OnBtnMouseLeaveOrUp(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OnBtnMouseLeaveOrUp(object sender, MouseEventArgs e)
+        {
+
+        }
     }
 }

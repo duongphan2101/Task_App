@@ -1750,6 +1750,39 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
+        public async Task<Object_Response<List<NguoiDung>>> GetAccountActive()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/auth/get-account-active");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<NguoiDung>>>(result);
+                }
+
+                return new Object_Response<List<NguoiDung>>
+                {
+                    Success = false,
+                    Message = $"GETACCOUNTACTIVE thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<NguoiDung>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<NguoiDung>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETACCOUNTACTIVE: " + ex.Message,
+                    Data = new List<NguoiDung>()
+                };
+            }
+        }
+
 
     }
 }

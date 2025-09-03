@@ -115,6 +115,47 @@ public class AuthController : ControllerBase
         });
     }
 
+    [HttpGet("get-account-active")]
+    public async Task<IActionResult> GetAccountActive()
+    {
+        var accs = await _context.NguoiDungs
+            .Where(u => u.TrangThai == 1 && u.IsAdmin == 0)
+            .Select(u => new
+            {
+                u.MaNguoiDung,
+                u.HoTen,
+                u.Email,
+                DonVi = new
+                {
+                    MaDonVi = u.MaDonVi,
+                    TenDonVi = u.DonVi.TenDonVi
+                },
+                PhongBan = new
+                {
+                    MaPhongBan = u.MaPhongBan,
+                    TenPhongBan = u.PhongBan.TenPhongBan
+                },
+                ChucVu = new
+                {
+                    MaChucVu = u.MaChucVu,
+                    TenChucVu = u.ChucVu.TenChucVu
+                },
+
+                MaChucVu = u.MaChucVu,
+                MaDonVi = u.MaDonVi,
+                MaPhongBan = u.MaPhongBan
+
+            })
+            .ToListAsync();
+
+        return Ok(new
+        {
+            Success = true,
+            Message = accs.Count > 0 ? "Lấy danh sách người dùng" : "Không có người dùng nào",
+            Data = accs
+        });
+    }
+
 
 
     private string GenerateJwtToken(NguoiDung user)
