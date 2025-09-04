@@ -29,4 +29,19 @@ namespace Task_App.DTO
         public DateTime? NgayGiao { get; set; }
         public DateTime? NgayKetThuc { get; set; }
     }
+
+    public class NguoiDungView
+    {
+        public int MaNguoiDung { get; set; }
+        public string HoTen { get; set; }
+        public string Email { get; set; }
+        public string MaDonVi { get; set; }
+        public string MaPhongBan { get; set; }
+        public string MaChucVu { get; set; }
+        public string DonVi { get; set; }
+        public string PhongBan { get; set; }
+        public string ChucVu { get; set; }
+        public string TrangThai { get; set; }
+    }
+
 }

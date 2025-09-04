@@ -596,9 +596,7 @@ namespace APIServerApp.controllers
                 {
                     TenTep = tep.TenTep,
                     DuongDan = tep.DuongDan,
-                    TenTepGoc = tep.TenTepGoc,
-
-                    TepDinhKemEmails = tep.TepDinhKemEmails
+                    TenTepGoc = tep.TenTepGoc
                 };
 
                 _context.TepTins.Add(tt);

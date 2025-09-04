@@ -884,7 +884,8 @@ namespace Task_App.views
                 }
 
                 int stt = 1;
-                string targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
+                string targetFolder = Duong_Dan.DuongDan;
+                    //Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
                 if (!Directory.Exists(targetFolder))
                 {
                     Directory.CreateDirectory(targetFolder);

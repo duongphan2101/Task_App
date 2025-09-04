@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace APIServerApp.Model
 {
@@ -19,7 +20,7 @@ namespace APIServerApp.Model
 
         [StringLength(500)]
         public string DuongDan { get; set; }
-
-        public virtual ICollection<TepDinhKemEmail> TepDinhKemEmails { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<TepDinhKemEmail>? TepDinhKemEmails { get; set; } = new HashSet<TepDinhKemEmail>();
     }
 }

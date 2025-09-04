@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using Task_App.DTO;
 using Task_App.Model;
 using Task_App.TaskApp_Dao;
 
@@ -13,6 +14,8 @@ namespace Task_App.views
 
         private ApiClientDAO apiClientDAO;
         private NguoiDung nd;
+        private List<NguoiDungView> displayListFull;
+        private List<NguoiDungView> displayListFull1;
 
         public AdminForm(NguoiDung nd, ApiClientDAO apiClientDAO)
         {
@@ -24,7 +27,25 @@ namespace Task_App.views
 
         private void txt_TimKiem_TextChanged(object sender, EventArgs e)
         {
-            Console.WriteLine("Keyworld: " + txt_TimKiem.Text);
+            string keyword = txt_TimKiem.Text.Trim().ToLower();
+
+            if (string.IsNullOrEmpty(keyword))
+            {
+                data.DataSource = displayListFull;
+            }
+            else
+            {
+                var filtered = displayListFull
+                    .Where(x =>
+                        x.HoTen.ToLower().Contains(keyword) ||
+                        x.Email.ToLower().Contains(keyword) ||
+                        x.DonVi.ToLower().Contains(keyword) ||
+                        x.PhongBan.ToLower().Contains(keyword) ||
+                        x.ChucVu.ToLower().Contains(keyword))
+                    .ToList();
+
+                data.DataSource = filtered;
+            }
         }
 
         private void AdminForm_Load(object sender, EventArgs e)
@@ -64,19 +85,26 @@ namespace Task_App.views
             data.AllowUserToAddRows = false;
             data.Columns.Clear();
 
-            var displayList = lst.Select(x => new
+            var displayList = lst.Select(x => new NguoiDungView
             {
-                x.MaNguoiDung,
-                x.HoTen,
-                x.Email,
+                MaNguoiDung = x.MaNguoiDung,
+                HoTen = x.HoTen,
+                Email = x.Email,
+                MaDonVi = x.MaDonVi,
+                MaPhongBan = x.MaPhongBan,
+                MaChucVu = x.MaChucVu,
                 DonVi = donVis.FirstOrDefault(d => d.MaDonVi == x.MaDonVi)?.TenDonVi ?? "",
                 PhongBan = phongBans.FirstOrDefault(p => p.MaPhongBan == x.MaPhongBan)?.TenPhongBan ?? "",
                 ChucVu = chucVus.FirstOrDefault(c => c.MaChucVu == x.MaChucVu)?.TenChucVu ?? "",
                 TrangThai = x.TrangThai == 1 ? "Kích hoạt" : "Chưa kích hoạt"
             }).ToList();
 
-            //data.DataSource = new BindingList<NguoiDung>(lst);
+            // Lưu full list để search
+            displayListFull = displayList;
+
+            // Gán vào datagrid
             data.DataSource = displayList;
+
 
 
             // ID
@@ -187,6 +215,7 @@ namespace Task_App.views
                 {
                     MessageBox.Show($"{res.Message}", "Thông Báo");
                     loadData();
+                    loadData1();
                 }
                 else
                 {
@@ -201,7 +230,26 @@ namespace Task_App.views
 
         private void txt_TimKiem_1_TextChanged(object sender, EventArgs e)
         {
-            Console.WriteLine("Keyworld: " + txt_TimKiem_1.Text);
+            string keyword = txt_TimKiem_1.Text.Trim().ToLower();
+
+            if (string.IsNullOrEmpty(keyword))
+            {
+                data1.DataSource = displayListFull1;
+            }
+            else
+            {
+                var filtered = displayListFull1
+                    .Where(x =>
+                        x.HoTen.ToLower().Contains(keyword) ||
+                        x.Email.ToLower().Contains(keyword) ||
+                        x.DonVi.ToLower().Contains(keyword) ||
+                        x.PhongBan.ToLower().Contains(keyword) ||
+                        x.ChucVu.ToLower().Contains(keyword))
+                    .ToList();
+
+                data1.DataSource = filtered;
+            }
+
         }
 
         private async void loadData1()
@@ -235,18 +283,24 @@ namespace Task_App.views
             data1.AllowUserToAddRows = false;
             data1.Columns.Clear();
 
-            var displayList = lst.Select(x => new
+            var displayList = lst.Select(x => new NguoiDungView
             {
-                x.MaNguoiDung,
-                x.HoTen,
-                x.Email,
+                MaNguoiDung = x.MaNguoiDung,
+                HoTen = x.HoTen,
+                Email = x.Email,
+                MaDonVi = x.MaDonVi,
+                MaPhongBan = x.MaPhongBan,
+                MaChucVu = x.MaChucVu,
                 DonVi = donVis.FirstOrDefault(d => d.MaDonVi == x.MaDonVi)?.TenDonVi ?? "",
                 PhongBan = phongBans.FirstOrDefault(p => p.MaPhongBan == x.MaPhongBan)?.TenPhongBan ?? "",
                 ChucVu = chucVus.FirstOrDefault(c => c.MaChucVu == x.MaChucVu)?.TenChucVu ?? "",
                 TrangThai = x.TrangThai == 1 ? "Kích hoạt" : "Chưa kích hoạt"
             }).ToList();
 
-            //data.DataSource = new BindingList<NguoiDung>(lst);
+            // Lưu full list để search
+            displayListFull1 = displayList;
+
+            // Gán vào datagrid
             data1.DataSource = displayList;
 
 
@@ -349,6 +403,7 @@ namespace Task_App.views
                 {
                     MessageBox.Show($"{res.Message}", "Thông Báo");
                     loadData1();
+                    loadData();
                 }
                 else
                 {

@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Task_App.DTO;
 using Task_App.TaskApp_Dao;
-using Task_App.views;
 
 namespace Task_App
 {
@@ -18,9 +17,11 @@ namespace Task_App
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            Duong_Dan.Init();
+
             var apiDao = new ApiClientDAO();
             Application.Run(new FormLogin(apiDao));
-
+            
         }
 
 

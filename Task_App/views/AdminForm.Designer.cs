@@ -36,14 +36,14 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.tab = new Guna.UI2.WinForms.Guna2TabControl();
-            this.accounts = new System.Windows.Forms.TabPage();
+            this.ChoKichHoat = new System.Windows.Forms.TabPage();
             this.panel_center = new Guna.UI2.WinForms.Guna2Panel();
             this.panel_panel_center = new Guna.UI2.WinForms.Guna2Panel();
             this.data = new Guna.UI2.WinForms.Guna2DataGridView();
             this.panel_top = new Guna.UI2.WinForms.Guna2Panel();
             this.flow = new System.Windows.Forms.FlowLayoutPanel();
             this.txt_TimKiem = new Guna.UI2.WinForms.Guna2TextBox();
-            this.all = new System.Windows.Forms.TabPage();
+            this.TatCaTaiKhoan = new System.Windows.Forms.TabPage();
             this.panel_main = new Guna.UI2.WinForms.Guna2Panel();
             this.panel_main_main = new Guna.UI2.WinForms.Guna2Panel();
             this.data1 = new Guna.UI2.WinForms.Guna2DataGridView();
@@ -51,13 +51,13 @@
             this.flow_1 = new System.Windows.Forms.FlowLayoutPanel();
             this.txt_TimKiem_1 = new Guna.UI2.WinForms.Guna2TextBox();
             this.tab.SuspendLayout();
-            this.accounts.SuspendLayout();
+            this.ChoKichHoat.SuspendLayout();
             this.panel_center.SuspendLayout();
             this.panel_panel_center.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.data)).BeginInit();
             this.panel_top.SuspendLayout();
             this.flow.SuspendLayout();
-            this.all.SuspendLayout();
+            this.TatCaTaiKhoan.SuspendLayout();
             this.panel_main.SuspendLayout();
             this.panel_main_main.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.data1)).BeginInit();
@@ -68,8 +68,8 @@
             // tab
             // 
             this.tab.Alignment = System.Windows.Forms.TabAlignment.Left;
-            this.tab.Controls.Add(this.accounts);
-            this.tab.Controls.Add(this.all);
+            this.tab.Controls.Add(this.ChoKichHoat);
+            this.tab.Controls.Add(this.TatCaTaiKhoan);
             this.tab.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tab.ItemSize = new System.Drawing.Size(180, 60);
             this.tab.Location = new System.Drawing.Point(0, 0);
@@ -96,20 +96,20 @@
             this.tab.TabIndex = 1;
             this.tab.TabMenuBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(42)))), ((int)(((byte)(57)))));
             // 
-            // accounts
+            // ChoKichHoat
             // 
-            this.accounts.AutoScroll = true;
-            this.accounts.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.accounts.Controls.Add(this.panel_center);
-            this.accounts.Controls.Add(this.panel_top);
-            this.accounts.Location = new System.Drawing.Point(184, 4);
-            this.accounts.Margin = new System.Windows.Forms.Padding(0);
-            this.accounts.Name = "accounts";
-            this.accounts.Padding = new System.Windows.Forms.Padding(10);
-            this.accounts.Size = new System.Drawing.Size(1194, 645);
-            this.accounts.TabIndex = 0;
-            this.accounts.Text = "Accounts";
-            this.accounts.ToolTipText = "Accounts";
+            this.ChoKichHoat.AutoScroll = true;
+            this.ChoKichHoat.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.ChoKichHoat.Controls.Add(this.panel_center);
+            this.ChoKichHoat.Controls.Add(this.panel_top);
+            this.ChoKichHoat.Location = new System.Drawing.Point(184, 4);
+            this.ChoKichHoat.Margin = new System.Windows.Forms.Padding(0);
+            this.ChoKichHoat.Name = "ChoKichHoat";
+            this.ChoKichHoat.Padding = new System.Windows.Forms.Padding(10);
+            this.ChoKichHoat.Size = new System.Drawing.Size(1194, 645);
+            this.ChoKichHoat.TabIndex = 0;
+            this.ChoKichHoat.Text = "Chờ Kích Hoạt";
+            this.ChoKichHoat.ToolTipText = "Các tài khoản chờ kích hoạt";
             // 
             // panel_center
             // 
@@ -242,19 +242,19 @@
             this.txt_TimKiem.TabIndex = 0;
             this.txt_TimKiem.TextChanged += new System.EventHandler(this.txt_TimKiem_TextChanged);
             // 
-            // all
+            // TatCaTaiKhoan
             // 
-            this.all.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.all.Controls.Add(this.panel_main);
-            this.all.Controls.Add(this.panel_head);
-            this.all.Location = new System.Drawing.Point(184, 4);
-            this.all.Margin = new System.Windows.Forms.Padding(0);
-            this.all.Name = "all";
-            this.all.Padding = new System.Windows.Forms.Padding(10);
-            this.all.Size = new System.Drawing.Size(1194, 645);
-            this.all.TabIndex = 1;
-            this.all.Text = "All";
-            this.all.ToolTipText = "all";
+            this.TatCaTaiKhoan.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.TatCaTaiKhoan.Controls.Add(this.panel_main);
+            this.TatCaTaiKhoan.Controls.Add(this.panel_head);
+            this.TatCaTaiKhoan.Location = new System.Drawing.Point(184, 4);
+            this.TatCaTaiKhoan.Margin = new System.Windows.Forms.Padding(0);
+            this.TatCaTaiKhoan.Name = "TatCaTaiKhoan";
+            this.TatCaTaiKhoan.Padding = new System.Windows.Forms.Padding(10);
+            this.TatCaTaiKhoan.Size = new System.Drawing.Size(1194, 645);
+            this.TatCaTaiKhoan.TabIndex = 1;
+            this.TatCaTaiKhoan.Text = "Tất cả tài khoản";
+            this.TatCaTaiKhoan.ToolTipText = "Tất cả các tài khoản của người dùng";
             // 
             // panel_main
             // 
@@ -400,14 +400,14 @@
             this.Text = "ADMIN";
             this.Load += new System.EventHandler(this.AdminForm_Load);
             this.tab.ResumeLayout(false);
-            this.accounts.ResumeLayout(false);
+            this.ChoKichHoat.ResumeLayout(false);
             this.panel_center.ResumeLayout(false);
             this.panel_panel_center.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.data)).EndInit();
             this.panel_top.ResumeLayout(false);
             this.panel_top.PerformLayout();
             this.flow.ResumeLayout(false);
-            this.all.ResumeLayout(false);
+            this.TatCaTaiKhoan.ResumeLayout(false);
             this.panel_main.ResumeLayout(false);
             this.panel_main_main.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.data1)).EndInit();
@@ -421,8 +421,8 @@
         #endregion
 
         private Guna.UI2.WinForms.Guna2TabControl tab;
-        private System.Windows.Forms.TabPage accounts;
-        private System.Windows.Forms.TabPage all;
+        private System.Windows.Forms.TabPage ChoKichHoat;
+        private System.Windows.Forms.TabPage TatCaTaiKhoan;
         private Guna.UI2.WinForms.Guna2Panel panel_center;
         private Guna.UI2.WinForms.Guna2Panel panel_top;
         private System.Windows.Forms.FlowLayoutPanel flow;

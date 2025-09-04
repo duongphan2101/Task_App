@@ -21,6 +21,8 @@ namespace Task_App.views
         private void User_Setting_Load(object sender, EventArgs e)
         {
             txt_path.Text = Duong_Dan.DuongDan;
+            txt_passEmail.Text = DTO.TmpPass.Pwd;
+            //tableLayoutPanel1.Size = new System.Drawing.Size(main_flow.Width, main_flow.Height/4);
         }
 
         private void txt_path_Click(object sender, EventArgs e)
@@ -31,13 +33,13 @@ namespace Task_App.views
 
                 if (dialog.ShowDialog() == DialogResult.OK)
                 {
-                    // Gán lại path
                     Duong_Dan.DuongDan = dialog.SelectedPath;
-
-                    // Hiển thị lên TextBox
                     txt_path.Text = Duong_Dan.DuongDan;
+
+                    Console.WriteLine("Path update: " + Duong_Dan.DuongDan);
                 }
             }
         }
+
     }
 }

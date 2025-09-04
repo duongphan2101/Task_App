@@ -114,10 +114,7 @@ namespace Task_App.views
             if (clickedBtn.Name == btn_Task_DuocGiao.Name)
                 LoadContent(new Task_Duoc_Giao_Control(nd, apiClientDAO));
             if (clickedBtn.Name == btn_setting.Name)
-            {
                 LoadContent(new User_Setting());
-                Console.WriteLine("EHEHEH");
-            }
 
             ResumeLayout();
         }

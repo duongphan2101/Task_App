@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace APIServerApp.Model
 {
@@ -12,7 +13,7 @@ namespace APIServerApp.Model
 
         [Key, Column(Order = 1)]
         public int? MaTep { get; set; }
-
+        [JsonIgnore]
         [ForeignKey("MaEmail")]
         public virtual Email? Email { get; set; }
 

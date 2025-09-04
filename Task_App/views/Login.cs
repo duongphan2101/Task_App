@@ -79,6 +79,12 @@ namespace Task_App
             NguoiDung nd = resLogin.Data;
             tmp.mk = pass;
 
+            if(nd.TrangThai == 0)
+            {
+                MessageBox.Show("Tài khoản chưa được kích hoạt, vui lòng liên hệ admin để kích hoạt tài khoản", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             if (nd.IsAdmin == 0)
             {
                 var homeForm = new Home(nd, apiClientDAO);
