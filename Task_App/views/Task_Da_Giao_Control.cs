@@ -39,11 +39,19 @@ namespace Task_App.views
         {
             var response = await apiClientDAO.GetViecDaGiaoAsync(nd.MaNguoiDung, !locTheoNgay);
 
-            //if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
-            //{
-            //    MessageBox.Show("Không có dữ liệu.");
-            //    return;
-            //}
+            if (response.Data == null || !response.Data.Any())
+            {
+                Console.WriteLine("Không có dữ liệu. Msg: " + response.Message);
+                Panel_TDG_main.Controls.Clear();
+                Label lbl = new Label();
+                lbl.Text = "Không có dữ liệu";
+                lbl.AutoSize = false;
+                lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                Panel_TDG_main.Controls.Add(lbl);
+                lbl.Dock = DockStyle.Fill;
+                lbl.Font = new System.Drawing.Font("Tahoma", 26F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                return;
+            }
 
             // Flatten dữ liệu: mỗi chi tiết công việc thành 1 dòng, lấy thông tin người nhận ở cấp công việc
             var displayData = response.Data

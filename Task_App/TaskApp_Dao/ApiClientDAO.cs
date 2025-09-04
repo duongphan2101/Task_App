@@ -89,6 +89,48 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
+        public async Task<ApiResponse> UpdatePassAcount(string email, string password)
+        {
+            try
+            {
+                var loginData = new { email = email, matKhau = password };
+
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(loginData),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                    var response = await client.PostAsync("api/auth/update-mat-khau-nguoi-dung", jsonContent);
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    }
+
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"Cập nhật Pass thất bại ({(int)response.StatusCode}): {result}"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi cập nhật Pass: " + ex.Message
+                };
+            }
+        }
+
+
         public async Task<ViecDaGiaoResponse> GetViecDaGiaoAsync(int maNguoiDung, bool locTheoNgay)
         {
             try

@@ -33,11 +33,20 @@ namespace Task_App.views
         {
             var response = await apiClientDAO.GetViecDuocGiaoAsync(nd.MaNguoiDung, locTheoNgay);
 
-            //if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
-            //{
-            //    MessageBox.Show("Không có dữ liệu.");
-            //    return;
-            //}
+            if (response.Data == null || !response.Data.Any())
+            {
+                Console.WriteLine("Không có dữ liệu. Msg: " + response.Message);
+                this.Controls.Clear();
+                this.BackColor = Color.White;
+                Label lbl = new Label();
+                lbl.Text = "Không có dữ liệu";
+                lbl.AutoSize = false;
+                lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+                this.Controls.Add(lbl);
+                lbl.Dock = DockStyle.Fill;
+                lbl.Font = new System.Drawing.Font("Tahoma", 26F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                return;
+            }
 
             var displayData = response.Data
                 .SelectMany(cv => cv.ChiTiet.Select(ct => new

@@ -156,6 +156,34 @@ public class AuthController : ControllerBase
         });
     }
 
+    [HttpPost("update-mat-khau-nguoi-dung")]
+    public async Task<IActionResult> UpdateMatKhau([FromBody] LoginRequest request)
+    {
+        // Tìm user theo email
+        var user = await _context.NguoiDungs
+            .FirstOrDefaultAsync(u => u.Email == request.Email);
+
+        if (user == null)
+        {
+            return NotFound("Người dùng không tồn tại.");
+        }
+
+        // Hash lại mật khẩu mới và update
+        user.MatKhau = PasswordHasher.Hash(request.MatKhau);
+
+        _context.NguoiDungs.Update(user);
+        await _context.SaveChangesAsync();
+
+        Console.WriteLine($"Cập nhật mật khẩu thành công cho user {user.Email}");
+
+        return Ok(new ApiResponseDto
+        {
+            Message = "Cập nhật mật khẩu thành công!",
+            Success = true
+        });
+    }
+
+
 
 
     private string GenerateJwtToken(NguoiDung user)
