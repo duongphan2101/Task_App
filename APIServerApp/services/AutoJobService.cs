@@ -6,6 +6,7 @@ using APIServerApp.Context;
 using APIServerApp.controllers;
 using APIServerApp.Helper;
 using APIServerApp.Model;
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 
 namespace APIServerApp.services
@@ -60,6 +61,9 @@ namespace APIServerApp.services
 
         public async Task Auto_SendEmail_NhacNho()
         {
+            var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+            Env.Load(envPath);
+
             var query = await (from ctcv in _context.ChiTietCongViecs
                                join nlq in _context.NguoiLienQuanCongViecs on ctcv.MaCongViec equals nlq.MaCongViec
                                join nd in _context.NguoiDungs on nlq.MaNguoiDung equals nd.MaNguoiDung
@@ -96,8 +100,8 @@ namespace APIServerApp.services
                         new NguoiNhanEmail { MaEmail = e.MaEmail, MaNguoiDung = nn.MaNguoiDung, VaiTro = "to", Email = e, NguoiDung = nn }
                     };
 
-                    string email = Environment.GetEnvironmentVariable("EMAIL_ADDRESS");
-                    string pass = Environment.GetEnvironmentVariable("EMAIL_SECRET_PASS");
+                    string email = Env.GetString("EMAIL_ADDRESS");
+                    string pass = Env.GetString("EMAIL_SECRET_PASS");
 
                     var u = new NguoiDung { Email = email, MatKhau = pass };
 

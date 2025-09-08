@@ -146,6 +146,9 @@
     <Reference Include="DotNetEnv, Version=3.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\DotNetEnv.3.1.1\lib\netstandard1.3\DotNetEnv.dll</HintPath>
     </Reference>
+    <Reference Include="Guna.Charts.WinForms, Version=1.1.0.0, Culture=neutral, PublicKeyToken=8b9d14aa5142e261, processorArchitecture=MSIL">
+      <HintPath>packages\Guna.Charts.WinForms.1.1.0\lib\net48\Guna.Charts.WinForms.dll</HintPath>
+    </Reference>
     <Reference Include="Guna.UI2, Version=2.0.4.7, Culture=neutral, PublicKeyToken=8b9d14aa5142e261, processorArchitecture=MSIL">
       <HintPath>packages\Guna.UI2.WinForms.2.0.4.7\lib\net48\Guna.UI2.dll</HintPath>
     </Reference>
@@ -441,6 +444,7 @@
     <Compile Include="DTO\NguoiLienQuanDTO.cs" />
     <Compile Include="DTO\PieChartModel.cs" />
     <Compile Include="DTO\tmp.cs" />
+    <Compile Include="Helper\CryptoHelper.cs" />
     <Compile Include="Model\ChiTietCongViec.cs" />
     <Compile Include="Model\ChucVu.cs" />
     <Compile Include="Model\CongViec.cs" />
@@ -456,6 +460,7 @@
     <Compile Include="Model\TepDinhKemEmail.cs" />
     <Compile Include="Model\TepTin.cs" />
     <Compile Include="Model\ThongBaoNguoiDung.cs" />
+    <Compile Include="Model\UserCredential.cs" />
     <Compile Include="Response\ApiResponse.cs" />
     <Compile Include="Response\GlobalSession.cs" />
     <Compile Include="Response\LoginResponse.cs" />
@@ -465,23 +470,17 @@
     <Compile Include="Services\CongViecService.cs" />
     <Compile Include="TaskApp_Dao\ApiClientDAO.cs" />
     <Compile Include="TaskApp_Dao\clientDao.cs" />
+    <Compile Include="views\AdminForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\AdminForm.Designer.cs">
+      <DependentUpon>AdminForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="views\Dashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="views\Dashboard.Designer.cs">
       <DependentUpon>Dashboard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="views\DashboardControlViewer.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="views\DashboardControlViewer.Designer.cs">
-      <DependentUpon>DashboardControlViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="views\Dashboard_Express.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="views\Dashboard_Express.Designer.cs">
-      <DependentUpon>Dashboard_Express.cs</DependentUpon>
     </Compile>
     <Compile Include="views\Home.cs">
       <SubType>Form</SubType>
@@ -509,6 +508,18 @@
     <Compile Include="views\Modal_Create_Task.Designer.cs">
       <DependentUpon>Modal_Create_Task.cs</DependentUpon>
     </Compile>
+    <Compile Include="views\Register.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\Register.Designer.cs">
+      <DependentUpon>Register.cs</DependentUpon>
+    </Compile>
+    <Compile Include="views\Setting.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="views\Setting.Designer.cs">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </Compile>
     <Compile Include="views\Task_Da_Giao_Control.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -527,15 +538,18 @@
     <Compile Include="views\TimelineControl.Designer.cs">
       <DependentUpon>TimelineControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="views\RealPass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="views\RealPass.Designer.cs">
+      <DependentUpon>RealPass.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="views\AdminForm.resx">
+      <DependentUpon>AdminForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="views\Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="views\DashboardControlViewer.resx">
-      <DependentUpon>DashboardControlViewer.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="views\Dashboard_Express.resx">
-      <DependentUpon>Dashboard_Express.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="views\Home.resx">
       <DependentUpon>Home.cs</DependentUpon>
@@ -560,6 +574,12 @@
     <EmbeddedResource Include="views\Modal_Create_Task.resx">
       <DependentUpon>Modal_Create_Task.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="views\Register.resx">
+      <DependentUpon>Register.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\Setting.resx">
+      <DependentUpon>Setting.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="views\Task_Da_Giao_Control.resx">
       <DependentUpon>Task_Da_Giao_Control.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -569,6 +589,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="views\TimelineControl.resx">
       <DependentUpon>TimelineControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="views\RealPass.resx">
+      <DependentUpon>RealPass.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>

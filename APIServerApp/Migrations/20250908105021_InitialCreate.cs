@@ -97,7 +97,9 @@ namespace APIServerApp.Migrations
                     MaPhongBan = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     MaDonVi = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     MaChucVu = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    LaLanhDao = table.Column<bool>(type: "bit", nullable: true)
+                    LaLanhDao = table.Column<bool>(type: "bit", nullable: true),
+                    IsAdmin = table.Column<int>(type: "int", nullable: true),
+                    TrangThai = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

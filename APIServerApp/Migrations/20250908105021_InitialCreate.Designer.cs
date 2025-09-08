@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250822061911_InitialCreate")]
+    [Migration("20250908105021_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -212,6 +212,9 @@ namespace APIServerApp.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("IsAdmin")
+                        .HasColumnType("int");
+
                     b.Property<bool?>("LaLanhDao")
                         .HasColumnType("bit");
 
@@ -230,6 +233,9 @@ namespace APIServerApp.Migrations
                     b.Property<string>("MatKhau")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<int?>("TrangThai")
+                        .HasColumnType("int");
 
                     b.HasKey("MaNguoiDung");
 

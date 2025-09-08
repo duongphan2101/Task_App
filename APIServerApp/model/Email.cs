@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace APIServerApp.Model
 {
@@ -28,7 +29,9 @@ namespace APIServerApp.Model
 
         public virtual ChiTietCongViec? ChiTietCongViec { get; set; }
         public virtual NguoiDung? NguoiGuiObj { get; set; }
+        [JsonIgnore]
         public virtual ICollection<NguoiNhanEmail>? NguoiNhanEmails { get; set; }
+        [JsonIgnore]
         public virtual ICollection<TepDinhKemEmail>? TepDinhKemEmails { get; set; }
     }
 }

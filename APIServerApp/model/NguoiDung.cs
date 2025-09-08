@@ -32,6 +32,10 @@ namespace APIServerApp.Model
 
         public bool? LaLanhDao { get; set; }
 
+        public int? IsAdmin { get; set; }
+
+        public int? TrangThai { get; set; } // 0: inactive, 1: active
+
         [ForeignKey("MaDonVi")]
         public virtual DonVi? DonVi { get; set; }
 

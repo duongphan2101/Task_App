@@ -552,5 +552,9 @@ namespace Task_App.views
             head_panel_4.Height = panelHeight;
         }
 
+        private void xtraTabControl1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -101,7 +101,9 @@ namespace APIServerApp.controllers
                     PhongBan = cv.PhongBan,
                     MaPhongBan = cv.MaPhongBan,
                     LaLanhDao = cv.LaLanhDao,
-                    MatKhau = ""
+                    MatKhau = "",
+                    IsAdmin = cv.IsAdmin,
+                    TrangThai = cv.TrangThai
                 }).FirstOrDefaultAsync();
 
 
@@ -594,9 +596,7 @@ namespace APIServerApp.controllers
                 {
                     TenTep = tep.TenTep,
                     DuongDan = tep.DuongDan,
-                    TenTepGoc = tep.TenTepGoc,
-
-                    TepDinhKemEmails = tep.TepDinhKemEmails
+                    TenTepGoc = tep.TenTepGoc
                 };
 
                 _context.TepTins.Add(tt);
@@ -811,6 +811,9 @@ namespace APIServerApp.controllers
                     MaPhongBan = nd.MaPhongBan,
                     DonVi = nd.DonVi,
                     MaDonVi = nd.MaDonVi,
+                    IsAdmin = nd.IsAdmin,
+                    TrangThai = nd.TrangThai,
+                    LaLanhDao = nd.LaLanhDao
                 })
                 .ToListAsync();
 
@@ -898,27 +901,16 @@ namespace APIServerApp.controllers
 
                 message.Body = builder.ToMessageBody();
 
-                Console.WriteLine(req.CurrentUser.Email + " " + req.CurrentUser.MatKhau);
+                Console.WriteLine(req.CurrentUser.Email + " " + req.MK);
                 // Gửi qua SMTP
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
                     await client.ConnectAsync(CLIENT, PORT, MailKit.Security.SecureSocketOptions.StartTls);
-                    await client.AuthenticateAsync(req.CurrentUser.Email, req.CurrentUser.MatKhau);
+                    await client.AuthenticateAsync(req.CurrentUser.Email, req.MK);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }
-
-                // using (var client = new MailKit.Net.Smtp.SmtpClient())
-                // {
-                //     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
-                //     await client.ConnectAsync(CLIENT, PORT, MailKit.Security.SecureSocketOptions.StartTls);
-                //     await client.AuthenticateAsync("test@intimexhcm.com", "TestInt2025@");
-                //     await client.SendAsync(message);
-                //     await client.DisconnectAsync(true);
-                // }
-
-
 
                 // Export .eml -> .zip
                 string targetFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
@@ -1421,6 +1413,73 @@ namespace APIServerApp.controllers
                 Data = tasks
             });
         }
+
+        [HttpGet("get-don-vi")]
+        public async Task<IActionResult> GetDonVi()
+        {
+            var dv = await _context.DonVis.ToArrayAsync();
+
+
+            return Ok(new Object_Response<List<DonVi>>
+            {
+                Success = true,
+                Message = dv.Length > 0 ? "Lấy danh sách đơn vị thành công" : "Không có đơn vị nào",
+                Data = dv.ToList()
+            });
+        }
+
+        [HttpGet("get-phong-ban")]
+        public async Task<IActionResult> GetPhongBan()
+        {
+            var dv = await _context.PhongBans.ToArrayAsync();
+
+
+            return Ok(new Object_Response<List<PhongBan>>
+            {
+                Success = true,
+                Message = dv.Length > 0 ? "Lấy danh sách phong ban thành công" : "Không có phong ban nào",
+                Data = dv.ToList()
+            });
+        }
+
+        [HttpGet("get-chuc-vu")]
+        public async Task<IActionResult> GetChucVu()
+        {
+            var dv = await _context.ChucVus.ToArrayAsync();
+
+            return Ok(new Object_Response<List<ChucVu>>
+            {
+                Success = true,
+                Message = dv.Length > 0 ? "Lấy danh sách chuc vu thành công" : "Không có chuc vu nào",
+                Data = dv.ToList()
+            });
+        }
+
+        [HttpPost("update-nguoi-dung")]
+        public async Task<IActionResult> UpdateNguoiDung([FromBody] NguoiDung nd)
+        {
+            var nguoiDung = await _context.NguoiDungs
+                .FirstOrDefaultAsync(x => x.MaNguoiDung == nd.MaNguoiDung);
+
+            nguoiDung.TrangThai = nd.TrangThai;
+            nguoiDung.DonVi = nd.DonVi;
+            nguoiDung.PhongBan = nd.PhongBan;
+            nguoiDung.ChucVu = nd.ChucVu;
+
+            nguoiDung.MaDonVi = nd.MaDonVi;
+            nguoiDung.MaChucVu = nd.MaChucVu;
+            nguoiDung.MaPhongBan = nd.MaPhongBan;
+
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new ApiResponseDto
+            {
+                Success = true,
+                Message = "Cập nhật thành công"
+            });
+        }
+
 
     }
 }

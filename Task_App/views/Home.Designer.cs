@@ -57,6 +57,7 @@ namespace Task_App.views
             this.btnDashboard = new Guna.UI2.WinForms.Guna2ImageButton();
             this.btn_Task_DaGiao = new Guna.UI2.WinForms.Guna2ImageButton();
             this.btn_Task_DuocGiao = new Guna.UI2.WinForms.Guna2ImageButton();
+            this.btn_setting = new Guna.UI2.WinForms.Guna2ImageButton();
             this.btnExit = new Guna.UI2.WinForms.Guna2ImageButton();
             this.menu_ThongBao = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cccswxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -360,15 +361,17 @@ namespace Task_App.views
             this.tableLayoutPanel2.Controls.Add(this.btnDashboard, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.btn_Task_DaGiao, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this.btn_Task_DuocGiao, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.btn_setting, 0, 3);
             this.tableLayoutPanel2.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 278);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 3;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 266);
+            this.tableLayoutPanel2.RowCount = 4;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(200, 400);
             this.tableLayoutPanel2.TabIndex = 4;
             // 
             // btnDashboard
@@ -386,7 +389,7 @@ namespace Task_App.views
             this.btnDashboard.Margin = new System.Windows.Forms.Padding(0);
             this.btnDashboard.Name = "btnDashboard";
             this.btnDashboard.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.btnDashboard.Size = new System.Drawing.Size(200, 88);
+            this.btnDashboard.Size = new System.Drawing.Size(200, 100);
             this.btnDashboard.TabIndex = 2;
             this.btnDashboard.Click += new System.EventHandler(this.OnBtnMouseClick);
             this.btnDashboard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnBtnMouseDown);
@@ -405,11 +408,11 @@ namespace Task_App.views
             this.btn_Task_DaGiao.ImageOffset = new System.Drawing.Point(0, 0);
             this.btn_Task_DaGiao.ImageRotate = 0F;
             this.btn_Task_DaGiao.ImageSize = new System.Drawing.Size(32, 32);
-            this.btn_Task_DaGiao.Location = new System.Drawing.Point(0, 88);
+            this.btn_Task_DaGiao.Location = new System.Drawing.Point(0, 100);
             this.btn_Task_DaGiao.Margin = new System.Windows.Forms.Padding(0);
             this.btn_Task_DaGiao.Name = "btn_Task_DaGiao";
             this.btn_Task_DaGiao.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.btn_Task_DaGiao.Size = new System.Drawing.Size(200, 88);
+            this.btn_Task_DaGiao.Size = new System.Drawing.Size(200, 100);
             this.btn_Task_DaGiao.TabIndex = 0;
             this.btn_Task_DaGiao.Click += new System.EventHandler(this.OnBtnMouseClick);
             this.btn_Task_DaGiao.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnBtnMouseDown);
@@ -428,17 +431,37 @@ namespace Task_App.views
             this.btn_Task_DuocGiao.ImageOffset = new System.Drawing.Point(0, 0);
             this.btn_Task_DuocGiao.ImageRotate = 0F;
             this.btn_Task_DuocGiao.ImageSize = new System.Drawing.Size(32, 32);
-            this.btn_Task_DuocGiao.Location = new System.Drawing.Point(0, 176);
+            this.btn_Task_DuocGiao.Location = new System.Drawing.Point(0, 200);
             this.btn_Task_DuocGiao.Margin = new System.Windows.Forms.Padding(0);
             this.btn_Task_DuocGiao.Name = "btn_Task_DuocGiao";
             this.btn_Task_DuocGiao.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.btn_Task_DuocGiao.Size = new System.Drawing.Size(200, 90);
+            this.btn_Task_DuocGiao.Size = new System.Drawing.Size(200, 100);
             this.btn_Task_DuocGiao.TabIndex = 1;
             this.btn_Task_DuocGiao.Click += new System.EventHandler(this.OnBtnMouseClick);
             this.btn_Task_DuocGiao.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnBtnMouseDown);
             this.btn_Task_DuocGiao.MouseEnter += new System.EventHandler(this.OnBtnMouseEnter);
             this.btn_Task_DuocGiao.MouseLeave += new System.EventHandler(this.OnBtnMouseLeaveOrUp);
             this.btn_Task_DuocGiao.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnBtnMouseLeaveOrUp);
+            // 
+            // btn_setting
+            // 
+            this.btn_setting.CheckedState.Image = ((System.Drawing.Image)(resources.GetObject("resource.Image")));
+            this.btn_setting.CheckedState.ImageSize = new System.Drawing.Size(32, 32);
+            this.btn_setting.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btn_setting.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btn_setting.HoverState.ImageSize = new System.Drawing.Size(32, 32);
+            this.btn_setting.Image = ((System.Drawing.Image)(resources.GetObject("btn_setting.Image")));
+            this.btn_setting.ImageOffset = new System.Drawing.Point(0, 0);
+            this.btn_setting.ImageRotate = 0F;
+            this.btn_setting.ImageSize = new System.Drawing.Size(24, 24);
+            this.btn_setting.Location = new System.Drawing.Point(0, 300);
+            this.btn_setting.Margin = new System.Windows.Forms.Padding(0);
+            this.btn_setting.Name = "btn_setting";
+            this.btn_setting.PressedState.Image = ((System.Drawing.Image)(resources.GetObject("resource.Image1")));
+            this.btn_setting.PressedState.ImageSize = new System.Drawing.Size(32, 32);
+            this.btn_setting.Size = new System.Drawing.Size(200, 100);
+            this.btn_setting.TabIndex = 3;
+            this.btn_setting.Click += new System.EventHandler(this.OnBtnMouseClick);
             // 
             // btnExit
             // 
@@ -451,11 +474,11 @@ namespace Task_App.views
             this.btnExit.ImageOffset = new System.Drawing.Point(0, 0);
             this.btnExit.ImageRotate = 0F;
             this.btnExit.ImageSize = new System.Drawing.Size(24, 24);
-            this.btnExit.Location = new System.Drawing.Point(0, 791);
+            this.btnExit.Location = new System.Drawing.Point(0, 790);
             this.btnExit.Margin = new System.Windows.Forms.Padding(0);
             this.btnExit.Name = "btnExit";
             this.btnExit.PressedState.ImageSize = new System.Drawing.Size(64, 64);
-            this.btnExit.Size = new System.Drawing.Size(200, 89);
+            this.btnExit.Size = new System.Drawing.Size(200, 90);
             this.btnExit.TabIndex = 3;
             this.btnExit.Click += new System.EventHandler(this.OnExitBtnClick);
             // 
@@ -466,6 +489,16 @@ namespace Task_App.views
             this.menu_ThongBao.Name = "contextMenuStrip1";
             this.menu_ThongBao.Size = new System.Drawing.Size(61, 4);
             this.menu_ThongBao.Closed += new System.Windows.Forms.ToolStripDropDownClosedEventHandler(this.contextMenuStrip1_Closed);
+            // 
+            // cccswxToolStripMenuItem
+            // 
+            this.cccswxToolStripMenuItem.Name = "cccswxToolStripMenuItem";
+            this.cccswxToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            // 
+            // eehToolStripMenuItem
+            // 
+            this.eehToolStripMenuItem.Name = "eehToolStripMenuItem";
+            this.eehToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
             // 
             // HomelayoutControl1ConvertedLayout
             // 
@@ -491,7 +524,6 @@ namespace Task_App.views
             this.layoutControlGroup1.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
             this.layoutControlGroup1.Size = new System.Drawing.Size(1421, 884);
             this.layoutControlGroup1.TextVisible = false;
-            this.layoutControlGroup1.GroupBordersVisible = false;
             // 
             // panelControl1item
             // 
@@ -573,5 +605,6 @@ namespace Task_App.views
         private DevExpress.XtraLayout.LayoutControlItem panelControl1item;
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
+        private Guna.UI2.WinForms.Guna2ImageButton btn_setting;
     }
 }

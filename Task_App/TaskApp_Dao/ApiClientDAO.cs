@@ -49,7 +49,88 @@ namespace Task_App.TaskApp_Dao
 
             return null;
         }
-    
+
+        public async Task<ApiResponse> Register(NguoiDung nd)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(nd),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                var response = await client.PostAsync("api/auth/register", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var apiResp = JsonConvert.DeserializeObject<ApiResponse>(result);
+                    return apiResp ?? new ApiResponse
+                    {
+                        Success = false,
+                        Message = "Server trả về dữ liệu rỗng."
+                    };
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Đăng ký thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi kết nối đến server API: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<ApiResponse> UpdatePassAcount(string email, string password)
+        {
+            try
+            {
+                var loginData = new { email = email, matKhau = password };
+
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(loginData),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                    var response = await client.PostAsync("api/auth/update-mat-khau-nguoi-dung", jsonContent);
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    }
+
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"Cập nhật Pass thất bại ({(int)response.StatusCode}): {result}"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi cập nhật Pass: " + ex.Message
+                };
+            }
+        }
+
+
         public async Task<ViecDaGiaoResponse> GetViecDaGiaoAsync(int maNguoiDung, bool locTheoNgay)
         {
             try
@@ -748,7 +829,7 @@ namespace Task_App.TaskApp_Dao
             return null;
         }
 
-        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser)
+        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser, string mk)
         {
             try
             {
@@ -757,7 +838,8 @@ namespace Task_App.TaskApp_Dao
                     Email = email,
                     DanhSachNguoiNhanEmail = lstNNE,
                     DanhSachTepDinhKem = lstTDK,
-                    CurrentUser = currentUser
+                    CurrentUser = currentUser,
+                    MK = mk
                 };
 
                 var jsonContent = new StringContent(
@@ -1539,6 +1621,209 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
+        public async Task<Object_Response<List<DonVi>>> GetDonVi()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/get-don-vi");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<DonVi>>>(result);
+                }
+
+                return new Object_Response<List<DonVi>>
+                {
+                    Success = false,
+                    Message = $"GETDONVI thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<DonVi>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<DonVi>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETDONVI: " + ex.Message,
+                    Data = new List<DonVi>()
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<PhongBan>>> GetPhongBan()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/get-phong-ban");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<PhongBan>>>(result);
+                }
+
+                return new Object_Response<List<PhongBan>>
+                {
+                    Success = false,
+                    Message = $"GETPHONGBAN thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<PhongBan>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<PhongBan>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETPHONGBAN: " + ex.Message,
+                    Data = new List<PhongBan>()
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<ChucVu>>> GetChucVu()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/task/get-chuc-vu");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<ChucVu>>>(result);
+                }
+
+                return new Object_Response<List<ChucVu>>
+                {
+                    Success = false,
+                    Message = $"GETCHUCVU thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<ChucVu>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<ChucVu>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETCHUCVU: " + ex.Message,
+                    Data = new List<ChucVu>()
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<NguoiDung>>> GetAccountInactive()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/auth/get-account-inactive");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<NguoiDung>>>(result);
+                }
+
+                return new Object_Response<List<NguoiDung>>
+                {
+                    Success = false,
+                    Message = $"GETACCOUNTINACTIVE thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<NguoiDung>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<NguoiDung>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETACCOUNTINACTIVE: " + ex.Message,
+                    Data = new List<NguoiDung>()
+                };
+            }
+        }
+
+        public async Task<ApiResponse> UpdateTrangThaiNguoiDung(NguoiDung nd)
+        {
+            try
+            {
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(nd),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                {
+                    client.DefaultRequestHeaders.Authorization =
+                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                    var response = await client.PostAsync("api/task/update-nguoi-dung", jsonContent);
+                    var result = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return JsonConvert.DeserializeObject<ApiResponse>(result);
+                    }
+
+                    return new ApiResponse
+                    {
+                        Success = false,
+                        Message = $"Cập nhật nguoidung thất bại ({(int)response.StatusCode}): {result}"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi cập nhật nguoidung email: " + ex.Message
+                };
+            }
+        }
+
+        public async Task<Object_Response<List<NguoiDung>>> GetAccountActive()
+        {
+            try
+            {
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.GetAsync($"api/auth/get-account-active");
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<Object_Response<List<NguoiDung>>>(result);
+                }
+
+                return new Object_Response<List<NguoiDung>>
+                {
+                    Success = false,
+                    Message = $"GETACCOUNTACTIVE thất bại ({(int)response.StatusCode}): {result}",
+                    Data = new List<NguoiDung>()
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Object_Response<List<NguoiDung>>
+                {
+                    Success = false,
+                    Message = "Loi khi GETACCOUNTACTIVE: " + ex.Message,
+                    Data = new List<NguoiDung>()
+                };
+            }
+        }
 
 
     }

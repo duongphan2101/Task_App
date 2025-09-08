@@ -17,11 +17,14 @@ namespace Task_App.Model
         public string MaDonVi { get; set; }
         public string MaChucVu { get; set; }
         public bool? LaLanhDao { get; set; }
+        public int IsAdmin { get; set; } // 0: regular user, 1: admin
+        public int TrangThai { get; set; } // 0: inactive, 1: active
 
         // Optional navigation properties
         public DonVi DonVi { get; set; }
         public PhongBan PhongBan { get; set; }
         public ChucVu ChucVu { get; set; }
+
     }
 
 }

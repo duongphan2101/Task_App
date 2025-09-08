@@ -33,22 +33,23 @@ namespace Task_App.views
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea21 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend21 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series21 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea22 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend22 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series22 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea23 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend23 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series23 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea24 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend24 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series24 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.dashboard_panel = new Guna.UI2.WinForms.Guna2Panel();
             this.main_panel = new Guna.UI2.WinForms.Guna2Panel();
             this.main_panel_panel = new Guna.UI2.WinForms.Guna2Panel();
+            this.panel_timeLine = new Guna.UI2.WinForms.Guna2Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.startDate = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.endDate = new Guna.UI2.WinForms.Guna2DateTimePicker();
@@ -112,7 +113,6 @@ namespace Task_App.views
             this.xtraTabControl1 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage2 = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabPage1 = new DevExpress.XtraTab.XtraTabPage();
-            this.panel_timeLine = new Guna.UI2.WinForms.Guna2Panel();
             this.dashboard_panel.SuspendLayout();
             this.main_panel.SuspendLayout();
             this.main_panel_panel.SuspendLayout();
@@ -167,7 +167,7 @@ namespace Task_App.views
             this.dashboard_panel.Location = new System.Drawing.Point(0, 0);
             this.dashboard_panel.Margin = new System.Windows.Forms.Padding(0);
             this.dashboard_panel.Name = "dashboard_panel";
-            this.dashboard_panel.Size = new System.Drawing.Size(954, 573);
+            this.dashboard_panel.Size = new System.Drawing.Size(714, 464);
             this.dashboard_panel.TabIndex = 0;
             // 
             // main_panel
@@ -175,11 +175,11 @@ namespace Task_App.views
             this.main_panel.Controls.Add(this.main_panel_panel);
             this.main_panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.main_panel.FillColor = System.Drawing.Color.White;
-            this.main_panel.Location = new System.Drawing.Point(0, 100);
+            this.main_panel.Location = new System.Drawing.Point(0, 81);
             this.main_panel.Margin = new System.Windows.Forms.Padding(0);
             this.main_panel.Name = "main_panel";
-            this.main_panel.Padding = new System.Windows.Forms.Padding(10);
-            this.main_panel.Size = new System.Drawing.Size(554, 473);
+            this.main_panel.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.main_panel.Size = new System.Drawing.Size(414, 383);
             this.main_panel.TabIndex = 3;
             // 
             // main_panel_panel
@@ -188,11 +188,23 @@ namespace Task_App.views
             this.main_panel_panel.Controls.Add(this.flowLayoutPanel1);
             this.main_panel_panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.main_panel_panel.FillColor = System.Drawing.Color.White;
-            this.main_panel_panel.Location = new System.Drawing.Point(10, 10);
+            this.main_panel_panel.Location = new System.Drawing.Point(8, 8);
             this.main_panel_panel.Margin = new System.Windows.Forms.Padding(0);
             this.main_panel_panel.Name = "main_panel_panel";
-            this.main_panel_panel.Size = new System.Drawing.Size(534, 453);
+            this.main_panel_panel.Size = new System.Drawing.Size(398, 367);
             this.main_panel_panel.TabIndex = 0;
+            // 
+            // panel_timeLine
+            // 
+            this.panel_timeLine.AutoScroll = true;
+            this.panel_timeLine.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_timeLine.FillColor = System.Drawing.Color.White;
+            this.panel_timeLine.Location = new System.Drawing.Point(0, 40);
+            this.panel_timeLine.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_timeLine.Name = "panel_timeLine";
+            this.panel_timeLine.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.panel_timeLine.Size = new System.Drawing.Size(398, 327);
+            this.panel_timeLine.TabIndex = 2;
             // 
             // flowLayoutPanel1
             // 
@@ -202,10 +214,10 @@ namespace Task_App.views
             this.flowLayoutPanel1.Controls.Add(this.endDate);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(10);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(8, 8, 8, 8);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(5);
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(534, 50);
+            this.flowLayoutPanel1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(398, 40);
             this.flowLayoutPanel1.TabIndex = 1;
             // 
             // startDate
@@ -215,12 +227,12 @@ namespace Task_App.views
             this.startDate.FillColor = System.Drawing.Color.White;
             this.startDate.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.startDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.startDate.Location = new System.Drawing.Point(5, 5);
-            this.startDate.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.startDate.Location = new System.Drawing.Point(4, 4);
+            this.startDate.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.startDate.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.startDate.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.startDate.Name = "startDate";
-            this.startDate.Size = new System.Drawing.Size(240, 40);
+            this.startDate.Size = new System.Drawing.Size(180, 32);
             this.startDate.TabIndex = 0;
             this.startDate.Value = new System.DateTime(2025, 7, 26, 16, 12, 35, 624);
             this.startDate.ValueChanged += new System.EventHandler(this.startDate_ValueChanged);
@@ -232,12 +244,12 @@ namespace Task_App.views
             this.endDate.FillColor = System.Drawing.Color.White;
             this.endDate.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.endDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.endDate.Location = new System.Drawing.Point(265, 5);
-            this.endDate.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.endDate.Location = new System.Drawing.Point(200, 4);
+            this.endDate.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.endDate.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.endDate.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.endDate.Name = "endDate";
-            this.endDate.Size = new System.Drawing.Size(240, 40);
+            this.endDate.Size = new System.Drawing.Size(180, 32);
             this.endDate.TabIndex = 1;
             this.endDate.Value = new System.DateTime(2025, 7, 26, 16, 12, 37, 911);
             this.endDate.ValueChanged += new System.EventHandler(this.endDate_ValueChanged);
@@ -247,11 +259,11 @@ namespace Task_App.views
             this.right_panel.Controls.Add(this.right_panel_panel);
             this.right_panel.Dock = System.Windows.Forms.DockStyle.Right;
             this.right_panel.FillColor = System.Drawing.Color.White;
-            this.right_panel.Location = new System.Drawing.Point(554, 100);
+            this.right_panel.Location = new System.Drawing.Point(414, 81);
             this.right_panel.Margin = new System.Windows.Forms.Padding(0);
             this.right_panel.Name = "right_panel";
-            this.right_panel.Padding = new System.Windows.Forms.Padding(10);
-            this.right_panel.Size = new System.Drawing.Size(400, 473);
+            this.right_panel.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.right_panel.Size = new System.Drawing.Size(300, 383);
             this.right_panel.TabIndex = 2;
             // 
             // right_panel_panel
@@ -259,11 +271,11 @@ namespace Task_App.views
             this.right_panel_panel.Controls.Add(this.chart2);
             this.right_panel_panel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.right_panel_panel.FillColor = System.Drawing.Color.White;
-            this.right_panel_panel.Location = new System.Drawing.Point(10, 10);
+            this.right_panel_panel.Location = new System.Drawing.Point(8, 8);
             this.right_panel_panel.Margin = new System.Windows.Forms.Padding(0);
             this.right_panel_panel.Name = "right_panel_panel";
-            this.right_panel_panel.Padding = new System.Windows.Forms.Padding(10);
-            this.right_panel_panel.Size = new System.Drawing.Size(380, 453);
+            this.right_panel_panel.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.right_panel_panel.Size = new System.Drawing.Size(284, 367);
             this.right_panel_panel.TabIndex = 0;
             // 
             // chart2
@@ -273,22 +285,22 @@ namespace Task_App.views
             this.chart2.BorderSkin.BackColor = System.Drawing.Color.Transparent;
             this.chart2.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
             this.chart2.BorderSkin.BorderWidth = 0;
-            chartArea21.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea21);
+            chartArea1.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea1);
             this.chart2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chart2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart2.Enabled = false;
-            legend21.Name = "Legend1";
-            this.chart2.Legends.Add(legend21);
-            this.chart2.Location = new System.Drawing.Point(10, 10);
+            legend1.Name = "Legend1";
+            this.chart2.Legends.Add(legend1);
+            this.chart2.Location = new System.Drawing.Point(8, 8);
             this.chart2.Margin = new System.Windows.Forms.Padding(0);
             this.chart2.Name = "chart2";
             this.chart2.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
-            series21.ChartArea = "ChartArea1";
-            series21.Legend = "Legend1";
-            series21.Name = "Series1";
-            this.chart2.Series.Add(series21);
-            this.chart2.Size = new System.Drawing.Size(360, 433);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart2.Series.Add(series1);
+            this.chart2.Size = new System.Drawing.Size(268, 351);
             this.chart2.TabIndex = 0;
             this.chart2.Text = "chart2";
             // 
@@ -303,7 +315,7 @@ namespace Task_App.views
             this.flow_Head.Location = new System.Drawing.Point(0, 0);
             this.flow_Head.Margin = new System.Windows.Forms.Padding(0);
             this.flow_Head.Name = "flow_Head";
-            this.flow_Head.Size = new System.Drawing.Size(954, 100);
+            this.flow_Head.Size = new System.Drawing.Size(714, 81);
             this.flow_Head.TabIndex = 0;
             this.flow_Head.Resize += new System.EventHandler(this.flow_Head_Resize);
             // 
@@ -317,8 +329,8 @@ namespace Task_App.views
             this.head_panel_2.Location = new System.Drawing.Point(0, 0);
             this.head_panel_2.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_2.Name = "head_panel_2";
-            this.head_panel_2.Padding = new System.Windows.Forms.Padding(10);
-            this.head_panel_2.Size = new System.Drawing.Size(300, 100);
+            this.head_panel_2.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.head_panel_2.Size = new System.Drawing.Size(225, 81);
             this.head_panel_2.TabIndex = 1;
             // 
             // head_panel_panel_2
@@ -332,20 +344,20 @@ namespace Task_App.views
             this.head_panel_panel_2.FillColor2 = System.Drawing.Color.RoyalBlue;
             this.head_panel_panel_2.FillColor3 = System.Drawing.Color.RoyalBlue;
             this.head_panel_panel_2.FillColor4 = System.Drawing.Color.RoyalBlue;
-            this.head_panel_panel_2.Location = new System.Drawing.Point(10, 10);
+            this.head_panel_panel_2.Location = new System.Drawing.Point(8, 8);
             this.head_panel_panel_2.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_panel_2.Name = "head_panel_panel_2";
-            this.head_panel_panel_2.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_panel_2.Size = new System.Drawing.Size(209, 65);
             this.head_panel_panel_2.TabIndex = 0;
             // 
             // lblImage_2
             // 
             this.lblImage_2.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblImage_2.Image = ((System.Drawing.Image)(resources.GetObject("lblImage_2.Image")));
-            this.lblImage_2.Location = new System.Drawing.Point(198, 0);
+            this.lblImage_2.Location = new System.Drawing.Point(147, 0);
             this.lblImage_2.Margin = new System.Windows.Forms.Padding(0);
             this.lblImage_2.Name = "lblImage_2";
-            this.lblImage_2.Size = new System.Drawing.Size(82, 80);
+            this.lblImage_2.Size = new System.Drawing.Size(62, 65);
             this.lblImage_2.TabIndex = 3;
             this.lblImage_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -357,7 +369,7 @@ namespace Task_App.views
             this.head_panel_item2.Location = new System.Drawing.Point(0, 0);
             this.head_panel_item2.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_item2.Name = "head_panel_item2";
-            this.head_panel_item2.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_item2.Size = new System.Drawing.Size(209, 65);
             this.head_panel_item2.TabIndex = 1;
             // 
             // head_panel_item1
@@ -366,8 +378,9 @@ namespace Task_App.views
             this.head_panel_item1.Controls.Add(this.panel_item2_1);
             this.head_panel_item1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.head_panel_item1.Location = new System.Drawing.Point(0, 0);
+            this.head_panel_item1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.head_panel_item1.Name = "head_panel_item1";
-            this.head_panel_item1.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_item1.Size = new System.Drawing.Size(209, 65);
             this.head_panel_item1.TabIndex = 0;
             // 
             // panel_item2_2
@@ -375,10 +388,10 @@ namespace Task_App.views
             this.panel_item2_2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_item2_2.Font = new System.Drawing.Font("Bahnschrift", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_item2_2.ForeColor = System.Drawing.Color.White;
-            this.panel_item2_2.Location = new System.Drawing.Point(0, 35);
+            this.panel_item2_2.Location = new System.Drawing.Point(0, 28);
             this.panel_item2_2.Margin = new System.Windows.Forms.Padding(0);
             this.panel_item2_2.Name = "panel_item2_2";
-            this.panel_item2_2.Size = new System.Drawing.Size(280, 45);
+            this.panel_item2_2.Size = new System.Drawing.Size(209, 37);
             this.panel_item2_2.TabIndex = 1;
             this.panel_item2_2.Text = "7 Task";
             this.panel_item2_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -391,7 +404,7 @@ namespace Task_App.views
             this.panel_item2_1.Location = new System.Drawing.Point(0, 0);
             this.panel_item2_1.Margin = new System.Windows.Forms.Padding(0);
             this.panel_item2_1.Name = "panel_item2_1";
-            this.panel_item2_1.Size = new System.Drawing.Size(280, 35);
+            this.panel_item2_1.Size = new System.Drawing.Size(209, 28);
             this.panel_item2_1.TabIndex = 0;
             this.panel_item2_1.Text = "Trong Tuần";
             this.panel_item2_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -399,8 +412,9 @@ namespace Task_App.views
             // lblSoTaskDangXuLi
             // 
             this.lblSoTaskDangXuLi.Location = new System.Drawing.Point(0, 0);
+            this.lblSoTaskDangXuLi.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSoTaskDangXuLi.Name = "lblSoTaskDangXuLi";
-            this.lblSoTaskDangXuLi.Size = new System.Drawing.Size(100, 23);
+            this.lblSoTaskDangXuLi.Size = new System.Drawing.Size(75, 19);
             this.lblSoTaskDangXuLi.TabIndex = 2;
             // 
             // head_panel_3
@@ -411,11 +425,11 @@ namespace Task_App.views
             this.head_panel_3.FillColor2 = System.Drawing.Color.Transparent;
             this.head_panel_3.FillColor3 = System.Drawing.Color.Transparent;
             this.head_panel_3.FillColor4 = System.Drawing.Color.Transparent;
-            this.head_panel_3.Location = new System.Drawing.Point(300, 0);
+            this.head_panel_3.Location = new System.Drawing.Point(225, 0);
             this.head_panel_3.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_3.Name = "head_panel_3";
-            this.head_panel_3.Padding = new System.Windows.Forms.Padding(10);
-            this.head_panel_3.Size = new System.Drawing.Size(300, 100);
+            this.head_panel_3.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.head_panel_3.Size = new System.Drawing.Size(225, 81);
             this.head_panel_3.TabIndex = 1;
             // 
             // head_panel_panel_3
@@ -428,10 +442,10 @@ namespace Task_App.views
             this.head_panel_panel_3.FillColor2 = System.Drawing.Color.LimeGreen;
             this.head_panel_panel_3.FillColor3 = System.Drawing.Color.LimeGreen;
             this.head_panel_panel_3.FillColor4 = System.Drawing.Color.LimeGreen;
-            this.head_panel_panel_3.Location = new System.Drawing.Point(10, 10);
+            this.head_panel_panel_3.Location = new System.Drawing.Point(8, 8);
             this.head_panel_panel_3.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_panel_3.Name = "head_panel_panel_3";
-            this.head_panel_panel_3.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_panel_3.Size = new System.Drawing.Size(209, 65);
             this.head_panel_panel_3.TabIndex = 0;
             // 
             // head_panel_item3
@@ -441,8 +455,9 @@ namespace Task_App.views
             this.head_panel_item3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.head_panel_item3.FillColor = System.Drawing.Color.Transparent;
             this.head_panel_item3.Location = new System.Drawing.Point(0, 0);
+            this.head_panel_item3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.head_panel_item3.Name = "head_panel_item3";
-            this.head_panel_item3.Size = new System.Drawing.Size(198, 80);
+            this.head_panel_item3.Size = new System.Drawing.Size(147, 65);
             this.head_panel_item3.TabIndex = 1;
             // 
             // panel_item3_2
@@ -450,9 +465,10 @@ namespace Task_App.views
             this.panel_item3_2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_item3_2.Font = new System.Drawing.Font("Bahnschrift", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_item3_2.ForeColor = System.Drawing.Color.White;
-            this.panel_item3_2.Location = new System.Drawing.Point(0, 35);
+            this.panel_item3_2.Location = new System.Drawing.Point(0, 28);
+            this.panel_item3_2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.panel_item3_2.Name = "panel_item3_2";
-            this.panel_item3_2.Size = new System.Drawing.Size(198, 45);
+            this.panel_item3_2.Size = new System.Drawing.Size(147, 37);
             this.panel_item3_2.TabIndex = 1;
             this.panel_item3_2.Text = "34 Task";
             this.panel_item3_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -465,7 +481,7 @@ namespace Task_App.views
             this.panel_item3_1.Location = new System.Drawing.Point(0, 0);
             this.panel_item3_1.Margin = new System.Windows.Forms.Padding(0);
             this.panel_item3_1.Name = "panel_item3_1";
-            this.panel_item3_1.Size = new System.Drawing.Size(198, 35);
+            this.panel_item3_1.Size = new System.Drawing.Size(147, 28);
             this.panel_item3_1.TabIndex = 0;
             this.panel_item3_1.Text = "Trong Tháng";
             this.panel_item3_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -474,9 +490,10 @@ namespace Task_App.views
             // 
             this.lblImage_3.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblImage_3.Image = ((System.Drawing.Image)(resources.GetObject("lblImage_3.Image")));
-            this.lblImage_3.Location = new System.Drawing.Point(198, 0);
+            this.lblImage_3.Location = new System.Drawing.Point(147, 0);
+            this.lblImage_3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblImage_3.Name = "lblImage_3";
-            this.lblImage_3.Size = new System.Drawing.Size(82, 80);
+            this.lblImage_3.Size = new System.Drawing.Size(62, 65);
             this.lblImage_3.TabIndex = 0;
             this.lblImage_3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -488,11 +505,11 @@ namespace Task_App.views
             this.head_panel_4.FillColor2 = System.Drawing.Color.Transparent;
             this.head_panel_4.FillColor3 = System.Drawing.Color.Transparent;
             this.head_panel_4.FillColor4 = System.Drawing.Color.Transparent;
-            this.head_panel_4.Location = new System.Drawing.Point(600, 0);
+            this.head_panel_4.Location = new System.Drawing.Point(450, 0);
             this.head_panel_4.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_4.Name = "head_panel_4";
-            this.head_panel_4.Padding = new System.Windows.Forms.Padding(10);
-            this.head_panel_4.Size = new System.Drawing.Size(300, 100);
+            this.head_panel_4.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.head_panel_4.Size = new System.Drawing.Size(225, 81);
             this.head_panel_4.TabIndex = 2;
             // 
             // head_panel_panel_4
@@ -505,9 +522,10 @@ namespace Task_App.views
             this.head_panel_panel_4.FillColor2 = System.Drawing.Color.Tomato;
             this.head_panel_panel_4.FillColor3 = System.Drawing.Color.Tomato;
             this.head_panel_panel_4.FillColor4 = System.Drawing.Color.Tomato;
-            this.head_panel_panel_4.Location = new System.Drawing.Point(10, 10);
+            this.head_panel_panel_4.Location = new System.Drawing.Point(8, 8);
+            this.head_panel_panel_4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.head_panel_panel_4.Name = "head_panel_panel_4";
-            this.head_panel_panel_4.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_panel_4.Size = new System.Drawing.Size(209, 65);
             this.head_panel_panel_4.TabIndex = 0;
             // 
             // head_panel_item4
@@ -516,8 +534,9 @@ namespace Task_App.views
             this.head_panel_item4.Controls.Add(this.panel_item4_1);
             this.head_panel_item4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.head_panel_item4.Location = new System.Drawing.Point(0, 0);
+            this.head_panel_item4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.head_panel_item4.Name = "head_panel_item4";
-            this.head_panel_item4.Size = new System.Drawing.Size(200, 80);
+            this.head_panel_item4.Size = new System.Drawing.Size(149, 65);
             this.head_panel_item4.TabIndex = 1;
             // 
             // panel_item4_2
@@ -525,9 +544,10 @@ namespace Task_App.views
             this.panel_item4_2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_item4_2.Font = new System.Drawing.Font("Bahnschrift", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_item4_2.ForeColor = System.Drawing.Color.White;
-            this.panel_item4_2.Location = new System.Drawing.Point(0, 35);
+            this.panel_item4_2.Location = new System.Drawing.Point(0, 28);
+            this.panel_item4_2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.panel_item4_2.Name = "panel_item4_2";
-            this.panel_item4_2.Size = new System.Drawing.Size(200, 45);
+            this.panel_item4_2.Size = new System.Drawing.Size(149, 37);
             this.panel_item4_2.TabIndex = 1;
             this.panel_item4_2.Text = "218 Task";
             this.panel_item4_2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -538,8 +558,9 @@ namespace Task_App.views
             this.panel_item4_1.Font = new System.Drawing.Font("Bahnschrift", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_item4_1.ForeColor = System.Drawing.Color.White;
             this.panel_item4_1.Location = new System.Drawing.Point(0, 0);
+            this.panel_item4_1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.panel_item4_1.Name = "panel_item4_1";
-            this.panel_item4_1.Size = new System.Drawing.Size(200, 35);
+            this.panel_item4_1.Size = new System.Drawing.Size(149, 28);
             this.panel_item4_1.TabIndex = 0;
             this.panel_item4_1.Text = "Trong Năm";
             this.panel_item4_1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -548,9 +569,10 @@ namespace Task_App.views
             // 
             this.lblImage_4.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblImage_4.Image = ((System.Drawing.Image)(resources.GetObject("lblImage_4.Image")));
-            this.lblImage_4.Location = new System.Drawing.Point(200, 0);
+            this.lblImage_4.Location = new System.Drawing.Point(149, 0);
+            this.lblImage_4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblImage_4.Name = "lblImage_4";
-            this.lblImage_4.Size = new System.Drawing.Size(80, 80);
+            this.lblImage_4.Size = new System.Drawing.Size(60, 65);
             this.lblImage_4.TabIndex = 0;
             this.lblImage_4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -561,20 +583,20 @@ namespace Task_App.views
             this.chart1.BorderSkin.BackColor = System.Drawing.Color.Transparent;
             this.chart1.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
             this.chart1.BorderSkin.BorderWidth = 0;
-            chartArea22.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea22);
+            chartArea2.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea2);
             this.chart1.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart1.Enabled = false;
-            legend22.Name = "Legend1";
-            this.chart1.Legends.Add(legend22);
+            legend2.Name = "Legend1";
+            this.chart1.Legends.Add(legend2);
             this.chart1.Location = new System.Drawing.Point(10, 10);
             this.chart1.Margin = new System.Windows.Forms.Padding(0);
             this.chart1.Name = "chart1";
-            series22.ChartArea = "ChartArea1";
-            series22.Legend = "Legend1";
-            series22.Name = "Series1";
-            this.chart1.Series.Add(series22);
+            series2.ChartArea = "ChartArea1";
+            series2.Legend = "Legend1";
+            series2.Name = "Series1";
+            this.chart1.Series.Add(series2);
             this.chart1.Size = new System.Drawing.Size(514, 433);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
@@ -589,7 +611,7 @@ namespace Task_App.views
             this.dashboard_panel_dagiao.Location = new System.Drawing.Point(0, 0);
             this.dashboard_panel_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.dashboard_panel_dagiao.Name = "dashboard_panel_dagiao";
-            this.dashboard_panel_dagiao.Size = new System.Drawing.Size(954, 573);
+            this.dashboard_panel_dagiao.Size = new System.Drawing.Size(714, 464);
             this.dashboard_panel_dagiao.TabIndex = 0;
             // 
             // main_panel_dagiao
@@ -597,11 +619,11 @@ namespace Task_App.views
             this.main_panel_dagiao.Controls.Add(this.main_panel_panel_dagiao);
             this.main_panel_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.main_panel_dagiao.FillColor = System.Drawing.Color.White;
-            this.main_panel_dagiao.Location = new System.Drawing.Point(0, 100);
+            this.main_panel_dagiao.Location = new System.Drawing.Point(0, 81);
             this.main_panel_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.main_panel_dagiao.Name = "main_panel_dagiao";
-            this.main_panel_dagiao.Padding = new System.Windows.Forms.Padding(10);
-            this.main_panel_dagiao.Size = new System.Drawing.Size(554, 473);
+            this.main_panel_dagiao.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.main_panel_dagiao.Size = new System.Drawing.Size(414, 383);
             this.main_panel_dagiao.TabIndex = 3;
             // 
             // main_panel_panel_dagiao
@@ -611,10 +633,10 @@ namespace Task_App.views
             this.main_panel_panel_dagiao.Controls.Add(this.flowLayoutPanel1_dagiao);
             this.main_panel_panel_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.main_panel_panel_dagiao.FillColor = System.Drawing.Color.White;
-            this.main_panel_panel_dagiao.Location = new System.Drawing.Point(10, 10);
+            this.main_panel_panel_dagiao.Location = new System.Drawing.Point(8, 8);
             this.main_panel_panel_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.main_panel_panel_dagiao.Name = "main_panel_panel_dagiao";
-            this.main_panel_panel_dagiao.Size = new System.Drawing.Size(534, 453);
+            this.main_panel_panel_dagiao.Size = new System.Drawing.Size(398, 367);
             this.main_panel_panel_dagiao.TabIndex = 0;
             // 
             // panel_timeLine_DaGiao
@@ -622,10 +644,11 @@ namespace Task_App.views
             this.panel_timeLine_DaGiao.AutoScroll = true;
             this.panel_timeLine_DaGiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_timeLine_DaGiao.FillColor = System.Drawing.Color.White;
-            this.panel_timeLine_DaGiao.Location = new System.Drawing.Point(0, 50);
+            this.panel_timeLine_DaGiao.Location = new System.Drawing.Point(0, 40);
+            this.panel_timeLine_DaGiao.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel_timeLine_DaGiao.Name = "panel_timeLine_DaGiao";
-            this.panel_timeLine_DaGiao.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.panel_timeLine_DaGiao.Size = new System.Drawing.Size(534, 403);
+            this.panel_timeLine_DaGiao.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
+            this.panel_timeLine_DaGiao.Size = new System.Drawing.Size(398, 327);
             this.panel_timeLine_DaGiao.TabIndex = 2;
             // 
             // flowLayoutPanel1_dagiao
@@ -638,8 +661,8 @@ namespace Task_App.views
             this.flowLayoutPanel1_dagiao.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1_dagiao.Name = "flowLayoutPanel1_dagiao";
-            this.flowLayoutPanel1_dagiao.Padding = new System.Windows.Forms.Padding(5);
-            this.flowLayoutPanel1_dagiao.Size = new System.Drawing.Size(534, 50);
+            this.flowLayoutPanel1_dagiao.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel1_dagiao.Size = new System.Drawing.Size(398, 40);
             this.flowLayoutPanel1_dagiao.TabIndex = 1;
             // 
             // startDate_dagiao
@@ -649,12 +672,12 @@ namespace Task_App.views
             this.startDate_dagiao.FillColor = System.Drawing.Color.White;
             this.startDate_dagiao.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.startDate_dagiao.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.startDate_dagiao.Location = new System.Drawing.Point(5, 5);
-            this.startDate_dagiao.Margin = new System.Windows.Forms.Padding(0, 0, 10, 0);
+            this.startDate_dagiao.Location = new System.Drawing.Point(4, 4);
+            this.startDate_dagiao.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
             this.startDate_dagiao.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.startDate_dagiao.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.startDate_dagiao.Name = "startDate_dagiao";
-            this.startDate_dagiao.Size = new System.Drawing.Size(240, 40);
+            this.startDate_dagiao.Size = new System.Drawing.Size(180, 32);
             this.startDate_dagiao.TabIndex = 0;
             this.startDate_dagiao.Value = new System.DateTime(2025, 7, 26, 16, 12, 35, 624);
             this.startDate_dagiao.ValueChanged += new System.EventHandler(this.startDate_dagiao_ValueChanged);
@@ -666,12 +689,12 @@ namespace Task_App.views
             this.endDate_dagiao.FillColor = System.Drawing.Color.White;
             this.endDate_dagiao.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.endDate_dagiao.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.endDate_dagiao.Location = new System.Drawing.Point(265, 5);
-            this.endDate_dagiao.Margin = new System.Windows.Forms.Padding(10, 0, 0, 0);
+            this.endDate_dagiao.Location = new System.Drawing.Point(200, 4);
+            this.endDate_dagiao.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
             this.endDate_dagiao.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.endDate_dagiao.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
             this.endDate_dagiao.Name = "endDate_dagiao";
-            this.endDate_dagiao.Size = new System.Drawing.Size(240, 40);
+            this.endDate_dagiao.Size = new System.Drawing.Size(180, 32);
             this.endDate_dagiao.TabIndex = 1;
             this.endDate_dagiao.Value = new System.DateTime(2025, 7, 26, 16, 12, 37, 911);
             this.endDate_dagiao.ValueChanged += new System.EventHandler(this.endDate_dagiao_ValueChanged);
@@ -681,11 +704,11 @@ namespace Task_App.views
             this.right_panel_dagiao.Controls.Add(this.right_panel_panel_dagiao);
             this.right_panel_dagiao.Dock = System.Windows.Forms.DockStyle.Right;
             this.right_panel_dagiao.FillColor = System.Drawing.Color.White;
-            this.right_panel_dagiao.Location = new System.Drawing.Point(554, 100);
+            this.right_panel_dagiao.Location = new System.Drawing.Point(414, 81);
             this.right_panel_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.right_panel_dagiao.Name = "right_panel_dagiao";
-            this.right_panel_dagiao.Padding = new System.Windows.Forms.Padding(10);
-            this.right_panel_dagiao.Size = new System.Drawing.Size(400, 473);
+            this.right_panel_dagiao.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.right_panel_dagiao.Size = new System.Drawing.Size(300, 383);
             this.right_panel_dagiao.TabIndex = 2;
             // 
             // right_panel_panel_dagiao
@@ -693,11 +716,11 @@ namespace Task_App.views
             this.right_panel_panel_dagiao.Controls.Add(this.chart2_dagiao);
             this.right_panel_panel_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.right_panel_panel_dagiao.FillColor = System.Drawing.Color.White;
-            this.right_panel_panel_dagiao.Location = new System.Drawing.Point(10, 10);
+            this.right_panel_panel_dagiao.Location = new System.Drawing.Point(8, 8);
             this.right_panel_panel_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.right_panel_panel_dagiao.Name = "right_panel_panel_dagiao";
-            this.right_panel_panel_dagiao.Padding = new System.Windows.Forms.Padding(10);
-            this.right_panel_panel_dagiao.Size = new System.Drawing.Size(380, 453);
+            this.right_panel_panel_dagiao.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.right_panel_panel_dagiao.Size = new System.Drawing.Size(284, 367);
             this.right_panel_panel_dagiao.TabIndex = 0;
             // 
             // chart2_dagiao
@@ -707,22 +730,22 @@ namespace Task_App.views
             this.chart2_dagiao.BorderSkin.BackColor = System.Drawing.Color.Transparent;
             this.chart2_dagiao.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
             this.chart2_dagiao.BorderSkin.BorderWidth = 0;
-            chartArea23.Name = "ChartArea1_dagiao";
-            this.chart2_dagiao.ChartAreas.Add(chartArea23);
+            chartArea3.Name = "ChartArea1_dagiao";
+            this.chart2_dagiao.ChartAreas.Add(chartArea3);
             this.chart2_dagiao.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chart2_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart2_dagiao.Enabled = false;
-            legend23.Name = "Legend1_dagiao";
-            this.chart2_dagiao.Legends.Add(legend23);
-            this.chart2_dagiao.Location = new System.Drawing.Point(10, 10);
+            legend3.Name = "Legend1_dagiao";
+            this.chart2_dagiao.Legends.Add(legend3);
+            this.chart2_dagiao.Location = new System.Drawing.Point(8, 8);
             this.chart2_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.chart2_dagiao.Name = "chart2_dagiao";
             this.chart2_dagiao.Palette = System.Windows.Forms.DataVisualization.Charting.ChartColorPalette.Pastel;
-            series23.ChartArea = "ChartArea1_dagiao";
-            series23.Legend = "Legend1_dagiao";
-            series23.Name = "Series1_dagiao";
-            this.chart2_dagiao.Series.Add(series23);
-            this.chart2_dagiao.Size = new System.Drawing.Size(360, 433);
+            series3.ChartArea = "ChartArea1_dagiao";
+            series3.Legend = "Legend1_dagiao";
+            series3.Name = "Series1_dagiao";
+            this.chart2_dagiao.Series.Add(series3);
+            this.chart2_dagiao.Size = new System.Drawing.Size(268, 351);
             this.chart2_dagiao.TabIndex = 0;
             this.chart2_dagiao.Text = "chart2_dagiao ";
             // 
@@ -737,7 +760,7 @@ namespace Task_App.views
             this.flow_Head_dagiao.Location = new System.Drawing.Point(0, 0);
             this.flow_Head_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.flow_Head_dagiao.Name = "flow_Head_dagiao";
-            this.flow_Head_dagiao.Size = new System.Drawing.Size(954, 100);
+            this.flow_Head_dagiao.Size = new System.Drawing.Size(714, 81);
             this.flow_Head_dagiao.TabIndex = 0;
             this.flow_Head_dagiao.Resize += new System.EventHandler(this.flow_Head_dagiao_Resize);
             // 
@@ -751,8 +774,8 @@ namespace Task_App.views
             this.head_panel_2_dagiao.Location = new System.Drawing.Point(0, 0);
             this.head_panel_2_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_2_dagiao.Name = "head_panel_2_dagiao";
-            this.head_panel_2_dagiao.Padding = new System.Windows.Forms.Padding(10);
-            this.head_panel_2_dagiao.Size = new System.Drawing.Size(300, 100);
+            this.head_panel_2_dagiao.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.head_panel_2_dagiao.Size = new System.Drawing.Size(225, 81);
             this.head_panel_2_dagiao.TabIndex = 1;
             // 
             // head_panel_panel_2_dagiao
@@ -766,20 +789,20 @@ namespace Task_App.views
             this.head_panel_panel_2_dagiao.FillColor2 = System.Drawing.Color.RoyalBlue;
             this.head_panel_panel_2_dagiao.FillColor3 = System.Drawing.Color.RoyalBlue;
             this.head_panel_panel_2_dagiao.FillColor4 = System.Drawing.Color.RoyalBlue;
-            this.head_panel_panel_2_dagiao.Location = new System.Drawing.Point(10, 10);
+            this.head_panel_panel_2_dagiao.Location = new System.Drawing.Point(8, 8);
             this.head_panel_panel_2_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_panel_2_dagiao.Name = "head_panel_panel_2_dagiao";
-            this.head_panel_panel_2_dagiao.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_panel_2_dagiao.Size = new System.Drawing.Size(209, 65);
             this.head_panel_panel_2_dagiao.TabIndex = 0;
             // 
             // lblImage_2_dagiao
             // 
             this.lblImage_2_dagiao.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblImage_2_dagiao.Image = ((System.Drawing.Image)(resources.GetObject("lblImage_2_dagiao.Image")));
-            this.lblImage_2_dagiao.Location = new System.Drawing.Point(198, 0);
+            this.lblImage_2_dagiao.Location = new System.Drawing.Point(147, 0);
             this.lblImage_2_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.lblImage_2_dagiao.Name = "lblImage_2_dagiao";
-            this.lblImage_2_dagiao.Size = new System.Drawing.Size(82, 80);
+            this.lblImage_2_dagiao.Size = new System.Drawing.Size(62, 65);
             this.lblImage_2_dagiao.TabIndex = 0;
             this.lblImage_2_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -791,7 +814,7 @@ namespace Task_App.views
             this.head_panel_item2_dagiao.Location = new System.Drawing.Point(0, 0);
             this.head_panel_item2_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_item2_dagiao.Name = "head_panel_item2_dagiao";
-            this.head_panel_item2_dagiao.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_item2_dagiao.Size = new System.Drawing.Size(209, 65);
             this.head_panel_item2_dagiao.TabIndex = 1;
             // 
             // head_panel_item1_dagiao
@@ -800,8 +823,9 @@ namespace Task_App.views
             this.head_panel_item1_dagiao.Controls.Add(this.panel_item2_1_dagiao);
             this.head_panel_item1_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.head_panel_item1_dagiao.Location = new System.Drawing.Point(0, 0);
+            this.head_panel_item1_dagiao.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.head_panel_item1_dagiao.Name = "head_panel_item1_dagiao";
-            this.head_panel_item1_dagiao.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_item1_dagiao.Size = new System.Drawing.Size(209, 65);
             this.head_panel_item1_dagiao.TabIndex = 0;
             // 
             // panel_item2_2_dagiao
@@ -809,10 +833,10 @@ namespace Task_App.views
             this.panel_item2_2_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_item2_2_dagiao.Font = new System.Drawing.Font("Bahnschrift", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_item2_2_dagiao.ForeColor = System.Drawing.Color.White;
-            this.panel_item2_2_dagiao.Location = new System.Drawing.Point(0, 35);
+            this.panel_item2_2_dagiao.Location = new System.Drawing.Point(0, 28);
             this.panel_item2_2_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.panel_item2_2_dagiao.Name = "panel_item2_2_dagiao";
-            this.panel_item2_2_dagiao.Size = new System.Drawing.Size(280, 45);
+            this.panel_item2_2_dagiao.Size = new System.Drawing.Size(209, 37);
             this.panel_item2_2_dagiao.TabIndex = 1;
             this.panel_item2_2_dagiao.Text = "7 Task";
             this.panel_item2_2_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -825,7 +849,7 @@ namespace Task_App.views
             this.panel_item2_1_dagiao.Location = new System.Drawing.Point(0, 0);
             this.panel_item2_1_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.panel_item2_1_dagiao.Name = "panel_item2_1_dagiao";
-            this.panel_item2_1_dagiao.Size = new System.Drawing.Size(280, 35);
+            this.panel_item2_1_dagiao.Size = new System.Drawing.Size(209, 28);
             this.panel_item2_1_dagiao.TabIndex = 0;
             this.panel_item2_1_dagiao.Text = "Trong Tuần";
             this.panel_item2_1_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -833,8 +857,9 @@ namespace Task_App.views
             // lblSoTaskDangXuLi_dagiao
             // 
             this.lblSoTaskDangXuLi_dagiao.Location = new System.Drawing.Point(0, 0);
+            this.lblSoTaskDangXuLi_dagiao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSoTaskDangXuLi_dagiao.Name = "lblSoTaskDangXuLi_dagiao";
-            this.lblSoTaskDangXuLi_dagiao.Size = new System.Drawing.Size(100, 23);
+            this.lblSoTaskDangXuLi_dagiao.Size = new System.Drawing.Size(75, 19);
             this.lblSoTaskDangXuLi_dagiao.TabIndex = 2;
             // 
             // head_panel_3_dagiao
@@ -845,11 +870,11 @@ namespace Task_App.views
             this.head_panel_3_dagiao.FillColor2 = System.Drawing.Color.Transparent;
             this.head_panel_3_dagiao.FillColor3 = System.Drawing.Color.Transparent;
             this.head_panel_3_dagiao.FillColor4 = System.Drawing.Color.Transparent;
-            this.head_panel_3_dagiao.Location = new System.Drawing.Point(300, 0);
+            this.head_panel_3_dagiao.Location = new System.Drawing.Point(225, 0);
             this.head_panel_3_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_3_dagiao.Name = "head_panel_3_dagiao";
-            this.head_panel_3_dagiao.Padding = new System.Windows.Forms.Padding(10);
-            this.head_panel_3_dagiao.Size = new System.Drawing.Size(300, 100);
+            this.head_panel_3_dagiao.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.head_panel_3_dagiao.Size = new System.Drawing.Size(225, 81);
             this.head_panel_3_dagiao.TabIndex = 1;
             // 
             // head_panel_panel_3_dagiao
@@ -862,10 +887,10 @@ namespace Task_App.views
             this.head_panel_panel_3_dagiao.FillColor2 = System.Drawing.Color.LimeGreen;
             this.head_panel_panel_3_dagiao.FillColor3 = System.Drawing.Color.LimeGreen;
             this.head_panel_panel_3_dagiao.FillColor4 = System.Drawing.Color.LimeGreen;
-            this.head_panel_panel_3_dagiao.Location = new System.Drawing.Point(10, 10);
+            this.head_panel_panel_3_dagiao.Location = new System.Drawing.Point(8, 8);
             this.head_panel_panel_3_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_panel_3_dagiao.Name = "head_panel_panel_3_dagiao";
-            this.head_panel_panel_3_dagiao.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_panel_3_dagiao.Size = new System.Drawing.Size(209, 65);
             this.head_panel_panel_3_dagiao.TabIndex = 0;
             // 
             // head_panel_item3_dagiao
@@ -875,8 +900,9 @@ namespace Task_App.views
             this.head_panel_item3_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.head_panel_item3_dagiao.FillColor = System.Drawing.Color.Transparent;
             this.head_panel_item3_dagiao.Location = new System.Drawing.Point(0, 0);
+            this.head_panel_item3_dagiao.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.head_panel_item3_dagiao.Name = "head_panel_item3_dagiao";
-            this.head_panel_item3_dagiao.Size = new System.Drawing.Size(198, 80);
+            this.head_panel_item3_dagiao.Size = new System.Drawing.Size(147, 65);
             this.head_panel_item3_dagiao.TabIndex = 1;
             // 
             // panel_item3_2_dagiao
@@ -884,9 +910,10 @@ namespace Task_App.views
             this.panel_item3_2_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_item3_2_dagiao.Font = new System.Drawing.Font("Bahnschrift", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_item3_2_dagiao.ForeColor = System.Drawing.Color.White;
-            this.panel_item3_2_dagiao.Location = new System.Drawing.Point(0, 35);
+            this.panel_item3_2_dagiao.Location = new System.Drawing.Point(0, 28);
+            this.panel_item3_2_dagiao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.panel_item3_2_dagiao.Name = "panel_item3_2_dagiao";
-            this.panel_item3_2_dagiao.Size = new System.Drawing.Size(198, 45);
+            this.panel_item3_2_dagiao.Size = new System.Drawing.Size(147, 37);
             this.panel_item3_2_dagiao.TabIndex = 1;
             this.panel_item3_2_dagiao.Text = "34 Task";
             this.panel_item3_2_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -899,7 +926,7 @@ namespace Task_App.views
             this.panel_item3_1_dagiao.Location = new System.Drawing.Point(0, 0);
             this.panel_item3_1_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.panel_item3_1_dagiao.Name = "panel_item3_1_dagiao";
-            this.panel_item3_1_dagiao.Size = new System.Drawing.Size(198, 35);
+            this.panel_item3_1_dagiao.Size = new System.Drawing.Size(147, 28);
             this.panel_item3_1_dagiao.TabIndex = 0;
             this.panel_item3_1_dagiao.Text = "Trong Tháng";
             this.panel_item3_1_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -908,9 +935,10 @@ namespace Task_App.views
             // 
             this.lblImage_3_dagiao.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblImage_3_dagiao.Image = ((System.Drawing.Image)(resources.GetObject("lblImage_3_dagiao.Image")));
-            this.lblImage_3_dagiao.Location = new System.Drawing.Point(198, 0);
+            this.lblImage_3_dagiao.Location = new System.Drawing.Point(147, 0);
+            this.lblImage_3_dagiao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblImage_3_dagiao.Name = "lblImage_3_dagiao";
-            this.lblImage_3_dagiao.Size = new System.Drawing.Size(82, 80);
+            this.lblImage_3_dagiao.Size = new System.Drawing.Size(62, 65);
             this.lblImage_3_dagiao.TabIndex = 0;
             this.lblImage_3_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -922,11 +950,11 @@ namespace Task_App.views
             this.head_panel_4_dagiao.FillColor2 = System.Drawing.Color.Transparent;
             this.head_panel_4_dagiao.FillColor3 = System.Drawing.Color.Transparent;
             this.head_panel_4_dagiao.FillColor4 = System.Drawing.Color.Transparent;
-            this.head_panel_4_dagiao.Location = new System.Drawing.Point(600, 0);
+            this.head_panel_4_dagiao.Location = new System.Drawing.Point(450, 0);
             this.head_panel_4_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.head_panel_4_dagiao.Name = "head_panel_4_dagiao";
-            this.head_panel_4_dagiao.Padding = new System.Windows.Forms.Padding(10);
-            this.head_panel_4_dagiao.Size = new System.Drawing.Size(300, 100);
+            this.head_panel_4_dagiao.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.head_panel_4_dagiao.Size = new System.Drawing.Size(225, 81);
             this.head_panel_4_dagiao.TabIndex = 2;
             // 
             // head_panel_panel_4_dagiao
@@ -939,9 +967,10 @@ namespace Task_App.views
             this.head_panel_panel_4_dagiao.FillColor2 = System.Drawing.Color.Tomato;
             this.head_panel_panel_4_dagiao.FillColor3 = System.Drawing.Color.Tomato;
             this.head_panel_panel_4_dagiao.FillColor4 = System.Drawing.Color.Tomato;
-            this.head_panel_panel_4_dagiao.Location = new System.Drawing.Point(10, 10);
+            this.head_panel_panel_4_dagiao.Location = new System.Drawing.Point(8, 8);
+            this.head_panel_panel_4_dagiao.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.head_panel_panel_4_dagiao.Name = "head_panel_panel_4_dagiao";
-            this.head_panel_panel_4_dagiao.Size = new System.Drawing.Size(280, 80);
+            this.head_panel_panel_4_dagiao.Size = new System.Drawing.Size(209, 65);
             this.head_panel_panel_4_dagiao.TabIndex = 0;
             // 
             // head_panel_item4_dagiao
@@ -950,8 +979,9 @@ namespace Task_App.views
             this.head_panel_item4_dagiao.Controls.Add(this.panel_item4_1_dagiao);
             this.head_panel_item4_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.head_panel_item4_dagiao.Location = new System.Drawing.Point(0, 0);
+            this.head_panel_item4_dagiao.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.head_panel_item4_dagiao.Name = "head_panel_item4_dagiao";
-            this.head_panel_item4_dagiao.Size = new System.Drawing.Size(200, 80);
+            this.head_panel_item4_dagiao.Size = new System.Drawing.Size(149, 65);
             this.head_panel_item4_dagiao.TabIndex = 1;
             // 
             // panel_item4_2_dagiao
@@ -959,9 +989,10 @@ namespace Task_App.views
             this.panel_item4_2_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel_item4_2_dagiao.Font = new System.Drawing.Font("Bahnschrift", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_item4_2_dagiao.ForeColor = System.Drawing.Color.White;
-            this.panel_item4_2_dagiao.Location = new System.Drawing.Point(0, 35);
+            this.panel_item4_2_dagiao.Location = new System.Drawing.Point(0, 28);
+            this.panel_item4_2_dagiao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.panel_item4_2_dagiao.Name = "panel_item4_2_dagiao";
-            this.panel_item4_2_dagiao.Size = new System.Drawing.Size(200, 45);
+            this.panel_item4_2_dagiao.Size = new System.Drawing.Size(149, 37);
             this.panel_item4_2_dagiao.TabIndex = 1;
             this.panel_item4_2_dagiao.Text = "218 Task";
             this.panel_item4_2_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -972,8 +1003,9 @@ namespace Task_App.views
             this.panel_item4_1_dagiao.Font = new System.Drawing.Font("Bahnschrift", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel_item4_1_dagiao.ForeColor = System.Drawing.Color.White;
             this.panel_item4_1_dagiao.Location = new System.Drawing.Point(0, 0);
+            this.panel_item4_1_dagiao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.panel_item4_1_dagiao.Name = "panel_item4_1_dagiao";
-            this.panel_item4_1_dagiao.Size = new System.Drawing.Size(200, 35);
+            this.panel_item4_1_dagiao.Size = new System.Drawing.Size(149, 28);
             this.panel_item4_1_dagiao.TabIndex = 0;
             this.panel_item4_1_dagiao.Text = "Trong Năm";
             this.panel_item4_1_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -982,9 +1014,10 @@ namespace Task_App.views
             // 
             this.lblImage_4_dagiao.Dock = System.Windows.Forms.DockStyle.Right;
             this.lblImage_4_dagiao.Image = ((System.Drawing.Image)(resources.GetObject("lblImage_4_dagiao.Image")));
-            this.lblImage_4_dagiao.Location = new System.Drawing.Point(200, 0);
+            this.lblImage_4_dagiao.Location = new System.Drawing.Point(149, 0);
+            this.lblImage_4_dagiao.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblImage_4_dagiao.Name = "lblImage_4_dagiao";
-            this.lblImage_4_dagiao.Size = new System.Drawing.Size(80, 80);
+            this.lblImage_4_dagiao.Size = new System.Drawing.Size(60, 65);
             this.lblImage_4_dagiao.TabIndex = 0;
             this.lblImage_4_dagiao.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -995,20 +1028,20 @@ namespace Task_App.views
             this.chart1_dagiao.BorderSkin.BackColor = System.Drawing.Color.Transparent;
             this.chart1_dagiao.BorderSkin.BorderColor = System.Drawing.Color.Transparent;
             this.chart1_dagiao.BorderSkin.BorderWidth = 0;
-            chartArea24.Name = "ChartArea1_dagiao";
-            this.chart1_dagiao.ChartAreas.Add(chartArea24);
+            chartArea4.Name = "ChartArea1_dagiao";
+            this.chart1_dagiao.ChartAreas.Add(chartArea4);
             this.chart1_dagiao.Cursor = System.Windows.Forms.Cursors.Hand;
             this.chart1_dagiao.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chart1_dagiao.Enabled = false;
-            legend24.Name = "Legend1_dagiao";
-            this.chart1_dagiao.Legends.Add(legend24);
+            legend4.Name = "Legend1_dagiao";
+            this.chart1_dagiao.Legends.Add(legend4);
             this.chart1_dagiao.Location = new System.Drawing.Point(10, 10);
             this.chart1_dagiao.Margin = new System.Windows.Forms.Padding(0);
             this.chart1_dagiao.Name = "chart1_dagiao";
-            series24.ChartArea = "ChartArea1_dagiao";
-            series24.Legend = "Legend1_dagiao";
-            series24.Name = "Series1_dagiao";
-            this.chart1_dagiao.Series.Add(series24);
+            series4.ChartArea = "ChartArea1_dagiao";
+            series4.Legend = "Legend1_dagiao";
+            series4.Name = "Series1_dagiao";
+            this.chart1_dagiao.Series.Add(series4);
             this.chart1_dagiao.Size = new System.Drawing.Size(514, 433);
             this.chart1_dagiao.TabIndex = 1;
             this.chart1_dagiao.Text = "chart1_dagiao";
@@ -1018,24 +1051,25 @@ namespace Task_App.views
             this.xtraTabControl1.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.xtraTabControl1.BorderStylePage = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             this.xtraTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xtraTabControl1.Location = new System.Drawing.Point(10, 10);
+            this.xtraTabControl1.Location = new System.Drawing.Point(8, 8);
             this.xtraTabControl1.LookAndFeel.Style = DevExpress.LookAndFeel.LookAndFeelStyle.Flat;
             this.xtraTabControl1.LookAndFeel.UseDefaultLookAndFeel = false;
             this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.xtraTabPage2;
-            this.xtraTabControl1.Size = new System.Drawing.Size(954, 598);
+            this.xtraTabControl1.Size = new System.Drawing.Size(714, 486);
             this.xtraTabControl1.TabIndex = 1;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage1,
             this.xtraTabPage2});
+            this.xtraTabControl1.Click += new System.EventHandler(this.xtraTabControl1_Click);
             // 
             // xtraTabPage2
             // 
             this.xtraTabPage2.Controls.Add(this.dashboard_panel_dagiao);
             this.xtraTabPage2.Margin = new System.Windows.Forms.Padding(0);
             this.xtraTabPage2.Name = "xtraTabPage2";
-            this.xtraTabPage2.Size = new System.Drawing.Size(954, 573);
+            this.xtraTabPage2.Size = new System.Drawing.Size(714, 464);
             this.xtraTabPage2.Text = "Đã Giao";
             // 
             // xtraTabPage1
@@ -1043,30 +1077,19 @@ namespace Task_App.views
             this.xtraTabPage1.Controls.Add(this.dashboard_panel);
             this.xtraTabPage1.Margin = new System.Windows.Forms.Padding(0);
             this.xtraTabPage1.Name = "xtraTabPage1";
-            this.xtraTabPage1.Size = new System.Drawing.Size(954, 573);
+            this.xtraTabPage1.Size = new System.Drawing.Size(714, 464);
             this.xtraTabPage1.Text = "Được Giao";
-            // 
-            // panel_timeLine
-            // 
-            this.panel_timeLine.AutoScroll = true;
-            this.panel_timeLine.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_timeLine.FillColor = System.Drawing.Color.White;
-            this.panel_timeLine.Location = new System.Drawing.Point(0, 50);
-            this.panel_timeLine.Name = "panel_timeLine";
-            this.panel_timeLine.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-            this.panel_timeLine.Size = new System.Drawing.Size(534, 403);
-            this.panel_timeLine.TabIndex = 2;
             // 
             // Dashboard
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.xtraTabControl1);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "Dashboard";
-            this.Padding = new System.Windows.Forms.Padding(10);
-            this.Size = new System.Drawing.Size(974, 618);
+            this.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.Size = new System.Drawing.Size(730, 502);
             this.Load += new System.EventHandler(this.Dashboard_Load);
             this.dashboard_panel.ResumeLayout(false);
             this.dashboard_panel.PerformLayout();

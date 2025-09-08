@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
         // Console.WriteLine($"Đang login: {request.Email}");
         // Console.WriteLine($"Đang login: {request.MatKhau}");
 
-        Console.WriteLine("MK đã mã hóa: " + PasswordHasher.Hash(request.MatKhau));
+        // Console.WriteLine("MK đã mã hóa: " + PasswordHasher.Hash(request.MatKhau));
 
         var user = await _context.NguoiDungs
             .Include(u => u.PhongBan)
@@ -53,6 +53,137 @@ public class AuthController : ControllerBase
             UserId = user.MaNguoiDung
         });
     }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] NguoiDung request)
+    {
+
+        if (string.IsNullOrEmpty(request.Email) || string.IsNullOrEmpty(request.MatKhau))
+            return BadRequest("Email và mật khẩu không được để trống.");
+
+        var existingUser = await _context.NguoiDungs.FirstOrDefaultAsync(u => u.Email == request.Email);
+        if (existingUser != null)
+            return BadRequest("Email đã được sử dụng.");
+
+        // Mã hóa mật khẩu
+        request.MatKhau = PasswordHasher.Hash(request.MatKhau);
+
+        _context.NguoiDungs.Add(request);
+        await _context.SaveChangesAsync();
+
+        return Ok(new ApiResponseDto { Message = "Đăng ký thành công!", Success = true });
+    }
+
+    [HttpGet("get-account-inactive")]
+    public async Task<IActionResult> GetAccountInactive()
+    {
+        var accs = await _context.NguoiDungs
+            .Where(u => u.TrangThai == 0)
+            .Select(u => new
+            {
+                u.MaNguoiDung,
+                u.HoTen,
+                u.Email,
+                DonVi = new
+                {
+                    MaDonVi = u.MaDonVi,
+                    TenDonVi = u.DonVi.TenDonVi
+                },
+                PhongBan = new
+                {
+                    MaPhongBan = u.MaPhongBan,
+                    TenPhongBan = u.PhongBan.TenPhongBan
+                },
+                ChucVu = new
+                {
+                    MaChucVu = u.MaChucVu,
+                    TenChucVu = u.ChucVu.TenChucVu
+                },
+
+                MaChucVu = u.MaChucVu,
+                MaDonVi = u.MaDonVi,
+                MaPhongBan = u.MaPhongBan
+
+            })
+            .ToListAsync();
+
+        return Ok(new
+        {
+            Success = true,
+            Message = accs.Count > 0 ? "Lấy danh sách người dùng chưa xác nhận" : "Không có người dùng chưa xác nhận",
+            Data = accs
+        });
+    }
+
+    [HttpGet("get-account-active")]
+    public async Task<IActionResult> GetAccountActive()
+    {
+        var accs = await _context.NguoiDungs
+            .Where(u => u.TrangThai == 1 && u.IsAdmin == 0)
+            .Select(u => new
+            {
+                u.MaNguoiDung,
+                u.HoTen,
+                u.Email,
+                DonVi = new
+                {
+                    MaDonVi = u.MaDonVi,
+                    TenDonVi = u.DonVi.TenDonVi
+                },
+                PhongBan = new
+                {
+                    MaPhongBan = u.MaPhongBan,
+                    TenPhongBan = u.PhongBan.TenPhongBan
+                },
+                ChucVu = new
+                {
+                    MaChucVu = u.MaChucVu,
+                    TenChucVu = u.ChucVu.TenChucVu
+                },
+
+                MaChucVu = u.MaChucVu,
+                MaDonVi = u.MaDonVi,
+                MaPhongBan = u.MaPhongBan
+
+            })
+            .ToListAsync();
+
+        return Ok(new
+        {
+            Success = true,
+            Message = accs.Count > 0 ? "Lấy danh sách người dùng" : "Không có người dùng nào",
+            Data = accs
+        });
+    }
+
+    [HttpPost("update-mat-khau-nguoi-dung")]
+    public async Task<IActionResult> UpdateMatKhau([FromBody] LoginRequest request)
+    {
+        // Tìm user theo email
+        var user = await _context.NguoiDungs
+            .FirstOrDefaultAsync(u => u.Email == request.Email);
+
+        if (user == null)
+        {
+            return NotFound("Người dùng không tồn tại.");
+        }
+
+        // Hash lại mật khẩu mới và update
+        user.MatKhau = PasswordHasher.Hash(request.MatKhau);
+
+        _context.NguoiDungs.Update(user);
+        await _context.SaveChangesAsync();
+
+        Console.WriteLine($"Cập nhật mật khẩu thành công cho user {user.Email}");
+
+        return Ok(new ApiResponseDto
+        {
+            Message = "Cập nhật mật khẩu thành công!",
+            Success = true
+        });
+    }
+
+
 
 
     private string GenerateJwtToken(NguoiDung user)

@@ -13,8 +13,6 @@ namespace Task_App.views
 {
     public partial class Create_Task_Control : UserControl
     {
-        private readonly TcpClientDAO tcpClientDAO;
-        private readonly CongViecService CongViecService;
         private NguoiDung nd;
 
         private readonly int maNguoiDung;
@@ -39,11 +37,19 @@ namespace Task_App.views
 
         public async Task LoadData()
         {
-            var response = await apiClientDAO.GetViecDaGiaoAsync(nd.MaNguoiDung, locTheoNgay);
+            var response = await apiClientDAO.GetViecDaGiaoAsync(nd.MaNguoiDung, !locTheoNgay);
 
-            //if (response == null || !response.Success || response.Data == null || response.Data.Count == 0)
+            //if (response.Data == null || !response.Data.Any())
             //{
-            //    MessageBox.Show("Không có dữ liệu.");
+            //    Console.WriteLine("Không có dữ liệu. Msg: " + response.Message);
+            //    Panel_TDG_main.Controls.Clear();
+            //    Label lbl = new Label();
+            //    lbl.Text = "Không có dữ liệu";
+            //    lbl.AutoSize = false;
+            //    lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            //    Panel_TDG_main.Controls.Add(lbl);
+            //    lbl.Dock = DockStyle.Fill;
+            //    lbl.Font = new System.Drawing.Font("Tahoma", 26F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             //    return;
             //}
 
