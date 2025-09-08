@@ -39,10 +39,10 @@ namespace APIServerApp.Migrations
                     b.Property<DateTime?>("NgayHoanThanh")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NgayKetThucCongViec")
+                    b.Property<DateTime?>("NgayKetThucCongViec")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NgayNhanCongViec")
+                    b.Property<DateTime?>("NgayNhanCongViec")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NoiDung")

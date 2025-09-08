@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250815032915_InitialCreate")]
+    [Migration("20250822061911_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,10 +42,10 @@ namespace APIServerApp.Migrations
                     b.Property<DateTime?>("NgayHoanThanh")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NgayKetThucCongViec")
+                    b.Property<DateTime?>("NgayKetThucCongViec")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("NgayNhanCongViec")
+                    b.Property<DateTime?>("NgayNhanCongViec")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NoiDung")

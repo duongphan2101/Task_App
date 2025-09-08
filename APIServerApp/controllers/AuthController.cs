@@ -28,7 +28,7 @@ public class AuthController : ControllerBase
         // Console.WriteLine($"Đang login: {request.Email}");
         // Console.WriteLine($"Đang login: {request.MatKhau}");
 
-        // Console.WriteLine("MK đã mã hóa: " + PasswordHasher.Hash(request.MatKhau));
+        Console.WriteLine("MK đã mã hóa: " + PasswordHasher.Hash(request.MatKhau));
 
         var user = await _context.NguoiDungs
             .Include(u => u.PhongBan)
