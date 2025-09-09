@@ -35,6 +35,7 @@
             this.txtPass = new Guna.UI2.WinForms.Guna2TextBox();
             this.panelControl1 = new DevExpress.XtraEditors.PanelControl();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelControl2 = new DevExpress.XtraEditors.PanelControl();
             this.panel2 = new System.Windows.Forms.Panel();
             this.btn_DangKy = new Guna.UI2.WinForms.Guna2Button();
@@ -42,7 +43,6 @@
             this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
             this.panelControl1item = new DevExpress.XtraLayout.LayoutControlItem();
             this.panelControl2item = new DevExpress.XtraLayout.LayoutControlItem();
-            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).BeginInit();
             this.panelControl1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -138,16 +138,17 @@
             this.txtPass.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txtPass.ForeColor = System.Drawing.Color.DimGray;
             this.txtPass.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.txtPass.IconRight = global::Task_App.Properties.Resources.notshow;
+            this.txtPass.IconRightOffset = new System.Drawing.Point(10, 0);
+            this.txtPass.IconRightSize = new System.Drawing.Size(15, 15);
             this.txtPass.Location = new System.Drawing.Point(39, 310);
             this.txtPass.Margin = new System.Windows.Forms.Padding(0);
             this.txtPass.Name = "txtPass";
-            this.txtPass.PasswordChar = '@';
             this.txtPass.PlaceholderText = "Nhập mật khẩu";
             this.txtPass.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.txtPass.SelectedText = "";
             this.txtPass.Size = new System.Drawing.Size(251, 42);
             this.txtPass.TabIndex = 2;
-            this.txtPass.UseSystemPasswordChar = true;
             this.txtPass.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.OnKeyPressed);
             // 
             // panelControl1
@@ -172,6 +173,19 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(472, 601);
             this.panel1.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(472, 601);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Đăng Nhập";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelControl2
             // 
@@ -265,19 +279,6 @@
             this.panelControl2item.Size = new System.Drawing.Size(328, 601);
             this.panelControl2item.TextVisible = false;
             // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Font = new System.Drawing.Font("Tahoma", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(472, 601);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Đăng Nhập";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // FormLogin
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -292,6 +293,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
+            this.Load += new System.EventHandler(this.FormLogin_Load);
             ((System.ComponentModel.ISupportInitialize)(this.panelControl1)).EndInit();
             this.panelControl1.ResumeLayout(false);
             this.panelControl1.PerformLayout();

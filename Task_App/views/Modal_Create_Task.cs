@@ -205,6 +205,11 @@ namespace Task_App.views
 
         private async void btn_Create_Click(object sender, EventArgs e)
         {
+            if (!Invalid())
+            {
+                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             string path = Path.Combine(Application.StartupPath, "tmpCredential.dll");
             int savedUserId = 0;
 
@@ -972,6 +977,19 @@ namespace Task_App.views
 
         }
 
+        public bool Invalid()
+        {
+            string title = txtTieuDe.Text.Trim();
+            string content = txtNoiDung.Text.Trim();
+            string to = txtEmailInput.Text.Trim();
+
+            if (title == null || content == null || to == null || title == "" || content == "" || to == "")
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void empty()
         {
             txtTieuDe.Text = "";
@@ -985,6 +1003,7 @@ namespace Task_App.views
             mucDo = 0;
             cbMucDo.Text = "Bình thường";
             cbMucDo.SelectedIndex = 0;
+            flowFiles.Controls.Clear();
         }
 
         private void createNotifications(ThongBaoNguoiDung tb)

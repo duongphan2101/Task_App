@@ -20,7 +20,7 @@ namespace APIServerApp.Context
             // var user = Env.GetString("DB_USER");
             // var pass = Env.GetString("DB_PASS");
 
-            var connectionString = $"Data Source=DESKTOP-HDA0Q6C;Initial Catalog=TASK_API_DB;User ID=sa;Password=123;TrustServerCertificate=True";
+            var connectionString = $"Data Source=ADUONG;Initial Catalog=TASK_API_DB;User ID=sa;Password=123;TrustServerCertificate=True";
 
             optionsBuilder.UseSqlServer(connectionString);
         }

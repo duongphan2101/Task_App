@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Task_App.Model;
 using Task_App.TaskApp_Dao;
@@ -20,6 +14,8 @@ namespace Task_App.views
         string MaDV = "";
         string MaPB = "";
         string MaCV = "";
+        bool isPasswordHidden_Pass = true;
+        bool isPasswordHidden_RePass = true;
 
         public Register(ApiClientDAO apiClientDAO)
         {
@@ -71,22 +67,10 @@ namespace Task_App.views
             string phongban = cb_PB.SelectedItem.ToString();
             string chucvu = cb_CV.SelectedItem.ToString();
 
-            if (string.IsNullOrEmpty(hoTen) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(pass) || string.IsNullOrEmpty(repass))
+            bool re = Invalid(hoTen, email, pass, repass, out var err);
+            if (re)
             {
-                MessageBox.Show("Vui lòng nhập đầy đủ thông tin!", "Lỗi",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (emailChecker.IsValid(email) == false)
-            {
-                MessageBox.Show("Email không hợp lệ!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (pass != repass)
-            {
-                MessageBox.Show("Mật khẩu không khớp!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(err, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -116,6 +100,58 @@ namespace Task_App.views
                 MessageBox.Show("Đăng ký thất bại! " + resRegister.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
+        }
+
+        public bool Invalid(string username, string email, string password, string rePassword, out string errorMessage)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(rePassword))
+            {
+                errorMessage = "Vui lòng nhập đầy đủ thông tin!";
+                return false;
+            }
+            var usernamePattern = new Regex(@"^[\p{L}\s'-]+$");
+
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                errorMessage = "Tên không được để trống.";
+                return true;
+            }
+
+            if (!usernamePattern.IsMatch(username))
+            {
+                errorMessage = "Tên không được chứa số hoặc ký tự lạ (chỉ chữ, khoảng trắng, -, ').";
+                return true;
+            }
+
+            // Email: phải kết thúc chính xác bằng @intimexhcm.com
+            var emailPattern = new Regex(@"^[A-Za-z0-9._%+\-]+@intimexhcm\.com$", RegexOptions.IgnoreCase);
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                errorMessage = "Email không được để trống.";
+                return true;
+            }
+
+            if (!emailPattern.IsMatch(email))
+            {
+                errorMessage = "Email phải là một địa chỉ thuộc domain @intimexhcm.com.";
+                return true;
+            }
+
+            if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(rePassword))
+            {
+                errorMessage = "Mật khẩu và xác nhận mật khẩu không được để trống.";
+                return true;
+            }
+
+            if (password != rePassword)
+            {
+                errorMessage = "Mật khẩu và xác nhận mật khẩu không khớp.";
+                return true;
+            }
+
+
+            errorMessage = null;
+            return false;
         }
 
         private void cb_DV_SelectedIndexChanged(object sender, EventArgs e)
@@ -152,6 +188,54 @@ namespace Task_App.views
         private void Register_Load(object sender, EventArgs e)
         {
             SetItemComboBox();
+            txt_Pass.PasswordChar = '●';
+            txt_Pass.IconRight = Task_App.Properties.Resources.notshow;
+            txt_Pass.IconRightCursor = Cursors.Hand;
+
+            txt_Pass.IconRightClick += Txt_Pass_IconRightClick;
+
+            txt_RePass.PasswordChar = '●';
+            txt_RePass.IconRight = Task_App.Properties.Resources.notshow;
+            txt_RePass.IconRightCursor = Cursors.Hand;
+
+            txt_RePass.IconRightClick += txt_RePass_IconRightClick;
         }
+
+        private void Txt_Pass_IconRightClick(object sender, EventArgs e)
+        {
+            if (isPasswordHidden_Pass)
+            {
+                // Hiển thị password dạng text
+                txt_Pass.PasswordChar = '\0';
+                txt_Pass.IconRight = Task_App.Properties.Resources.show;
+                isPasswordHidden_Pass = false;
+            }
+            else
+            {
+                // Ẩn password
+                txt_Pass.PasswordChar = '●';
+                txt_Pass.IconRight = Task_App.Properties.Resources.notshow;
+                isPasswordHidden_Pass = true;
+            }
+        }
+
+        private void txt_RePass_IconRightClick(object sender, EventArgs e)
+        {
+            if (isPasswordHidden_RePass)
+            {
+                // Hiển thị password dạng text
+                txt_RePass.PasswordChar = '\0';
+                txt_RePass.IconRight = Task_App.Properties.Resources.show;
+                isPasswordHidden_RePass = false;
+            }
+            else
+            {
+                // Ẩn password
+                txt_RePass.PasswordChar = '●';
+                txt_RePass.IconRight = Task_App.Properties.Resources.notshow;
+                isPasswordHidden_RePass = true;
+            }
+        }
+
     }
 }

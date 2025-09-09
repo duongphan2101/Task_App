@@ -15,6 +15,7 @@ namespace Task_App
         private readonly EmailAddressAttribute emailChecker = new EmailAddressAttribute();
         private readonly ApiClientDAO apiClientDAO;
         private LoginResponse response;
+        bool isPasswordHidden_Pass = true;
 
         public FormLogin(ApiClientDAO apiClientDAO)
         {
@@ -104,6 +105,34 @@ namespace Task_App
             var registerForm = new Register(apiClientDAO);
             registerForm.FormClosed += (s, args) => Show();
             registerForm.Show();
+        }
+
+        private void FormLogin_Load(object sender, EventArgs e)
+        {
+
+            txtPass.PasswordChar = '●';
+            txtPass.IconRight = Task_App.Properties.Resources.notshow;
+            txtPass.IconRightCursor = Cursors.Hand;
+
+            txtPass.IconRightClick += txtPass_IconRightClick;
+        }
+
+        private void txtPass_IconRightClick(object sender, EventArgs e)
+        {
+            if (isPasswordHidden_Pass)
+            {
+                // Hiển thị password dạng text
+                txtPass.PasswordChar = '\0';
+                txtPass.IconRight = Task_App.Properties.Resources.show;
+                isPasswordHidden_Pass = false;
+            }
+            else
+            {
+                // Ẩn password
+                txtPass.PasswordChar = '●';
+                txtPass.IconRight = Task_App.Properties.Resources.notshow;
+                isPasswordHidden_Pass = true;
+            }
         }
     }
 }

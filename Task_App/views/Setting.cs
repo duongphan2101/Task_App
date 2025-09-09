@@ -112,7 +112,6 @@ namespace Task_App.views
             }
         }
 
-
         private void txt_PassAccount_IconRightClick(object sender, EventArgs e)
         {
             if (isPasswordHidden_Account)

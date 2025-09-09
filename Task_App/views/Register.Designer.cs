@@ -210,6 +210,7 @@
             this.txt_RePass.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txt_RePass.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.txt_RePass.IconRight = global::Task_App.Properties.Resources.notshow;
+            this.txt_RePass.IconRightSize = new System.Drawing.Size(15, 15);
             this.txt_RePass.Location = new System.Drawing.Point(32, 254);
             this.txt_RePass.Margin = new System.Windows.Forms.Padding(0);
             this.txt_RePass.Name = "txt_RePass";
@@ -241,6 +242,7 @@
             this.txt_Pass.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.txt_Pass.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
             this.txt_Pass.IconRight = global::Task_App.Properties.Resources.notshow;
+            this.txt_Pass.IconRightSize = new System.Drawing.Size(15, 15);
             this.txt_Pass.Location = new System.Drawing.Point(32, 182);
             this.txt_Pass.Margin = new System.Windows.Forms.Padding(0);
             this.txt_Pass.Name = "txt_Pass";
