@@ -135,14 +135,22 @@ namespace APIServerApp.Migrations
             modelBuilder.Entity("APIServerApp.Model.Email", b =>
                 {
                     b.Property<string>("MaEmail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int?>("ChiTietCongViecMaChiTietCV")
                         .HasColumnType("int");
 
+                    b.Property<string>("InReplyTo")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<int>("MaChiTietCV")
                         .HasColumnType("int");
+
+                    b.Property<string>("MessageId")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("NgayGui")
                         .HasColumnType("datetime2");
@@ -151,6 +159,9 @@ namespace APIServerApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NoiDung")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("References")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TieuDe")
@@ -271,8 +282,8 @@ namespace APIServerApp.Migrations
             modelBuilder.Entity("APIServerApp.Model.NguoiNhanEmail", b =>
                 {
                     b.Property<string>("MaEmail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnOrder(0);
 
                     b.Property<int>("MaNguoiDung")
@@ -345,8 +356,8 @@ namespace APIServerApp.Migrations
             modelBuilder.Entity("APIServerApp.Model.TepDinhKemEmail", b =>
                 {
                     b.Property<string>("MaEmail")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)")
                         .HasColumnOrder(0);
 
                     b.Property<int>("MaTep")

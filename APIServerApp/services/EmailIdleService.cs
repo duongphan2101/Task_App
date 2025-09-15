@@ -1,10 +1,14 @@
 using MailKit;
 using MailKit.Net.Imap;
 using MailKit.Security;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 using MimeKit;
+using APIServerApp.Context;
+using APIServerApp.Model;
 
-namespace APIServerApp.services
+namespace APIServerApp.Services
 {
     public class EmailIdleService : BackgroundService
     {
@@ -12,6 +16,13 @@ namespace APIServerApp.services
         private readonly int _port = 993;
         private readonly string _username = "duong2101.test@gmail.com";
         private readonly string _password = "ufns jzmt difo offq";
+        private readonly object _imapLock = new object();
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        public EmailIdleService(IServiceScopeFactory scopeFactory)
+        {
+            _scopeFactory = scopeFactory;
+        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -20,97 +31,151 @@ namespace APIServerApp.services
             await client.ConnectAsync(_host, _port, SecureSocketOptions.SslOnConnect, stoppingToken);
             await client.AuthenticateAsync(_username, _password, stoppingToken);
 
-            // --- Inbox ---
             var inbox = client.Inbox;
-            await inbox.OpenAsync(FolderAccess.ReadOnly, stoppingToken);
+            await inbox.OpenAsync(FolderAccess.ReadWrite, stoppingToken);
             Console.WriteLine($"📥 Inbox has {inbox.Count} messages");
-
-            // log tất cả mail trong Inbox
-            for (int i = 0; i < inbox.Count; i++)
-            {
-                var msg = await inbox.GetMessageAsync(i, stoppingToken);
-                LogEmailInfo(msg, "📥 Inbox");
-            }
 
             inbox.CountChanged += async (s, e) =>
             {
                 try
                 {
-                    var msg = await inbox.GetMessageAsync(inbox.Count - 1, stoppingToken);
-                    LogEmailInfo(msg, "📥 Inbox");
+                    MimeMessage msg = null;
+
+                    // Không lấy message trực tiếp từ client đang idle
+                    lock (_imapLock)
+                    {
+                        if (inbox.Count == 0) return;
+                    }
+
+                    // Tạo client mới để fetch message
+                    using var fetchClient = new ImapClient();
+                    await fetchClient.ConnectAsync(_host, _port, SecureSocketOptions.SslOnConnect);
+                    await fetchClient.AuthenticateAsync(_username, _password);
+                    await fetchClient.Inbox.OpenAsync(FolderAccess.ReadWrite);
+
+                    msg = await fetchClient.Inbox.GetMessageAsync(fetchClient.Inbox.Count - 1);
+
+                    await ProcessEmail(msg);
+
+                    await fetchClient.DisconnectAsync(true);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"❌ Inbox error: {ex.Message}");
+                    Console.WriteLine($"❌ Inbox fetch error: {ex.Message}");
                 }
             };
 
-            // --- Sent ---
-            var sent = client.GetFolder(SpecialFolder.Sent);
-            await sent.OpenAsync(FolderAccess.ReadOnly, stoppingToken);
-            Console.WriteLine($"📤 Sent has {sent.Count} messages");
 
-            // log tất cả mail trong Sent
-            for (int i = 0; i < sent.Count; i++)
-            {
-                var msg = await sent.GetMessageAsync(i, stoppingToken);
-                LogEmailInfo(msg, "📤 Sent");
-            }
-
-            sent.CountChanged += async (s, e) =>
-            {
-                try
-                {
-                    var msg = await sent.GetMessageAsync(sent.Count - 1, stoppingToken);
-                    LogEmailInfo(msg, "📤 Sent");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"❌ Sent error: {ex.Message}");
-                }
-            };
-
-            // --- Idle loop ---
             while (!stoppingToken.IsCancellationRequested)
             {
                 try
                 {
-                    await client.IdleAsync(stoppingToken);
+                    // Wrap idle trong lock nếu muốn đảm bảo không bị truy cập đồng thời
+                    lock (_imapLock)
+                    {
+                        client.Idle(stoppingToken);
+                    }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"❌ Idle error: {ex.Message}");
+                    await Task.Delay(5000, stoppingToken);
                 }
             }
         }
 
-        private void LogEmailInfo(MimeMessage msg, string folder)
+        private async Task ProcessEmail(MimeMessage msg)
         {
-            var messageId = msg.MessageId;
-            if (!string.IsNullOrEmpty(messageId) && messageId.Contains("@"))
+            using var scope = _scopeFactory.CreateScope();
+            var _context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+            var fromAddress = msg.From.Mailboxes.FirstOrDefault()?.Address;
+            if (string.IsNullOrEmpty(fromAddress))
             {
-                messageId = messageId.Split('@')[0];
+                Console.WriteLine("❌ Email không có sender, bỏ qua.");
+                return;
+            }
+            var lowerEmail = fromAddress.ToLower();
+
+            var nguoiDung = await _context.NguoiDungs
+                .FirstOrDefaultAsync(u => u.Email.ToLower() == lowerEmail);
+
+
+            if (nguoiDung == null)
+            {
+                Console.WriteLine($"⚠️ Không tìm thấy người dùng khớp với email {fromAddress}");
+                return;
             }
 
-            Console.WriteLine("=================================================");
-            Console.WriteLine($"{folder}");
-            Console.WriteLine($"📧 From: {msg.From}");
-            Console.WriteLine($"📤 To: {msg.To}");
-            if (msg.Cc.Count > 0)
-                Console.WriteLine($"📋 Cc: {msg.Cc}");
-            Console.WriteLine($"📝 Subject: {msg.Subject}");
-            Console.WriteLine($"📅 Date: {msg.Date}");
-            Console.WriteLine($"📄 Message-ID: {messageId}");
+            var chiTietCV = await _context.ChiTietCongViecs
+                .Where(c => c.CongViec.NguoiGiao == nguoiDung.MaNguoiDung)
+                .OrderByDescending(c => c.CongViec.NgayGiao)
+                .FirstOrDefaultAsync();
 
-            // log full nội dung email
-            Console.WriteLine("🌐 HtmlBody:");
-            Console.WriteLine(string.IsNullOrEmpty(msg.HtmlBody) ? "(no html body)" : msg.HtmlBody);
+            if (chiTietCV == null)
+            {
+                Console.WriteLine($"⚠️ Người dùng {nguoiDung.Email} chưa có task được giao, bỏ qua.");
+                return;
+            }
 
-            Console.WriteLine("📄 TextBody:");
-            Console.WriteLine(string.IsNullOrEmpty(msg.TextBody) ? "(no text body)" : msg.TextBody);
+            // Tạo phản hồi công việc
+            var phcv = new PhanHoiCongViec
+            {
+                MaCongViec = chiTietCV.MaCongViec,
+                MaNguoiDung = nguoiDung.MaNguoiDung,
+                NoiDung = msg.TextBody ?? msg.HtmlBody ?? "",
+                ThoiGian = DateTime.Now,
+                Loai = "Reply"
+            };
 
-            Console.WriteLine("=================================================");
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                _context.PhanHoiCongViecs.Add(phcv);
+                await _context.SaveChangesAsync();
+
+                // Lưu attachments
+                foreach (var attachment in msg.Attachments.OfType<MimePart>())
+                {
+                    var fileName = attachment.FileName ?? Guid.NewGuid().ToString();
+                    var path = Path.Combine("EmailAttachments", fileName);
+                    Directory.CreateDirectory("EmailAttachments");
+
+                    using (var stream = File.Create(path))
+                    {
+                        await attachment.Content.DecodeToAsync(stream);
+                    }
+
+                    var tepTin = new TepTin
+                    {
+                        TenTepGoc = fileName,
+                        DuongDan = path
+                    };
+                    _context.TepTins.Add(tepTin);
+                    await _context.SaveChangesAsync();
+
+                    var tepDinhKem = new TepDinhKemEmail
+                    {
+                        MaEmail = msg.MessageId,
+                        MaTep = tepTin.MaTep,
+                        Email = null,
+                        TepTin = tepTin
+                    };
+                    _context.TepDinhKemEmails.Add(tepDinhKem);
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                Console.WriteLine($"✅ Tạo phản hồi công việc + lưu attachments cho: {chiTietCV.MaCongViec}");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                Console.WriteLine($"❌ Lỗi khi tạo phản hồi + attachments: {ex.Message}");
+            }
         }
+
 
 
     }

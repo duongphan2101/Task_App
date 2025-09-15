@@ -1,5 +1,4 @@
-﻿using DevExpress.Utils.Animation;
-using Guna.UI2.WinForms;
+﻿using Guna.UI2.WinForms;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,15 +7,11 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Sockets;
-using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Task_App.DTO;
 using Task_App.Model;
-using Task_App.Response;
-using Task_App.Services;
 using Task_App.TaskApp_Dao;
 
 
@@ -96,12 +91,6 @@ namespace Task_App.views
 
             flow_FeedBack.Controls.Clear();
             renderedFeedbackIds.Clear();
-            //foreach (PhanHoiCongViec fb in lstFeedback)
-            //{
-            //    bool isMe = fb.NguoiDung.HoTen == nd.HoTen;
-            //    await AddFeedback(fb, isMe);
-            //    Console.WriteLine($"ID: {fb.MaPhanHoi}, Nội dung: {fb.NoiDung}");
-            //}
 
             var seen = new HashSet<int>();
             foreach (var fb in resPhanHoiCongViec.PhanHoiCongViec.OrderBy(f => f.ThoiGian))
@@ -732,6 +721,30 @@ namespace Task_App.views
         private async void btn_Send_Click(object sender, EventArgs e)
         {
             string mess = txtMessage.Text;
+            string path = Path.Combine(Application.StartupPath, "tmpCredential.dll");
+            int savedUserId = 0;
+
+            if (File.Exists(path))
+            {
+                byte[] readData = File.ReadAllBytes(path);
+                using (var ms = new MemoryStream(readData))
+                {
+                    var bf = new BinaryFormatter();
+                    var loaded = (UserCredential)bf.Deserialize(ms);
+
+                    DTO.TmpPass.Pwd = loaded.GetPassword();
+                    savedUserId = loaded.UserId;
+                }
+            }
+            string pwd = DTO.TmpPass.Pwd;
+            if (string.IsNullOrEmpty(pwd))
+            {
+                MessageBox.Show("Vui lòng nhập mật khẩu của email!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                RealPass rp = new RealPass(maNguoiDung);
+                rp.ShowDialog();
+                return;
+            }
+
 
             var resChiTiet = await apiClientDAO.GetChiTietConViec(maChiTietCV);
             CongViec cv = resChiTiet.Data.CongViec;
@@ -787,6 +800,136 @@ namespace Task_App.views
                 await apiClientDAO.CreatePhanHoiCongViec(phcv);
             }
 
+            // Sau khi tạo PhanHoiCongViec
+            if (!string.IsNullOrWhiteSpace(mess) || lstTepDaChon.Count > 0)
+            {
+                // Lấy email gốc của công việc
+                var resEmail = await apiClientDAO.GetEmailByChiTietCVAsync(maChiTietCV);
+                var emailGoc = resEmail?.Data?.FirstOrDefault();
+
+                // Tạo MessageId mới cho reply
+                string newMessageId = $"{Guid.NewGuid()}@intimexhcm.com";
+
+                Email emailReply = new Email
+                {
+                    MaChiTietCV = maChiTietCV,
+                    MaEmail = GenerateMaEmailFromLast("ReplyTo_" + emailGoc.MaEmail),
+                    NguoiGui = maNguoiDung,
+                    NoiDung = mess,
+                    TieuDe = "Reply_" + emailGoc.TieuDe,
+                    NgayGui = DateTime.Now,
+                    MessageId = newMessageId,
+                    InReplyTo = emailGoc?.MessageId,
+                    References = emailGoc != null
+                        ? (string.IsNullOrEmpty(emailGoc.References)
+                            ? emailGoc.MessageId
+                            : emailGoc.References + " " + emailGoc.MessageId)
+                        : null
+                };
+
+                var resEmailReply = await apiClientDAO.CreateEmail(emailReply);
+                if (resEmailReply.Success)
+                {
+                    Console.WriteLine("TẠO Email Reply Thành Công");
+
+                    // Lấy danh sách người nhận từ email gốc
+                    var resNguoiNhan = await apiClientDAO.GetNguoiNhanEmailByMaEmailAsync(emailGoc.MaEmail);
+                    var lstNguoiNhanGoc = resNguoiNhan?.Data ?? new List<NguoiNhanEmail>();
+
+                    // Build danh sách người nhận cho email reply
+                    var lstNguoiNhanReply = new List<NguoiNhanEmail>();
+
+                    if (emailGoc.NguoiGui == maNguoiDung)
+                    {
+                        // Case 1: Người login là NGƯỜI GỬI email gốc
+                        // → reply tới tất cả người nhận của email gốc
+                        foreach (var nnx in lstNguoiNhanGoc)
+                        {
+                            var nnReply = new NguoiNhanEmail
+                            {
+                                MaEmail = emailReply.MaEmail,
+                                MaNguoiDung = nnx.MaNguoiDung,
+                                VaiTro = nnx.VaiTro,
+                                Email = nnx.Email,
+                                NguoiDung = nnx.NguoiDung
+                            };
+                            await apiClientDAO.CreateNguoiNhanEmail(nnReply);
+                            lstNguoiNhanReply.Add(nnReply);
+                        }
+                    }
+                    else
+                    {
+                        // Case 2: Người login là NGƯỜI NHẬN email gốc
+                        // → reply lại cho NGƯỜI GỬI email gốc
+                        {
+                            // Lấy thông tin người gửi gốc từ API (đảm bảo có email)
+                            var resNguoiGui = await apiClientDAO.GetGetNguoiDungByIdAsync(emailGoc.NguoiGui);
+                            var nguoiGui = resNguoiGui?.Data;
+
+                            if (nguoiGui == null || string.IsNullOrWhiteSpace(nguoiGui.Email))
+                            {
+                                Console.WriteLine($"[ERROR] Không tìm thấy email của người gửi gốc (MaNguoiGui={emailGoc.NguoiGui}). Bỏ qua gửi mail.");
+                            }
+                            else
+                            {
+                                var nnReply = new NguoiNhanEmail
+                                {
+                                    MaEmail = emailReply.MaEmail,
+                                    MaNguoiDung = emailGoc.NguoiGui,
+                                    VaiTro = "to",
+                                    Email = emailReply,
+                                    NguoiDung = nguoiGui
+                                };
+
+                                var createRes = await apiClientDAO.CreateNguoiNhanEmail(nnReply);
+
+                                // Log kỹ để debug — cần using Newtonsoft.Json;
+                                //Console.WriteLine("== CreateNguoiNhanEmail result ==");
+                                //Console.WriteLine(JsonConvert.SerializeObject(createRes, Formatting.Indented));
+                                //Console.WriteLine("== nnReply object ==");
+                                //Console.WriteLine(JsonConvert.SerializeObject(nnReply, Formatting.Indented));
+
+                                lstNguoiNhanReply.Add(nnReply);
+                            }
+                        }
+
+                    }
+
+                    // Gọi hàm gửi email reply
+                    var replyRequest = new ReplyEmailRequest
+                    {
+                        Email = emailReply,
+                        DanhSachNguoiNhanEmail = lstNguoiNhanReply,
+                        DanhSachTepDinhKem = lstTepDaChon.Select(t => new TepDinhKemEmail
+                        {
+                            MaEmail = emailReply.MaEmail,
+                            MaTep = t.MaTep,
+                            TepTin = t,
+                            Email = emailReply
+                        }).ToList(),
+                        CurrentUser = nd,
+                        TaskId = maChiTietCV,
+                        MK = pwd,
+                        InReplyTo = emailReply.InReplyTo,
+                        References = emailReply.References
+                    };
+
+                    var resSend = await apiClientDAO.ReplyEmailAsync(replyRequest);
+                    if (resSend.Success)
+                    {
+                        Console.WriteLine("GỬI Email Reply Thành Công!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("GỬI Email Reply Thất Bại: " + resSend.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("LỖI khi tạo Email Reply: " + resEmailReply.Message);
+                }
+            }
+
             // Gửi thông báo cho người liên quan
             var resListNLQ = await apiClientDAO.GetNguoiLienQuanCongViecAsync(maCongViec);
             var lstLienQuanCongViec = resListNLQ.Data;
@@ -818,6 +961,7 @@ namespace Task_App.views
             loadData();
             txtMessage.Text = "";
         }
+
 
         private void btnAddFile_Click(object sender, EventArgs e)
         {
@@ -957,6 +1101,12 @@ namespace Task_App.views
             return zipPath;
         }
 
+        public string GenerateMaEmailFromLast(string maCongViec)
+        {
+            string timePart = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string randomPart = Guid.NewGuid().ToString("N").Substring(0, 6);
+            return $"{maCongViec}_{timePart}_{randomPart}";
+        }
 
 
 

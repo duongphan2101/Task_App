@@ -25,9 +25,22 @@ namespace APIServerApp.DTO
         public List<NguoiNhanEmail>? DanhSachNguoiNhanEmail { get; set; }
         public List<TepDinhKemEmail>? DanhSachTepDinhKem { get; set; }
         public NguoiDung? CurrentUser { get; set; }
-        public string? TaskId { get; set; }
+        public int? TaskId { get; set; }
         public string? MK { get; set; }
 
+    }
+
+    public class ReplyEmailRequest
+    {
+        public Email? Email { get; set; }
+        public List<NguoiNhanEmail>? DanhSachNguoiNhanEmail { get; set; }
+        public List<TepDinhKemEmail>? DanhSachTepDinhKem { get; set; }
+        public NguoiDung? CurrentUser { get; set; }
+        public int TaskId { get; set; }
+        public string? MK { get; set; }
+
+        public string? InReplyTo { get; set; }   // Message-ID của email gốc
+        public string? References { get; set; }  // Thread chain
     }
 
     public class IsGiaoViecRequest

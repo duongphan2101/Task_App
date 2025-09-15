@@ -224,13 +224,16 @@ namespace APIServerApp.Migrations
                 name: "Email",
                 columns: table => new
                 {
-                    MaEmail = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MaEmail = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     NguoiGui = table.Column<int>(type: "int", nullable: false),
                     MaChiTietCV = table.Column<int>(type: "int", nullable: false),
                     TieuDe = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     NoiDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NgayGui = table.Column<DateTime>(type: "datetime2", nullable: true),
                     TrangThai = table.Column<int>(type: "int", nullable: false),
+                    MessageId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    InReplyTo = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    References = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ChiTietCongViecMaChiTietCV = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -284,7 +287,7 @@ namespace APIServerApp.Migrations
                 name: "NguoiNhanEmail",
                 columns: table => new
                 {
-                    MaEmail = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MaEmail = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     MaNguoiDung = table.Column<int>(type: "int", nullable: false),
                     VaiTro = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true)
                 },
@@ -307,7 +310,7 @@ namespace APIServerApp.Migrations
                 name: "TepDinhKemEmail",
                 columns: table => new
                 {
-                    MaEmail = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    MaEmail = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     MaTep = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

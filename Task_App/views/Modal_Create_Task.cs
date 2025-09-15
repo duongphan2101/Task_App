@@ -448,6 +448,10 @@ namespace Task_App.views
                     email1.ChiTietCongViec = ct;
                     email1.NguoiGuiObj = currentUser;
 
+                    email1.MessageId = Guid.NewGuid().ToString();
+                    email1.InReplyTo = null;
+                    email1.References = null;
+
                     var resCreateEmail = await apiClientDAO.CreateEmail(email1);
                     if (resCreateEmail.Success)
                     {
@@ -765,6 +769,10 @@ namespace Task_App.views
                 email1.ChiTietCongViec = chiTietCongViec;
                 email1.NguoiGuiObj = currentUser;
 
+                email1.MessageId = Guid.NewGuid().ToString();
+                email1.InReplyTo = null;
+                email1.References = null;
+
                 var resCreateEmail = await apiClientDAO.CreateEmail(email1);
                 if (resCreateEmail.Success)
                 {
@@ -947,7 +955,7 @@ namespace Task_App.views
                 if (success)
                 {
 
-                    var resSendEmail = await apiClientDAO.sendEmail(email1, lstNguoiNhanEmail, lstTepDinhKem, currentUser, congViec.MaCongViec, pwd);
+                    var resSendEmail = await apiClientDAO.sendEmail(email1, lstNguoiNhanEmail, lstTepDinhKem, currentUser, chiTietCongViec.MaChiTietCV, pwd);
                     bool sendEmail = resSendEmail.Success;
 
                     var resUpdateEmail = await apiClientDAO.UpdateTrangThaiEmail(email1);

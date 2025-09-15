@@ -8,7 +8,7 @@ namespace APIServerApp.Model
     public class TepDinhKemEmail
     {
         [Key, Column(Order = 0)]
-        [StringLength(50)]
+        [StringLength(200)]
         public string? MaEmail { get; set; }
 
         [Key, Column(Order = 1)]

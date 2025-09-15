@@ -124,18 +124,18 @@ namespace Task_App.views
             }
 
             // Email: phải kết thúc chính xác bằng @intimexhcm.com
-            var emailPattern = new Regex(@"^[A-Za-z0-9._%+\-]+@intimexhcm\.com$", RegexOptions.IgnoreCase);
-            if (string.IsNullOrWhiteSpace(email))
-            {
-                errorMessage = "Email không được để trống.";
-                return true;
-            }
+            //var emailPattern = new Regex(@"^[A-Za-z0-9._%+\-]+@intimexhcm\.com$", RegexOptions.IgnoreCase);
+            //if (string.IsNullOrWhiteSpace(email))
+            //{
+            //    errorMessage = "Email không được để trống.";
+            //    return true;
+            //}
 
-            if (!emailPattern.IsMatch(email))
-            {
-                errorMessage = "Email phải là một địa chỉ thuộc domain @intimexhcm.com.";
-                return true;
-            }
+            //if (!emailPattern.IsMatch(email))
+            //{
+            //    errorMessage = "Email phải là một địa chỉ thuộc domain @intimexhcm.com.";
+            //    return true;
+            //}
 
             if (string.IsNullOrEmpty(password) || string.IsNullOrEmpty(rePassword))
             {

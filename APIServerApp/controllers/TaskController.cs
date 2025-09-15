@@ -11,6 +11,10 @@ using DotNetEnv;
 using MimeKit;
 using System.Text.RegularExpressions;
 using System.IO.Compression;
+using System.Xml;
+using Newtonsoft.Json;
+using MimeKit.Utils;
+
 
 namespace APIServerApp.controllers
 {
@@ -656,6 +660,10 @@ namespace APIServerApp.controllers
                     TrangThai = e.TrangThai,
                     MaChiTietCV = e.MaChiTietCV,
 
+                    MessageId = e.MessageId,
+                    InReplyTo = e.InReplyTo,
+                    References = e.References,
+
                     TepDinhKemEmails = [],
                     NguoiNhanEmails = [],
                 };
@@ -827,6 +835,54 @@ namespace APIServerApp.controllers
             });
         }
 
+        [HttpGet("get-email-by-chitietcv/{maChiTietCV}")]
+        public async Task<IActionResult> GetEmailByChiTietCV(int maChiTietCV)
+        {
+            var emails = await _context.Emails
+                .Where(e => e.MaChiTietCV == maChiTietCV)
+                .Select(e => new Email
+                {
+                    MaEmail = e.MaEmail,
+                    MaChiTietCV = e.MaChiTietCV,
+                    TieuDe = e.TieuDe,
+                    NoiDung = e.NoiDung,
+                    NguoiGui = e.NguoiGui,
+                    NgayGui = e.NgayGui,
+                    MessageId = e.MessageId,
+                    InReplyTo = e.InReplyTo,
+                    References = e.References
+                })
+                .ToListAsync();
+
+            return Ok(new Object_Response<List<Email>>
+            {
+                Success = true,
+                Message = emails.Any()
+                    ? "Lấy danh sách email thành công"
+                    : "Không tìm thấy email nào",
+                Data = emails
+            });
+        }
+
+        [HttpGet("get-nguoi-nhan/{maEmail}")]
+        public async Task<IActionResult> GetNguoiNhanByEmail(string maEmail)
+        {
+            var lstNguoiNhan = await _context.NguoiNhanEmails
+                .Where(n => n.MaEmail == maEmail)
+                .Include(n => n.NguoiDung)
+                .Include(n => n.Email)
+                .ToListAsync();
+
+            return Ok(new Object_Response<List<NguoiNhanEmail>>
+            {
+                Success = true,
+                Message = lstNguoiNhan.Any()
+                    ? "Lấy danh sách người nhận thành công"
+                    : "Không tìm thấy người nhận nào",
+                Data = lstNguoiNhan
+            });
+        }
+
         [HttpPost("gui-email")]
         public async Task<IActionResult> SendEmail([FromBody] SendEmailRequest req)
         {
@@ -852,13 +908,29 @@ namespace APIServerApp.controllers
                 // From
                 message.From.Add(new MailboxAddress("", req.CurrentUser.Email));
                 message.Subject = req.Email.TieuDe ?? "";
-                message.MessageId = $"<{req.TaskId}@intimexhcm.com>";
+                // message.MessageId = $"<{req.TaskId}@intimexhcm.com>";
+
+                // Generate new Message-Id
+                message.MessageId = MimeUtils.GenerateMessageId("intimexhcm.com");
+
+                // Add headers để client hiểu là reply
+                if (!string.IsNullOrEmpty(req.Email.InReplyTo))
+                {
+                    string fixedId = FixMessageId(req.Email.InReplyTo);
+                    message.InReplyTo = fixedId;   // chỉ set property thôi
+                }
+
+                if (!string.IsNullOrEmpty(req.Email.References))
+                {
+                    string fixedRef = FixMessageId(req.Email.References);
+                    message.References.Add(fixedRef);  // chỉ set property thôi
+                }
 
                 // To / Cc / Bcc
                 foreach (var nguoiNhan in req.DanhSachNguoiNhanEmail)
                 {
-                    var email = nguoiNhan.NguoiDung.Email;
-                    switch (nguoiNhan.VaiTro)
+                    var email = nguoiNhan?.NguoiDung?.Email;
+                    switch (nguoiNhan?.VaiTro)
                     {
                         case "to":
                             message.To.Add(new MailboxAddress("", email));
@@ -902,7 +974,7 @@ namespace APIServerApp.controllers
 
                 message.Body = builder.ToMessageBody();
 
-                Console.WriteLine(req.CurrentUser.Email + " " + req.MK);
+                // Console.WriteLine(req.CurrentUser.Email + " " + req.MK);
                 // Gửi qua SMTP
                 using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
@@ -951,6 +1023,127 @@ namespace APIServerApp.controllers
                 {
                     Success = false,
                     Message = "Lỗi khi gửi email: " + ex.Message
+                });
+            }
+        }
+
+        string FixMessageId(string raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw)) return null;
+            if (!raw.StartsWith("<")) return $"<{raw}@intimexhcm.com>";
+            return raw;
+        }
+
+        [HttpPost("reply-email")]
+        public async Task<IActionResult> ReplyEmail([FromBody] ReplyEmailRequest req)
+        {
+            if (req.Email == null || req.DanhSachNguoiNhanEmail == null || req.CurrentUser == null)
+            {
+                return BadRequest(new ApiResponseDto
+                {
+                    Success = false,
+                    Message = "Thiếu thông tin reply email"
+                });
+            }
+
+            try
+            {
+                var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+                Env.Load(envPath);
+                string CLIENT = Env.GetString("SMTP_CLIENT");
+                int PORT = Convert.ToInt32(Env.GetString("SMTP_PORT"));
+
+                var message = new MimeMessage();
+
+                // From
+                message.From.Add(new MailboxAddress("", req.CurrentUser.Email));
+
+                // To / Cc / Bcc
+                foreach (var nguoiNhan in req.DanhSachNguoiNhanEmail)
+                {
+                    var email = nguoiNhan?.NguoiDung?.Email;
+                    if (string.IsNullOrEmpty(email)) continue;
+
+                    switch (nguoiNhan?.VaiTro?.ToLower())
+                    {
+                        case "to":
+                            message.To.Add(new MailboxAddress("", email));
+                            break;
+                        case "cc":
+                            message.Cc.Add(new MailboxAddress("", email));
+                            break;
+                        case "bcc":
+                            message.Bcc.Add(new MailboxAddress("", email));
+                            break;
+                    }
+                }
+
+                // Subject
+                message.Subject = "Re: " + (req.Email.TieuDe ?? "");
+
+                // Generate new Message-Id
+                message.MessageId = MimeUtils.GenerateMessageId("intimexhcm.com");
+
+                // Add headers để client hiểu là reply
+                if (!string.IsNullOrEmpty(req.InReplyTo))
+                {
+                    string fixedId = FixMessageId(req.InReplyTo);
+                    message.InReplyTo = fixedId;   // chỉ set property thôi
+                }
+
+                if (!string.IsNullOrEmpty(req.References))
+                {
+                    string fixedRef = FixMessageId(req.References);
+                    message.References.Add(fixedRef);  // chỉ set property thôi
+                }
+
+
+                // Body
+                var builder = new BodyBuilder
+                {
+                    HtmlBody = req.Email.NoiDung ?? "",
+                    TextBody = Regex.Replace(req.Email.NoiDung ?? "", "<.*?>", string.Empty)
+                };
+
+                // Attachments
+                if (req.DanhSachTepDinhKem != null && req.DanhSachTepDinhKem.Count > 0)
+                {
+                    foreach (var tep in req.DanhSachTepDinhKem)
+                    {
+                        string path = tep?.TepTin?.DuongDan;
+                        string tenTepGoc = tep?.TepTin?.TenTepGoc;
+
+                        if (!string.IsNullOrEmpty(path) && System.IO.File.Exists(path))
+                        {
+                            builder.Attachments.Add(path, new ContentType("application", "octet-stream"));
+                        }
+                    }
+                }
+
+                message.Body = builder.ToMessageBody();
+
+                // Send via SMTP
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                {
+                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    await client.ConnectAsync(CLIENT, PORT, MailKit.Security.SecureSocketOptions.StartTls);
+                    await client.AuthenticateAsync(req.CurrentUser.Email, req.MK);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
+
+                return Ok(new ApiResponseDto
+                {
+                    Success = true,
+                    Message = "Reply Email thành công"
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponseDto
+                {
+                    Success = false,
+                    Message = "Lỗi khi reply email: " + ex.Message
                 });
             }
         }

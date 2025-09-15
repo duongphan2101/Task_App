@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DevExpress.XtraPrinting.Native.Properties;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -828,7 +829,25 @@ namespace Task_App.TaskApp_Dao
             return null;
         }
 
-        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser, string taskId, string mk)
+        public async Task<Object_Response<List<NguoiNhanEmail>>> GetNguoiNhanEmailByMaEmailAsync(string maEmail)
+        {
+            try
+            {
+                var response = await client.GetAsync($"api/task/get-nguoi-nhan/{maEmail}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Object_Response<List<NguoiNhanEmail>>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy danh sách người nhận Email: " + ex.Message);
+            }
+            return null;
+        }
+
+        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser, int taskId, string mk)
         {
             try
             {
@@ -875,6 +894,65 @@ namespace Task_App.TaskApp_Dao
                     Message = "Lỗi khi Gui Email: " + ex.Message
                 };
             }
+        }
+
+        public async Task<ApiResponse> ReplyEmailAsync(ReplyEmailRequest req)
+        {
+            try
+            {
+                //var json = JsonConvert.SerializeObject(req, Formatting.Indented);
+                //Console.WriteLine("=== REPLY REQ ===");
+                //Console.WriteLine(json);
+
+                var jsonContent = new StringContent(
+                    JsonConvert.SerializeObject(req),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+
+                client.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", GlobalSession.Token);
+
+                var response = await client.PostAsync("api/task/reply-email", jsonContent);
+                var result = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonConvert.DeserializeObject<ApiResponse>(result);
+                }
+
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = $"Reply Email Thất bại ({(int)response.StatusCode}): {result}"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse
+                {
+                    Success = false,
+                    Message = "Lỗi khi Reply Email: " + ex.Message
+                };
+            }
+        }
+        
+        public async Task<Object_Response<List<Email>>> GetEmailByChiTietCVAsync(int maChiTietCV)
+        {
+            try
+            {
+                var response = await client.GetAsync($"api/task/get-email-by-chitietcv/{maChiTietCV}");
+                if (response.IsSuccessStatusCode)
+                {
+                    string result = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<Object_Response<List<Email>>>(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi lấy Email: " + ex.Message);
+            }
+            return null;
         }
 
         public async Task<ApiResponse> getIsGiaoViec(int maNguoiDung, int maChiTietCV)
