@@ -130,7 +130,6 @@ namespace Task_App.TaskApp_Dao
             }
         }
 
-
         public async Task<ViecDaGiaoResponse> GetViecDaGiaoAsync(int maNguoiDung, bool locTheoNgay)
         {
             try
@@ -829,7 +828,7 @@ namespace Task_App.TaskApp_Dao
             return null;
         }
 
-        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser, string mk)
+        public async Task<ApiResponse> sendEmail(Email email, List<NguoiNhanEmail> lstNNE, List<TepDinhKemEmail> lstTDK, NguoiDung currentUser, string taskId, string mk)
         {
             try
             {
@@ -839,6 +838,7 @@ namespace Task_App.TaskApp_Dao
                     DanhSachNguoiNhanEmail = lstNNE,
                     DanhSachTepDinhKem = lstTDK,
                     CurrentUser = currentUser,
+                    TaskId = taskId,
                     MK = mk
                 };
 

@@ -19,6 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<AutoJobService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddHostedService<DailyEmailJob>();
+builder.Services.AddHostedService<EmailIdleService>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

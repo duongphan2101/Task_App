@@ -78,7 +78,7 @@ namespace Task_App.views
         {
             var chiTietRes = await apiClientDAO.GetChiTietConViecAsync(maChiTietCV);
             var chiTietdeRes = await apiClientDAO.GetChiTietConViec(maChiTietCV);
-            ctcv = chiTietdeRes.Data;
+             ctcv = chiTietdeRes.Data;
 
             var ChiTiet = chiTietRes.Data;
             ctcvdto = ChiTiet;

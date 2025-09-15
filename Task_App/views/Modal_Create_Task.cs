@@ -947,7 +947,7 @@ namespace Task_App.views
                 if (success)
                 {
 
-                    var resSendEmail = await apiClientDAO.sendEmail(email1, lstNguoiNhanEmail, lstTepDinhKem, currentUser, pwd);
+                    var resSendEmail = await apiClientDAO.sendEmail(email1, lstNguoiNhanEmail, lstTepDinhKem, currentUser, congViec.MaCongViec, pwd);
                     bool sendEmail = resSendEmail.Success;
 
                     var resUpdateEmail = await apiClientDAO.UpdateTrangThaiEmail(email1);

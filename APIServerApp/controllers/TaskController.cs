@@ -852,6 +852,7 @@ namespace APIServerApp.controllers
                 // From
                 message.From.Add(new MailboxAddress("", req.CurrentUser.Email));
                 message.Subject = req.Email.TieuDe ?? "";
+                message.MessageId = $"<{req.TaskId}@intimexhcm.com>";
 
                 // To / Cc / Bcc
                 foreach (var nguoiNhan in req.DanhSachNguoiNhanEmail)
