@@ -1054,6 +1054,41 @@ namespace Task_App.TaskApp_Dao
 
             return null;
         }
+        public async Task<byte[]> DownloadFileAsync(string filePath, string originalFileName)
+        {
+            try
+            {
+                // Tạo request body
+                var requestObj = new
+                {
+                    FilePath = filePath,
+                    OriginalFileName = originalFileName
+                };
+
+                var json = JsonConvert.SerializeObject(requestObj);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Gọi API download qua POST
+                var response = await client.PostAsync("api/task/download-file", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Đọc dữ liệu file dạng byte[]
+                    var fileBytes = await response.Content.ReadAsByteArrayAsync();
+                    return fileBytes;
+                }
+                else
+                {
+                    Console.WriteLine("Download thất bại: " + response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi khi download file: " + ex.Message);
+            }
+
+            return null;
+        }
 
         public async Task<Object_Response<int>> SoTaskTrongTuan(int maNguoiDung)
         {

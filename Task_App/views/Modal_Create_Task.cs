@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -12,6 +10,7 @@ using System.Windows.Forms;
 using Task_App.DTO;
 using Task_App.Model;
 using Task_App.TaskApp_Dao;
+using Task_App.Helper;
 
 
 namespace Task_App.views
@@ -912,6 +911,10 @@ namespace Task_App.views
 
                     File.Copy(t.DuongDan, destPath, true);
 
+                    // Nén file
+                    //string zipName = $"{email1.MaEmail}_{stt}";
+                    string zipPath = Zipper.CompressFile(t.DuongDan, targetFolder, fileName);
+
                     t.DuongDan = destPath;
                     t.TenTep = newFileName;
                     t.TenTepGoc = fileName;
@@ -929,11 +932,13 @@ namespace Task_App.views
                         Console.WriteLine("Lỗi " + resCreateTep.Message);
                     }
 
+                    var resUploadFile = await apiClientDAO.UploadFile(zipPath, congViec.MaCongViec);
+                    var tx = resUploadFile.Data;
                     TepDinhKemEmail tepDinhKem = new TepDinhKemEmail
                     {
                         MaEmail = email1.MaEmail,
-                        MaTep = t.MaTep,
-                        TepTin = t,
+                        MaTep = tx.MaTep,
+                        TepTin = tx,
                         Email = email1
                     };
 

@@ -58,5 +58,11 @@ namespace Task_App.DTO
         public string References { get; set; }  // References (có thể trùng với InReplyTo hoặc chuỗi thread)
     }
 
+    public class DownloadRequest
+    {
+        public string FilePath { get; set; }
+        public string OriginalFileName { get; set; }
+    }
+
 
 }

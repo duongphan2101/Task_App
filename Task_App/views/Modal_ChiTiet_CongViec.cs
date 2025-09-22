@@ -11,6 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Task_App.DTO;
+using Task_App.Helper;
 using Task_App.Model;
 using Task_App.TaskApp_Dao;
 
@@ -335,7 +336,6 @@ namespace Task_App.views
 
                 string extension = Path.GetExtension(tep.TenTep).ToLower();
 
-
                 Image iconImage = Properties.Resources.icons8_document_48;
 
                 if (extension == ".pdf")
@@ -372,7 +372,7 @@ namespace Task_App.views
                 panel.Controls.Add(lbl);
                 flow_Files.Controls.Add(panel);
 
-                icon.Click += (s, e) =>
+                icon.Click += async (s, e) =>
                 {
                     try
                     {
@@ -382,7 +382,19 @@ namespace Task_App.views
                         }
                         else
                         {
-                            MessageBox.Show("Không tìm thấy tệp: " + tep.TenTep);
+                            var fileBytes = await FileDownloader.SaveFileAsync(apiClientDAO, tep.DuongDan, tep.TenTepGoc);
+
+                            //if (fileBytes != null)
+                            //{
+                            //    string savePath = Path.Combine(
+                            //        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                            //        "Downloads",
+                            //        "Document.docx"
+                            //    );
+                            //    File.WriteAllBytes(savePath, fileBytes);
+                            //    Console.WriteLine("File đã tải về: " + savePath);
+                            //}
+                            MessageBox.Show("Không tìm thấy tệp, đang tải file từ server về");
                         }
                     }
                     catch (Exception ex)
@@ -1086,19 +1098,6 @@ namespace Task_App.views
                 lstTepDaChon.Remove(tep);
                 HienThiDanhSachFile2();
             }
-        }
-
-        private string ZipFiles(List<TepTin> files, string maCongViec)
-        {
-            string zipPath = Path.Combine(Path.GetTempPath(), $"cv_{maCongViec}_{DateTime.Now.Ticks}.zip");
-            using (var zip = ZipFile.Open(zipPath, ZipArchiveMode.Create))
-            {
-                foreach (var file in files)
-                {
-                    zip.CreateEntryFromFile(file.DuongDan, Path.GetFileName(file.DuongDan));
-                }
-            }
-            return zipPath;
         }
 
         public string GenerateMaEmailFromLast(string maCongViec)

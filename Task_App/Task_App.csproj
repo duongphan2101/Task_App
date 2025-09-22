@@ -445,6 +445,8 @@
     <Compile Include="DTO\PieChartModel.cs" />
     <Compile Include="DTO\tmp.cs" />
     <Compile Include="Helper\CryptoHelper.cs" />
+    <Compile Include="Helper\FileDownloader.cs" />
+    <Compile Include="Helper\Zipper.cs" />
     <Compile Include="Model\ChiTietCongViec.cs" />
     <Compile Include="Model\ChucVu.cs" />
     <Compile Include="Model\CongViec.cs" />
