@@ -410,7 +410,7 @@ namespace APIServerApp.controllers
         {
             var tepDinhKemList = await _context.TepDinhKemEmails
                 .Include(tdk => tdk.Email)
-                    .ThenInclude(e => e.ChiTietCongViec)
+                .ThenInclude(e => e.ChiTietCongViec)
                 .Include(tdk => tdk.TepTin)
                 .Where(tdk => tdk.Email.ChiTietCongViec.MaCongViec == maCongViec)
                 .ToListAsync();
@@ -1194,6 +1194,28 @@ namespace APIServerApp.controllers
             });
         }
 
+        [HttpGet("get-path/{name}")]
+        public async Task<IActionResult> GetPathTepTin(string name)
+        {
+            Console.WriteLine("name: " + name);
+
+            var path = await _context.TepTins
+                .Where(cv => cv.TenTep == name)
+                .Select(cv => cv.DuongDan)
+                .FirstOrDefaultAsync();
+
+            var response = new Object_Response<string>
+            {
+                Success = !string.IsNullOrEmpty(path),
+                Message = !string.IsNullOrEmpty(path)
+                    ? "Lấy đường dẫn tệp tin thành công"
+                    : "Không tìm thấy tệp tin nào",
+                Data = path
+            };
+
+            return Ok(response);
+        }
+
         [HttpPost("upload-file")]
         public async Task<IActionResult> UploadFile([FromForm] string maCongViec, [FromForm] IFormFile file)
         {
@@ -1201,7 +1223,8 @@ namespace APIServerApp.controllers
                 return BadRequest(new { success = false, message = "File rỗng" });
 
             string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Attachments");
-            Directory.CreateDirectory(folder);
+            string subFolder = Path.Combine(folder, "Attach_files");
+            Directory.CreateDirectory(subFolder);
 
             // Đổi tên file (theo maCongViec + timestamp + random GUID)
             string extension = Path.GetExtension(file.FileName);
@@ -1217,7 +1240,9 @@ namespace APIServerApp.controllers
             var tep = new TepTin
             {
                 TenTep = newFileName,
-                TenTepGoc = file.FileName,
+                TenTepGoc = file.FileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)
+            ? file.FileName.Substring(0, file.FileName.Length - 4)
+            : file.FileName,
                 DuongDan = savePath
             };
 
@@ -1231,6 +1256,40 @@ namespace APIServerApp.controllers
                 Data = tep
             });
         }
+
+        [HttpPost("download-file")]
+        public async Task<IActionResult> DownloadFile([FromBody] DownloadRequest request)
+        {
+
+            if (string.IsNullOrWhiteSpace(request.FilePath) || string.IsNullOrWhiteSpace(request.OriginalFileName))
+                return BadRequest(new { success = false, message = "Thiếu tham số filePath hoặc originalFileName" });
+
+            if (!System.IO.File.Exists(request.FilePath))
+                return NotFound(new { success = false, message = "Không tìm thấy file" });
+
+            // Nếu file là .zip thì giải nén trước
+            string fileToReturn = request.FilePath;
+            if (Path.GetExtension(request.FilePath).Equals(".zip", StringComparison.OrdinalIgnoreCase))
+            {
+                string tempFolder = Path.Combine(Path.GetTempPath(), "UnzippedFiles");
+                fileToReturn = ZipHelper.ExtractFirstFile(request.FilePath, tempFolder);
+            }
+
+            var memory = new MemoryStream();
+            await using (var stream = new FileStream(fileToReturn, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+
+            var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+            provider.TryGetContentType(fileToReturn, out string? contentType);
+            contentType ??= "application/octet-stream";
+
+            // Xuất file với tên gốc (OriginalFileName trong DB)
+            return File(memory, contentType, request.OriginalFileName);
+        }
+
 
         [HttpGet("so-task-trong-tuan/{manguoidung}")]
         public async Task<IActionResult> SoTaskTrongTuan(int manguoidung)

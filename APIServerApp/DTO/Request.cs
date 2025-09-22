@@ -58,6 +58,12 @@ namespace APIServerApp.DTO
 
     }
 
+    public class DownloadRequest
+    {
+        public string FilePath { get; set; }
+        public string OriginalFileName { get; set; }
+    }
+
 
 
 }
