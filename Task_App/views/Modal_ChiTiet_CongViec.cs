@@ -669,10 +669,30 @@ namespace Task_App.views
                     Font = new Font("Segoe UI", 10, FontStyle.Underline),
                     Margin = new Padding(0, 5, 0, 0)
                 };
-                link.Click += (s, e) =>
+                link.Click += async (s, e) =>
                 {
-                    try { System.Diagnostics.Process.Start(tep.DuongDan); }
-                    catch (Exception ex) { MessageBox.Show("Không thể mở tệp: " + ex.Message); }
+                    //try { System.Diagnostics.Process.Start(tep.DuongDan); }
+                    //catch (Exception ex) { MessageBox.Show("Không thể mở tệp: " + ex.Message); }
+                    if (File.Exists(tep.DuongDan))
+                    {
+                        System.Diagnostics.Process.Start(tep.DuongDan);
+                    }
+                    else
+                    {
+                        var fileBytes = await FileDownloader.SaveFileAsync(apiClientDAO, tep.DuongDan, tep.TenTepGoc);
+
+                        //if (fileBytes != null)
+                        //{
+                        //    string savePath = Path.Combine(
+                        //        Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                        //        "Downloads",
+                        //        "Document.docx"
+                        //    );
+                        //    File.WriteAllBytes(savePath, fileBytes);
+                        //    Console.WriteLine("File đã tải về: " + savePath);
+                        //}
+                        MessageBox.Show("Không tìm thấy tệp, đang tải file từ server về");
+                    }
                 };
 
                 FlowLayoutPanel filePanel = new FlowLayoutPanel
